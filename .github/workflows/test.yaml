@@ -1,0 +1,32 @@
+# This is a test workflow, only to test and understand the workings of gitHub actions
+# This workflow will not be used during actual development
+name: Test workflow
+# This workflow runs whenever someone pushes to the master branch with the tag 'test'
+on: 
+  push: 
+    branches:
+      - master
+    tags: 
+      - test
+jobs:
+  build:
+    name: Build debug apk
+    runs-on: ubuntu-latest
+    # The enviourment uses the latest java version and the latest flutter version
+    steps:
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '12.x'
+    - uses: subosito/flutter-action@v1
+      with:
+        flutter-version: '1.7.8+hotfix.4'
+    # Make sure to download all dependencies in the enviourment before building
+    - run: flutter pub get
+    # Running all unit tests written to ensure there are no errors
+    - run: flutter test
+    # Remove the previous cache of build directories
+    - run: flutter clean
+    # Build the debug apk
+    - run: flutter build apk --debug
+    # Copy the latest build apk to the root project directory
+    - run: cp ./build/app/outputs/apk/debug/app-debug.apk ./
