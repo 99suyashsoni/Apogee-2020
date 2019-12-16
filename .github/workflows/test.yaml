@@ -20,6 +20,9 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         flutter-version: '1.7.8+hotfix.4'
+    - run: pwd > test.txt
+    # Upgrade flutter version if possible
+    -run: flutter upgrade
     # Make sure to download all dependencies in the enviourment before building
     - run: flutter pub get
     # Running all unit tests written to ensure there are no errors
