@@ -25,7 +25,7 @@ List<String> tables = ['''
   )
   ''', '''
   CREATE TABLE order_items (
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NON NULL,
     item_id INTEGER NON NULL,
     quantity INTEGER NON NULL,
@@ -56,7 +56,7 @@ List<String> tables = ['''
   )
   ''', '''
   CREATE TABLE tickets (
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     ticket_id INTEGER NON NULL,
     price INTEGER NON NULL,
     name TEXT NON NULL,
@@ -72,7 +72,7 @@ List<String> tables = ['''
   )
   ''', '''
   CREATE TABLE tickets_cart (
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     ticket_id INTEGER NON NULL,
     quantity INTEGER NON NULL,
     type TEXT NON NULL
@@ -91,7 +91,7 @@ List<String> tables = ['''
   )
   ''', '''
   CREATE TABLE event_categories (
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     category TEXT NON NULL,
     filtered INTEGER NON NULL,
     event_id INTEGER NON NULL
