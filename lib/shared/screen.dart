@@ -1,4 +1,3 @@
-import 'dart:js';
 import 'package:flutter/material.dart';
 
 class Screen extends StatelessWidget {
@@ -25,6 +24,10 @@ class Screen extends StatelessWidget {
         //for gradient, to be written later
         decoration: BoxDecoration(
           gradient: LinearGradient(
+            colors: [
+              Colors.red,
+              Colors.blue
+            ],
             //fill anything later
           )
         ),
@@ -99,7 +102,8 @@ class _BottomNav extends StatelessWidget {
     }
     else{
       return Container(
-        color: Colors.greenAccent,
+        // color: Colors.greenAccent,
+        height: 0,
       );
     }
   }
