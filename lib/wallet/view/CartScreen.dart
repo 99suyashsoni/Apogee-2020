@@ -2,6 +2,8 @@ import 'package:apogee_main/shared/UIMessageListener.dart';
 import 'package:apogee_main/shared/screen.dart';
 import 'package:apogee_main/wallet/controller/CartController.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
+import 'package:apogee_main/wallet/view/CartItemWidget.dart';
+import 'package:apogee_main/wallet/view/CartQuantityWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,7 +12,7 @@ class CartScreen extends StatefulWidget {
   _CartScreenState createState() => _CartScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> implements UIMessageListener{
+class _CartScreenState extends State<CartScreen> implements UIMessageListener, CartQuantityListener {
   @override
   Widget build(BuildContext context) {
     return Screen(
@@ -40,19 +42,34 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener{
                                 ),
                               );
                             } else {
-                              return ListView.builder(
-                                itemCount: items.length,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    child: Center(child: Text(items[index].itemName),),
-                                  );
-                                },
+                              return Container(
+                                child: Column(
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 1,
+                                      child: ListView.builder(
+                                        itemCount: items.length,
+                                        itemBuilder: (context, index) {
+                                          return CartItemWidget(item: items[index], cartQuantityListener: this,);
+                                        },
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Container(
+                                        child: Text("Total: \u20B9 ${11000}"),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               );
                             }
                           } else {
                             onAlertMessageRecived(message: "Something went abslutely wrong. Restart your app");
                             return Container();
                           }
+                        } else {
+                          return Container(child: Center(child: Text("Something went wrong"),),);
                         }
                       },
                     );
@@ -84,6 +101,11 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener{
   @override
   void onToastMessageRecived({String message}) {
     // TODO: implement onToastMessageRecived
+  }
+
+  @override
+  void onQuantityChanged(int itemId, int quantity) {
+    // TODO: implement onQuantityChanged
   }
   
 }
