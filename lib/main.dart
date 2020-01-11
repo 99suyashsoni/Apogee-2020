@@ -1,3 +1,4 @@
+import 'package:apogee_main/events/EventsScreen.dart';
 import 'package:apogee_main/wallet/view/CartScreen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
           body1: TextStyle(fontSize: 20)
         )
       ),
-      home: CartScreen(),
+      home: EventsScreen(),
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics)
       ],

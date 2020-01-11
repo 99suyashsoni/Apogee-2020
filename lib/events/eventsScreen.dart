@@ -1,6 +1,7 @@
 import 'dart:js';
 
 import 'package:apogee_main/events/data/EventsModel.dart';
+import 'package:apogee_main/events/data/dataClasses/EventsData.dart';
 import 'package:apogee_main/shared/UIMessageListener.dart';
 import 'package:flutter/material.dart';
 import 'package:apogee_main/shared/screen.dart';
@@ -31,11 +32,34 @@ class EventList extends StatelessWidget implements UIMessageListener{
 
     return Expanded(
       child:FutureBuilder(
+        future: _eventsModel.getAllEvents(),
         builder: (context,snapshot){
           if(snapshot.connectionState == ConnectionState.waiting)
             return CircularProgressIndicator();
           else if(snapshot.connectionState == ConnectionState.done){
-            //TODO: update list
+            if(snapshot.hasData){
+              final events = (snapshot.data as List<EventsData>).toList();
+              return ListView.builder(
+                itemCount: events.length,
+                itemBuilder: (context,index){
+                  return Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                       Text(events[index].name,
+                       style: TextStyle(fontSize: 20.0,color: Colors.black),),
+                        SizedBox(height: 10.0,),
+                      ],),
+                  );
+                },
+              );
+            }
+            if(snapshot.hasError){
+              onSnackbarMessageRecived(message: "Error fetching events!");
+              print('error fetching events ');
+              return Container();
+            }
           }
           else {
             onAlertMessageRecived(message: "Something went wrong!",);
