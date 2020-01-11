@@ -1,6 +1,6 @@
-# apogee_main
+# Appogee App
 
-A new Flutter application.
+A Flutter application created by the Depaertment of Visual Media, BITS-Pilani, for our annual technical fest, Appogee.
 
 ## Getting Started
 
