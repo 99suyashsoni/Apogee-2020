@@ -75,4 +75,10 @@ class WalletDao {
       }
     });
   }
+
+  Future<Null> updateCartItemQuantity(int id, int quantity) async {
+    var database = await databaseInstance();
+    var result = await database.rawQuery("""UPDATE cart_data SET quantity = ? WHERE item_id = ?""", [quantity, id]);
+    print("Result for update query on database = $result");
+  }
 }
