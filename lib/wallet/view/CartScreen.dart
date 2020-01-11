@@ -13,6 +13,8 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> implements UIMessageListener, CartQuantityListener {
+  CartController _controller;
+
   @override
   Widget build(BuildContext context) {
     return Screen(
@@ -27,7 +29,31 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener, C
                 flex: 1,
                 child: Consumer<CartController>(
                   builder: (context, controller, child) {
-                    return FutureBuilder<List<CartItem>>(
+                    _controller = controller;
+                    return controller.isLoading ? Center(child: CircularProgressIndicator(),) : 
+                      controller.cartItems.isEmpty ? Center(child: Text("There are no items in your cart"),) :
+                        Container(
+                          child: Column(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: ListView.builder(
+                                  itemCount: controller.cartItems.length,
+                                  itemBuilder: (context, index) {
+                                    return CartItemWidget(item: controller.cartItems[index], cartQuantityListener: this,);
+                                  },
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Container(
+                                  child: Text("Total: \u20B9 ${11000}"),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                    /* return FutureBuilder<List<CartItem>>(
                       future: controller.getCartItems(),
                       builder: (context, snapshot) {
                         if(snapshot.connectionState == ConnectionState.waiting)
@@ -72,7 +98,7 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener, C
                           return Container(child: Center(child: Text("Something went wrong"),),);
                         }
                       },
-                    );
+                    ); */
                   },
                 ),
               )
@@ -104,8 +130,9 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener, C
   }
 
   @override
-  void onQuantityChanged(int itemId, int quantity) {
-    // TODO: implement onQuantityChanged
+  void onQuantityChanged({int id, int quantity}) {
+    _controller.cartItemQuantityChanged(id, quantity);
   }
+
   
 }

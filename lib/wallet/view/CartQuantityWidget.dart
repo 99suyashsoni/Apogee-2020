@@ -2,16 +2,18 @@ import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:flutter/material.dart';
 
 abstract class CartQuantityListener {
-  void onQuantityChanged(int itemId, int quantity);
+  void onQuantityChanged({@required int id, @required int quantity});
 }
 
 class CartQuantityWidget extends StatelessWidget {
   CartQuantityListener cartQuantityListener;
   int quantity;
+  int itemId;
 
   CartQuantityWidget({
     @required this.cartQuantityListener,
-    this.quantity = 1
+    this.quantity = 1,
+    @required this.itemId
   });
 
   @override
@@ -24,29 +26,50 @@ class CartQuantityWidget extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5.0),
-                bottomLeft: Radius.circular(5.0)
+          GestureDetector(
+            onTap: () {
+              quantity -= 1;
+              if(quantity >= 0) {
+                cartQuantityListener.onQuantityChanged(quantity: quantity, id: itemId);
+              }
+            },
+            onLongPressEnd: (delegator) {
+              quantity = 0;
+              cartQuantityListener.onQuantityChanged(id: itemId, quantity: quantity);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(5.0),
+                  bottomLeft: Radius.circular(5.0)
+                ),
               ),
+              child: Center(child: Icon(Icons.remove, color: cartQuantityButtonBackground, size: 20.0,)),
             ),
-            child: Center(child: Icon(Icons.remove, color: cartQuantityButtonBackground, size: 20.0,)),
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 4.0),
             child: Text(quantity.toString(), style: Theme.of(context).textTheme.title.copyWith(color: Colors.white),),
           ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5.0),
-                bottomLeft: Radius.circular(5.0)
+          GestureDetector(
+            onTap: () {
+              quantity += 1;
+              cartQuantityListener.onQuantityChanged(
+                id: itemId,
+                quantity: quantity
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(5.0),
+                  bottomRight: Radius.circular(5.0)
+                ),
               ),
+              child: Center(child: Icon(Icons.add, color: cartQuantityButtonBackground, size: 20.0,)),
             ),
-            child: Center(child: Icon(Icons.add, color: cartQuantityButtonBackground, size: 20.0,)),
           ),
         ],
       ),

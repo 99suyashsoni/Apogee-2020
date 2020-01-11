@@ -69,7 +69,7 @@ class CartItemWidget extends StatelessWidget {
               ],
             ),
           ),
-          CartQuantityWidget(cartQuantityListener: cartQuantityListener,)
+          CartQuantityWidget(cartQuantityListener: cartQuantityListener, itemId: item.itemId, quantity: item.quantity,) 
         ],
       ),
     );
