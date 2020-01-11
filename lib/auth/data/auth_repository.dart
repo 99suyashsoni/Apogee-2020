@@ -24,6 +24,10 @@ class AuthRepository {
 
   }
 
+  Future<Null> login() async {
+
+  }
+
   Future<Null> logout() async {
 
   }
