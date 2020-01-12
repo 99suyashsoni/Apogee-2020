@@ -1,7 +1,5 @@
-import 'dart:js';
-
 import 'package:apogee_main/events/data/EventsModel.dart';
-import 'package:apogee_main/events/data/dataClasses/EventsData.dart';
+import 'package:apogee_main/events/data/dataClasses/Events.dart';
 import 'package:apogee_main/shared/UIMessageListener.dart';
 import 'package:flutter/material.dart';
 import 'package:apogee_main/shared/screen.dart';
@@ -38,7 +36,7 @@ class EventList extends StatelessWidget implements UIMessageListener{
             return CircularProgressIndicator();
           else if(snapshot.connectionState == ConnectionState.done){
             if(snapshot.hasData){
-              final events = (snapshot.data as List<EventsData>).toList();
+              final events = (snapshot.data as List<Events>).toList();
               return ListView.builder(
                 itemCount: events.length,
                 itemBuilder: (context,index){
