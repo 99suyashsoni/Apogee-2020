@@ -25,8 +25,8 @@ class Screen extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.red,
-              Colors.blue
+              Colors.white,
+              Colors.white
             ],
             //fill anything later
           )

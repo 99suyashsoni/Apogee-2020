@@ -21,7 +21,7 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener, C
       selectedTabIndex: -1,
       title: "Cart",
       child: ChangeNotifierProvider<CartController>(
-        create: (BuildContext context) => CartController(),
+        create: (BuildContext context) => CartController(this),
         child: Container(
           child: Column(
             children: <Widget>[
@@ -49,59 +49,45 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener, C
                                 child: Container(
                                   child: Text("Total: \u20B9 ${11000}"),
                                 ),
-                              )
-                            ],
-                          ),
-                        );
-                    /* return FutureBuilder<List<CartItem>>(
-                      future: controller.getCartItems(),
-                      builder: (context, snapshot) {
-                        if(snapshot.connectionState == ConnectionState.waiting)
-                          return Center(child: CircularProgressIndicator(),);
-                        else if(snapshot.connectionState == ConnectionState.done) {
-                          if(snapshot.data is List<CartItem>) {
-                            List<CartItem> items = snapshot.data as List<CartItem>;
-                            if(items.isEmpty) {
-                              return Center(
-                                child: Container(
-                                  child: Text("There are no items in the cart"),
-                                ),
-                              );
-                            } else {
-                              return Container(
-                                child: Column(
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 4.0),
+                                child: Row(
                                   children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: Text(controller.cartItems.length.toString()+" items", style: Theme.of(context).textTheme.body1,),
+                                    ),
                                     Expanded(
                                       flex: 1,
-                                      child: ListView.builder(
-                                        itemCount: items.length,
-                                        itemBuilder: (context, index) {
-                                          return CartItemWidget(item: items[index], cartQuantityListener: this,);
-                                        },
-                                      ),
+                                      child: Container(),
                                     ),
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Container(
-                                        child: Text("Total: \u20B9 ${11000}"),
+                                    Container(
+                                      margin: EdgeInsets.symmetric(horizontal: 8.0),
+                                      child: Text("\u20B9 1000", style: Theme.of(context).textTheme.body1,),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(right: 8.0),
+                                      child: GestureDetector(
+                                        child: Text("Place Order"),
+                                        onTap: () {
+                                          controller.placeOrder();
+                                        },
                                       ),
                                     )
                                   ],
                                 ),
-                              );
-                            }
-                          } else {
-                            onAlertMessageRecived(message: "Something went abslutely wrong. Restart your app");
-                            return Container();
-                          }
-                        } else {
-                          return Container(child: Center(child: Text("Something went wrong"),),);
-                        }
-                      },
-                    ); */
+                              )
+                            ],
+                          ),
+                        );
                   },
                 ),
-              )
+              ),
             ],
           ),
         ),
