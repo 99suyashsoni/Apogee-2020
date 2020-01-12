@@ -15,7 +15,7 @@ class EventsScreen extends StatelessWidget implements UIMessageListener{
          create: (BuildContext context) => EventsModel(this),
          child: EventList(nuiMessageListener: this,),
          ),
-      selectedTabIndex: 0,
+      selectedTabIndex: 2,
     );
   
   }
