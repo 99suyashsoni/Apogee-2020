@@ -1,4 +1,4 @@
-import 'package:apogee_main/events/data/dataClasses/EventsData.dart';
+import 'package:apogee_main/events/data/dataClasses/Events.dart';
 import 'package:apogee_main/shared/database_helper.dart';
 
 class EventsDao{
@@ -23,14 +23,14 @@ Future<Null> insertAllEvents(List<dynamic> eventsJson) async{
   });
 }
 
-Future<List<EventsData>> getAllEvents() async{
+Future<List<Events>> getAllEvents() async{
   var database = await databaseInstance();
   List<Map<String,dynamic>> events = await database.rawQuery("SELECT * FROM events_data");
   if(events == null || events.isEmpty)
   return [];
-  List<EventsData> eventList = [];
+  List<Events> eventList = [];
   for(var event in events){
-    eventList.add(EventsData.fromMap(event));
+    eventList.add(Events.fromMap(event));
   }
   return eventList;
 }
