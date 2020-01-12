@@ -1,0 +1,1 @@
+String baseUrl = "https://www.bits-oasis.org/";

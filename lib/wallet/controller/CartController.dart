@@ -1,9 +1,20 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:apogee_main/shared/UIMessageListener.dart';
+import 'package:apogee_main/shared/constants/strings.dart' as prefix0;
+import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
+import 'package:apogee_main/shared/network/NetworkClient.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:collection/collection.dart';
 
 class CartController with ChangeNotifier {
   WalletDao _walletDao;
+  UIMessageListener uiMessageListener;
+  CustomHttpNetworkClient _networkClient;
+  Map<String, String> headerMap = {HttpHeaders.authorizationHeader: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyOTg2LCJ1c2VybmFtZSI6Im91dGd1eSIsImV4cCI6MTU3OTQwNTYyMCwiZW1haWwiOiIifQ.Pci9SeEJ5Vb4q4Vtr3jjYVE9E3rYVhF44K8PcYOk03U"};
   List<CartItem> cartItems = [
     CartItem(
       basePrice: 200,
@@ -30,8 +41,13 @@ class CartController with ChangeNotifier {
   ];
   bool isLoading = false;
 
-  CartController() {
+  CartController(this.uiMessageListener) {
     this._walletDao = WalletDao();
+    this._networkClient = CustomHttpNetworkClient(
+      baseUrl: prefix0.baseUrl,
+      uiMessageListener: uiMessageListener,
+      headers: headerMap
+    );
     // isLoading = true;
     // loadCartItems();
   }
@@ -56,6 +72,30 @@ class CartController with ChangeNotifier {
         _walletDao.updateCartItemQuantity(id, quantity);
       }
     }
+  }
+
+  Future<Null> placeOrder() async {
+    isLoading = true;
+    notifyListeners();
+    cartItems.sort((item1, item2) => item1.vendorId.compareTo(item2.vendorId));
+    Map<int, List<CartItem>> map = groupBy(cartItems, (CartItem item) => item.vendorId);
+    Map<String, dynamic> finalMap = Map();
+    map.forEach((int key, List<CartItem> value) {
+      Map<String, dynamic> vendorMap = Map();
+      value.forEach((CartItem item) {
+        vendorMap.addAll(item.toMapForOrder());
+      });
+      finalMap.addEntries([MapEntry(key.toString(), vendorMap)]);
+    });
+    Map<String, dynamic> body = {
+      "orderdict": finalMap
+    };
+    _networkClient.post("wallet/orders", json.encode(body), (response) async {
+      await _walletDao.clearAllCartItems();
+      cartItems.clear();
+      isLoading = false;
+      notifyListeners();
+    },);
   }
 
   @override

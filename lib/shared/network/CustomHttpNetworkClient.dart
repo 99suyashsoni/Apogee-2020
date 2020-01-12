@@ -32,6 +32,8 @@ class CustomHttpNetworkClient implements NetworkClient {
   Future<Null> post(String url, String body, Function(String) onSucess) async {
     url = url ?? "";
     Response response = await _networkClient.post("$baseUrl$url");
+    print("Code = ${response.statusCode}");
+    print("Response = ${response.body}");
     NetworkResponseHandler.handleResponse(
       response: response,
       messageListener: uiMessageListener,
