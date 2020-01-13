@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           body1: TextStyle(fontSize: 20)
         )
       ),
-      home: StallScreen(),
+      home: EventsScreen(),
       routes: <String, WidgetBuilder> {
         '/cart': (BuildContext context) => CartScreen(),
       },

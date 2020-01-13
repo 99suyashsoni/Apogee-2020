@@ -24,12 +24,9 @@ Future<Null> fetchEvents() async{
 
   _networkClient.get('registrations/events', (json) async{
    var body = jsonDecode(json);
-   EventsData newEvents = EventsData.fromJson(body);
- print('newEvents: ${newEvents.allEvents}');
- print(newEvents);
- List <Events> events;
- _eventsDao.insertAllEvents(newEvents.allEvents[0].events);
+ _eventsDao.insertAllEvents(body);
   });
+  getAllEvents();
 }
 
 

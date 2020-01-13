@@ -3,22 +3,27 @@ import 'package:apogee_main/shared/database_helper.dart';
 
 class EventsDao{
 
-Future<Null> insertAllEvents(List<dynamic> eventsJson) async{
+Future<Null> insertAllEvents(Map<String,dynamic> eventsJson) async{
   var database = await databaseInstance();
+  var body = eventsJson['data'] as List;
+  var rawEventList = body.map((f) => f['events']).toList();
+  print('body : $rawEventList');
   await database.transaction((transaction) async{
    await transaction.delete("events_data");
-   for(var events in eventsJson){
+   for(var events in rawEventList.take(2)){
+     for(var event in events){
      await transaction.rawInsert("""INSERT INTO events_data(event_id,name,about,rules,time,date,details,venue,contact) VALUES(?,?,?,?,?,?,?,?,?) """,[
-       int.parse(events["id"].toString()) ??0,
-       events["name"].toString() ??"",
-       events["about"].toString() ??"",
-       events["rules"].toString() ??"",
-       events["timings"].toString() ??"",
-       events["date_time"].toString() ??"",
-       events["details"].toString() ??"",
-       events["venue"].toString() ??"",
-       events["contact"].toString() ??""
+       int.parse(event["id"].toString()) ?? 0,
+       event["name"].toString() ??"",
+       event["about"].toString() ??"",
+       event["rules"].toString() ??"",
+       event["timings"].toString() ??"",
+       event["date_time"].toString() ??"",
+       event["details"].toString() ??"",
+       event["venue"].toString() ??"",
+       event["contact"].toString() ??""
      ]);
+   }
    }
   });
 }
