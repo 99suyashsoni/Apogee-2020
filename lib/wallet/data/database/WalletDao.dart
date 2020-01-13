@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:apogee_main/shared/database_helper.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
-import 'package:apogee_main/wallet/data/database/dataClasses/StallData.dart';
+import 'package:apogee_main/wallet/data/database/dataClasses/StallDataItem.dart';
+import 'package:apogee_main/wallet/data/database/dataClasses/StallMenuItem.dart';
+import 'package:apogee_main/wallet/data/database/dataClasses/StallModifiedMenuItem.dart';
 import 'package:sqflite/sqflite.dart';
 
 class WalletDao {
@@ -10,30 +14,64 @@ class WalletDao {
     var database = await databaseInstance();
     await database.transaction((transaction) async {
       await transaction.delete("stalls");
+      await transaction.delete("stall_items");
       for(var stallJson in stallsJson) {
         await transaction.rawInsert("""INSERT INTO stalls (stallId, stallName, closed, imageUrl) VALUES (?, ?, ?, ?)""", [
           int.parse(stallJson["id"].toString()) ?? 0,
           stallJson["name"].toString() ?? "",
-          int.parse(stallJson["closed"].toString()) ?? 0,
+          stallJson["closed"] as bool ? 1:0 ?? 0,
           stallJson["image_url"].toString() ?? ""
         ]);
+        print(stallJson["menu"]);
+
+        for(var response in stallJson["menu"]) {
+          await transaction.rawInsert("""INSERT INTO stall_items (itemId,itemName,stallId,stallName,category,current_price,
+                                                                isAvailable,isVeg,discount,base_price) 
+                                                                VALUES ( ?, ?, ?, ? , ?, ?, ?, ?, ?, ?)""",
+              [
+                int.parse(response["id"].toString()),
+                response["name"].toString(),
+                int.parse(stallJson["id"].toString()) ?? 0,
+                stallJson["name"].toString() ?? "",
+                response["description"].toString(),
+                int.parse(response["price"].toString()),
+                response["is_available"] as bool ? 1 : 0 ?? 0,
+                response["is_veg"] as bool ? 1 : 0 ?? 0,
+                int.parse(response["current_discount"].toString()),
+                int.parse(response["base_price"].toString()),
+              ]);
+        }
       }
     });
   }
 
   // This is a demo select query to show how we intend to write DAO files. 
-  // The model data class for this is present in lib/wallet/data/database/dataClasses/StallData.dart
+  // The model data class for this is present in lib/wallet/data/database/dataClasses/StallDataitem.dart
   // Please follow this pattern strictly, and donot forget to include error handling in all queries
-  Future<List<StallData>> getAllStalls() async {
+  Future<List<StallDataItem>> getAllStalls() async {
     var database = await databaseInstance();
     List<Map<String, dynamic>> result = await database.rawQuery("""SELECT * FROM stalls""");
     if(result == null || result.isEmpty) 
       return [];
-    List<StallData> stallsList = [];
+    List<StallDataItem> stallsList = [];
     for(var item in result) {
-      stallsList.add(StallData.fromMap(item));
+      stallsList.add(StallDataItem.fromMap(item));
     }
     return stallsList;
+  }
+
+  Future<List<StallModifiedMenuItem>> getModifiedMenuItems(int stallId,int available) async {
+    var database = await databaseInstance();
+    List<Map<String, dynamic>> result = await database.rawQuery(""" SELECT itemId, itemName, stallId, category, current_price AS current_price, isVeg, COALESCE(cart_data.quantity, 0) AS quantity, discount, base_price AS base_price FROM stall_items LEFT JOIN cart_data ON itemId = item_id WHERE stallId = $stallId AND isAvailable = $available ORDER BY category""");
+    if(result == null || result.isEmpty)
+      return [];
+    List<StallModifiedMenuItem> menuList = [];
+    for(var item in result) {
+      menuList.add(StallModifiedMenuItem.fromMap(item));
+    }
+
+    print(menuList);
+    return menuList;
   }
 
   Future<Null> clearAllCartItems() async {
