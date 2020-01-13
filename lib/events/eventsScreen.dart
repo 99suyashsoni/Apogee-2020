@@ -1,5 +1,5 @@
+
 import 'package:apogee_main/events/data/EventsModel.dart';
-import 'package:apogee_main/events/data/dataClasses/Events.dart';
 import 'package:apogee_main/shared/UIMessageListener.dart';
 import 'package:flutter/material.dart';
 import 'package:apogee_main/shared/screen.dart';
@@ -47,46 +47,38 @@ class EventList extends StatelessWidget {
  EventList({@required this.nuiMessageListener}); 
   @override
   Widget build(BuildContext context) {
-    final _eventsModel = Provider.of<EventsModel>(context);
-
-    return FutureBuilder(
-        future: _eventsModel.getAllEvents(),
-        builder: (context,snapshot){
-          if(snapshot.connectionState == ConnectionState.waiting)
-            return Center(child: CircularProgressIndicator());
-          else if(snapshot.connectionState == ConnectionState.done){
-            if(snapshot.hasData){
-              final events = (snapshot.data as List<Events>).toList();
-              return ListView.builder(
-                itemCount: events.length,
+  
+    return Container(
+      child: Column(children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: Consumer<EventsModel>(
+            builder: (context,controller,child){
+              return controller.isLoading?Center(child: CircularProgressIndicator(),):
+              controller.events.isEmpty? Center(child: Text('No data',style: TextStyle(color: Colors.black),),):
+              Container(
+                child: ListView.builder(
+                itemCount: controller.events.length,
                 itemBuilder: (context,index){
                   return Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                       Text(events[index].name,
+                       Text(controller.events[index].name,
                        style: TextStyle(fontSize: 20.0,color: Colors.black),),
                         SizedBox(height: 10.0,),
                       ],),
                   );
                 },
+              ),
               );
-            }
-            if(snapshot.hasError){
-             nuiMessageListener.onSnackbarMessageRecived(message: "Error fetching events!");
-              print('error fetching events ');
-              return Container();
-            }
-          }
-          else {
-           nuiMessageListener.onAlertMessageRecived(message: "Something went wrong!",);
-            return Container();
-          }    
-          return Center(child: Text('No data',style: TextStyle(color: Colors.black),),);
-        },
-        
-      );
+
+            } ,),
+        )
+      ],),
+    );
+   
   }
 
 }
