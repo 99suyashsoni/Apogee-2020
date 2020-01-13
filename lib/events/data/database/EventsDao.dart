@@ -6,9 +6,9 @@ class EventsDao{
 Future<Null> insertAllEvents(List<dynamic> eventsJson) async{
   var database = await databaseInstance();
   await database.transaction((transaction) async{
-   database.delete("events_data");
+   await transaction.delete("events_data");
    for(var events in eventsJson){
-     transaction.rawInsert("""INSERT INTO events_data(event_id,name,about,rules,time,date,details,venue,contact) VALUES(?,?,?,?,?,?,?,?,?) """,[
+     await transaction.rawInsert("""INSERT INTO events_data(event_id,name,about,rules,time,date,details,venue,contact) VALUES(?,?,?,?,?,?,?,?,?) """,[
        int.parse(events["id"].toString()) ??0,
        events["name"].toString() ??"",
        events["about"].toString() ??"",

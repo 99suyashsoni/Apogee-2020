@@ -17,21 +17,27 @@ CustomHttpNetworkClient _networkClient ;
 EventsModel(this._uiMessageListener){
   this._eventsDao = EventsDao();
   this._networkClient =  CustomHttpNetworkClient(baseUrl:baseUrl,headers:{HttpHeaders.authorizationHeader:jwt},uiMessageListener: _uiMessageListener  );
+  fetchEvents();
 }
 
 Future<Null> fetchEvents() async{
-  _networkClient.get('registration/events', (json) async{
-  List<dynamic> body = jsonDecode(json);
-  List<Events> newEvents = body.map((dynamic item) => Events.fromJson(item)).toList();
-  print('$newEvents');
-  _eventsDao.insertAllEvents(newEvents);
+
+  _networkClient.get('registrations/events', (json) async{
+   var body = jsonDecode(json);
+   EventsData newEvents = EventsData.fromJson(body);
+ print('newEvents: ${newEvents.allEvents}');
+ print(newEvents);
+ List <Events> events;
+ _eventsDao.insertAllEvents(newEvents.allEvents[0].events);
   });
 }
 
 
 Future<List<Events>> getAllEvents() async{
-  
- return await _eventsDao.getAllEvents(); 
+
+  events = await _eventsDao.getAllEvents();
+  print('events:$events');
+ return events; 
   
 }
 }

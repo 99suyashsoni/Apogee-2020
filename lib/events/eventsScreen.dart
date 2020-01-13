@@ -83,7 +83,9 @@ class EventList extends StatelessWidget {
            nuiMessageListener.onAlertMessageRecived(message: "Something went wrong!",);
             return Container();
           }    
+          return Center(child: Text('No data',style: TextStyle(color: Colors.black),),);
         },
+        
       );
   }
 

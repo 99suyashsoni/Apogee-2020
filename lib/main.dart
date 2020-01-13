@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           body1: TextStyle(fontSize: 20)
         )
       ),
-      home: EventsScreen(),
+      home: CartScreen(),
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics)
       ],

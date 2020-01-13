@@ -67,6 +67,7 @@ class WalletDao {
     await database.transaction((transaction) async {
       await transaction.delete("cart_data");
       for(var element in cartJson) {
+          print('object')  ;    
         await transaction.rawInsert("""INSERT INTO cart_data (item_id, quantity, vendor_id) VALUES (?, ?, ?)""", [
           int.parse(element["item_data".toString()]) ?? 0,
           int.parse(element["quantity"].toString()) ?? 1,
