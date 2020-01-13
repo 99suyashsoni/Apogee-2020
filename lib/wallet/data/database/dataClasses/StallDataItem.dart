@@ -1,17 +1,17 @@
-class StallData {
+class StallDataItem {
   int stallId;
   String stallName;
   bool closed;
   String imageUrl;
 
-  StallData({
+  StallDataItem ({
     this.stallId,
     this.stallName,
     this.imageUrl,
     this.closed
   });
 
-  factory StallData.fromMap(Map<String, dynamic> response) => StallData(
+  factory StallDataItem.fromMap(Map<String, dynamic> response) => StallDataItem(
     stallId: int.parse(response["stallId"].toString()),
     stallName: response["stallName"].toString(),
     imageUrl: response["imageUrl"].toString(),
