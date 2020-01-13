@@ -159,6 +159,7 @@ class MyStallModel with ChangeNotifier{
         uiMessageListener: uiMessageListener,
         headers: headerMap
     );
+    displayStallDataItems();
     fetchStallData();
     // isLoading = true;
     // loadCartItems();

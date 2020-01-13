@@ -46,7 +46,7 @@ class WalletDao {
   }
 
   // This is a demo select query to show how we intend to write DAO files. 
-  // The model data class for this is present in lib/wallet/data/database/dataClasses/StallDataitem.dart
+  // The model data class for this is present in lib/wallet/data/database/dataClasses/StallDataItem.dart
   // Please follow this pattern strictly, and donot forget to include error handling in all queries
   Future<List<StallDataItem>> getAllStalls() async {
     var database = await databaseInstance();
