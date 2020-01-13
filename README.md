@@ -1,4 +1,4 @@
-# Appogee App
+# Apogee App
 
 A Flutter application created by the Depaertment of Visual Media, BITS-Pilani, for our annual technical fest, Appogee.
 
