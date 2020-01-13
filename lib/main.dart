@@ -1,3 +1,6 @@
+import 'package:apogee_main/wallet/view/CartScreen.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -5,6 +8,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FirebaseAnalytics analytics = FirebaseAnalytics();
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -27,7 +31,10 @@ class MyApp extends StatelessWidget {
           body1: TextStyle(fontSize: 20)
         )
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: CartScreen(),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics)
+      ],
     );
   }
 }
