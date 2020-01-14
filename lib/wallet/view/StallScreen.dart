@@ -28,7 +28,7 @@ class _StallScreenState extends State<StallScreen>  implements UIMessageListener
   @override
   Widget build(BuildContext context) {
     return Screen(
-        selectedTabIndex: -1,
+        selectedTabIndex: 0,
         title: "Stall",
         child: ChangeNotifierProvider<MyStallModel>(
           create: (BuildContext context) => MyStallModel(this),

@@ -1,3 +1,4 @@
+import 'package:apogee_main/events/EventsScreen.dart';
 import 'package:apogee_main/wallet/view/CartScreen.dart';
 import 'package:apogee_main/wallet/view/MenuScreen.dart';
 import 'package:apogee_main/wallet/view/StallScreen.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
           body1: TextStyle(fontSize: 20)
         )
       ),
-      home: StallScreen(),
+      home: EventsScreen(),
       routes: <String, WidgetBuilder> {
         '/cart': (BuildContext context) => CartScreen(),
       },
