@@ -134,7 +134,7 @@ class _MenuScreenState extends State<MenuScreen> implements UIMessageListener, C
 
   @override
   void onQuantityChanged({int id, int quantity}) {
-    //_controller.cartItemQuantityChanged(id, quantity);
+    _myMenuModel.cartItemQuantityChanged(id, quantity);
   }
 
 
@@ -146,13 +146,14 @@ class MyMenuModel with ChangeNotifier{
   //List<StallDataItem> stallItems;
 
   WalletDao _walletDao;
+  int stallId;
   UIMessageListener uiMessageListener;
   Map<String, String> headerMap = {HttpHeaders.authorizationHeader: "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyOTg2LCJ1c2VybmFtZSI6Im91dGd1eSIsImV4cCI6MTU3OTQ0Mjk3OSwiZW1haWwiOiIifQ.jkUfUC72EpPGeD4tvKn0wRYfsMK27oudMuZW4W6-MbY"};
   List<StallModifiedMenuItem> menuItems= [];
 
   MyMenuModel(uiMessageListener,int stallId) {
     this._walletDao = WalletDao();
-
+     this.stallId=stallId;
     displayStallMenuItems(stallId);
     // isLoading = true;
     // loadCartItems();
@@ -163,6 +164,31 @@ class MyMenuModel with ChangeNotifier{
     isLoading = false;
     notifyListeners();
     print("Updated CartItems = $menuItems");
+  }
+
+  Future<Null> cartItemQuantityChanged(int id, int quantity) async {
+    if(quantity >= 0) {
+      if(quantity == 0) {
+        //cartItems.removeWhere((item) => item.itemId == id);
+        menuItems.firstWhere((item) => item.itemId == id).quantity=quantity;
+        notifyListeners();
+        var result = await _walletDao.deleteCartItem(id);
+        print("Result for delting item from cart = $result");
+      }
+      else if(quantity == 1) {
+        //cartItems.removeWhere((item) => item.itemId == id);
+        menuItems.firstWhere((item) => item.itemId == id).quantity=quantity;
+        notifyListeners();
+        var result = await _walletDao.insertCartItemfromMenuScreen(id, quantity, stallId);
+        print("insert new intem to cart");
+      }
+      else {
+        print("enter update with new quantity$quantity id$id");
+        menuItems.firstWhere((item) => item.itemId == id).quantity = quantity;
+        notifyListeners();
+        _walletDao.updateCartItemQuantity(id, quantity);
+      }
+    }
   }
 
 

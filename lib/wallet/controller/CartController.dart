@@ -16,7 +16,7 @@ class CartController with ChangeNotifier {
   CustomHttpNetworkClient _networkClient;
   Map<String, String> headerMap = {HttpHeaders.authorizationHeader: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyOTg2LCJ1c2VybmFtZSI6Im91dGd1eSIsImV4cCI6MTU3OTQwNTYyMCwiZW1haWwiOiIifQ.Pci9SeEJ5Vb4q4Vtr3jjYVE9E3rYVhF44K8PcYOk03U"};
   List<CartItem> cartItems = [
-    CartItem(
+   /* CartItem(
       basePrice: 200,
       currentPrice: 150,
       discount: 50,
@@ -37,7 +37,7 @@ class CartController with ChangeNotifier {
       quantity: 1,
       vendorId: 2,
       vendorName: "Vendor 1"
-    )
+    )*/
   ];
   bool isLoading = false;
 
@@ -48,8 +48,8 @@ class CartController with ChangeNotifier {
       uiMessageListener: uiMessageListener,
       headers: headerMap
     );
-    // isLoading = true;
-    // loadCartItems();
+     isLoading = true;
+     loadCartItems();
   }
 
   Future<Null> loadCartItems() async {

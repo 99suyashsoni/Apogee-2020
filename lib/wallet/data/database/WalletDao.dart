@@ -114,6 +114,18 @@ class WalletDao {
     });
   }
 
+  Future<Null> insertCartItemfromMenuScreen(int itemId,int quantity,int stallid) async {
+    var database = await databaseInstance();
+        await database.rawInsert("""INSERT INTO cart_data (item_id, quantity, vendor_id) VALUES (?, ?, ?)""", [
+          itemId ,
+          quantity,
+          stallid
+        ]);
+
+
+  }
+
+
   Future<Null> updateCartItemQuantity(int id, int quantity) async {
     var database = await databaseInstance();
     var result = await database.rawQuery("""UPDATE cart_data SET quantity = ? WHERE item_id = ?""", [quantity, id]);
