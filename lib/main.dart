@@ -43,7 +43,7 @@ class MainApp extends StatelessWidget {
           body1: TextStyle(fontSize: 20)
         )
       ),
-      home: LoginScreen(),
+      home: EventsScreen(),
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics)
       ],
