@@ -86,7 +86,7 @@ class _BottomNav extends StatelessWidget {
             isSelected: currentIndex == 2,
           ),
           _bottomNavItem(
-            title: 'Quiz',
+            title: 'Profile',
             selectedIconData: Icons.star,
             unselectedIconData: Icons.question_answer,
             isSelected: currentIndex == 3,

@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:apogee_main/events/data/dataClasses/Events.dart';
 import 'package:apogee_main/shared/UIMessageListener.dart';
 import 'package:apogee_main/shared/constants/strings.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:apogee_main/events/data/database/EventsDao.dart';
+
+import 'dataClasses/Events.dart';
 
 class EventsModel with ChangeNotifier{
 EventsDao _eventsDao;

@@ -72,9 +72,10 @@ class EventList extends StatelessWidget {
                   );
                 },
               ),
+             
               );
-
-            } ,),
+            } ,
+          ),
         )
       ],),
     );

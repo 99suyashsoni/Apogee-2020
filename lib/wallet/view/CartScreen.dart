@@ -18,7 +18,7 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener, C
   @override
   Widget build(BuildContext context) {
     return Screen(
-      selectedTabIndex: -1,
+      selectedTabIndex: 1,
       title: "Cart",
       child: ChangeNotifierProvider<CartController>(
         create: (BuildContext context) => CartController(this),
