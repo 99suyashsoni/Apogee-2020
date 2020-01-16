@@ -1,6 +1,7 @@
 import 'package:apogee_main/shared/database_helper.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
-import 'package:apogee_main/wallet/data/database/dataClasses/StallData.dart';
+import 'package:apogee_main/wallet/data/database/dataClasses/StallDataItem.dart';
+import 'package:apogee_main/wallet/data/database/dataClasses/StallModifiedMenuItem.dart';
 import 'package:sqflite/sqflite.dart';
 
 class WalletDao {
@@ -24,14 +25,14 @@ class WalletDao {
   // This is a demo select query to show how we intend to write DAO files. 
   // The model data class for this is present in lib/wallet/data/database/dataClasses/StallData.dart
   // Please follow this pattern strictly, and donot forget to include error handling in all queries
-  Future<List<StallData>> getAllStalls() async {
+  Future<List<StallDataItem>> getAllStalls() async {
     var database = await databaseInstance();
     List<Map<String, dynamic>> result = await database.rawQuery("""SELECT * FROM stalls""");
     if(result == null || result.isEmpty) 
       return [];
-    List<StallData> stallsList = [];
+    List<StallDataItem> stallsList = [];
     for(var item in result) {
-      stallsList.add(StallData.fromMap(item));
+      stallsList.add(StallDataItem.fromMap(item));
     }
     return stallsList;
   }
@@ -66,7 +67,7 @@ class WalletDao {
     var database = await databaseInstance();
     await database.transaction((transaction) async {
       await transaction.delete("cart_data");
-      for(var element in cartJson) {
+      for(var element in cartJson) {    
         await transaction.rawInsert("""INSERT INTO cart_data (item_id, quantity, vendor_id) VALUES (?, ?, ?)""", [
           int.parse(element["item_data".toString()]) ?? 0,
           int.parse(element["quantity"].toString()) ?? 1,
@@ -80,5 +81,19 @@ class WalletDao {
     var database = await databaseInstance();
     var result = await database.rawQuery("""UPDATE cart_data SET quantity = ? WHERE item_id = ?""", [quantity, id]);
     print("Result for update query on database = $result");
+  }
+
+    Future<List<StallModifiedMenuItem>> getModifiedMenuItems(int stallId,int available) async {
+    var database = await databaseInstance();
+    List<Map<String, dynamic>> result = await database.rawQuery(""" SELECT itemId, itemName, stallId, category, current_price AS current_price, isVeg, COALESCE(cart_data.quantity, 0) AS quantity, discount, base_price AS base_price FROM stall_items LEFT JOIN cart_data ON itemId = item_id WHERE stallId = $stallId AND isAvailable = $available ORDER BY category""");
+    if(result == null || result.isEmpty)
+      return [];
+    List<StallModifiedMenuItem> menuList = [];
+    for(var item in result) {
+      menuList.add(StallModifiedMenuItem.fromMap(item));
+    }
+
+    print(menuList);
+    return menuList;
   }
 }

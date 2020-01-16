@@ -1,7 +1,11 @@
+import 'package:apogee_main/events/EventsScreen.dart';
 import 'package:apogee_main/wallet/view/CartScreen.dart';
+import 'package:apogee_main/wallet/view/MenuScreen.dart';
+import 'package:apogee_main/wallet/view/StallScreen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -31,7 +35,10 @@ class MyApp extends StatelessWidget {
           body1: TextStyle(fontSize: 20)
         )
       ),
-      home: CartScreen(),
+      home: EventsScreen(),
+      routes: <String, WidgetBuilder> {
+        '/cart': (BuildContext context) => CartScreen(),
+      },
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics)
       ],

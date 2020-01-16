@@ -1,4 +1,22 @@
 class EventsData{
+  List<RawEvent> allEvents;
+
+  EventsData({this.allEvents});
+
+}
+
+class RawEvent{
+  String category;
+  List<Events> events;
+
+  RawEvent({
+    this.category,
+    this.events
+  });
+
+}
+
+class Events{
     int id;
     String name;
     String about;
@@ -9,7 +27,7 @@ class EventsData{
     String details;
     String contact;
 
-EventsData({
+Events({
     this.id,
     this.name,
     this.about,
@@ -21,15 +39,18 @@ EventsData({
     this.contact
 });
 
-factory EventsData.fromMap(Map<String,dynamic> response) => EventsData(
+
+
+factory Events.fromMap(Map<String,dynamic> response) => Events(
     id : int.parse(response["event_id"].toString()),
     name : response["name"].toString(),
     about : response["about"].toString(),
     rules : response["rules"].toString(),
     time : response["time"].toString(),
-    date : response["date"].toString,
+    date : response["date"].toString(),
     venue : response["venue"].toString(),
     details : response["details"].toString(),
     contact : response["contact"].toString()
 );
+
 }

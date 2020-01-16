@@ -25,8 +25,8 @@ class Screen extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.red,
-              Colors.blue
+              Colors.white,
+              Colors.white
             ],
             //fill anything later
           )
@@ -68,33 +68,33 @@ class _BottomNav extends StatelessWidget {
         unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500),
         items: [
           _bottomNavItem(
-            title: 'Profile',
+            title: 'Stalls',
             selectedIconData: Icons.star,
-            unselectedIconData: Icons.add,
+            unselectedIconData: Icons.shop,
             isSelected: currentIndex == 0,
           ),
           _bottomNavItem(
-            title: 'Grubs',
+            title: 'Orders',
             selectedIconData: Icons.star,
-            unselectedIconData: Icons.title,
+            unselectedIconData: Icons.list,
             isSelected: currentIndex == 1,
           ),
           _bottomNavItem(
-            title: 'Menu',
+            title: 'Events',
             selectedIconData: Icons.star,
-            unselectedIconData: Icons.error,
+            unselectedIconData: Icons.event,
             isSelected: currentIndex == 2,
           ),
           _bottomNavItem(
-            title: 'Feedback',
+            title: 'Quiz',
             selectedIconData: Icons.star,
-            unselectedIconData: Icons.note,
+            unselectedIconData: Icons.question_answer,
             isSelected: currentIndex == 3,
           ),
           _bottomNavItem(
             title: 'More',
             selectedIconData: Icons.star,
-            unselectedIconData: Icons.map,
+            unselectedIconData: Icons.more,
             isSelected: currentIndex == 4,
           ),
         ],
