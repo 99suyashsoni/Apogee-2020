@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:sqflite/sqflite.dart';
 
 class AuthRepository {
   AuthRepository({
@@ -29,7 +27,7 @@ class AuthRepository {
       body.addAll({'referral_code': code});
 
     isBitsian = true;
-    await _client.post('', jsonEncode(body), setUser);
+    await _client.post('/wallet/auth', jsonEncode(body), setUser);
 
   }
 
@@ -47,7 +45,7 @@ class AuthRepository {
       body.addAll({'referral_code': code});
 
     isBitsian = false;
-    await _client.post('', jsonEncode(body), setUser);
+    await _client.post('/wallet/auth', jsonEncode(body), setUser);
   }
 
   Future<void> logout() async {
@@ -91,20 +89,4 @@ class AuthRepository {
     await _storage.write(key: 'IS_BITSIAN', value: isBitsian.toString());
     
   }
-
-  /*async{
-  WidgetsFlutterBinding.ensureInitialized();
-
-  final authRepository = AuthRepository(
-      client: CustomHttpNetworkClient(baseUrl: '', uiMessageListener: ),
-      secureStorage: new FlutterSecureStorage()
-  );
-
-  SystemChrome.setSystemUIOverlayStyle(
-  SystemUiOverlayStyle(
-  statusBarColor: Colors.greenAccent
-  )
-  );
-
-  runApp(MyApp());*/
 }
