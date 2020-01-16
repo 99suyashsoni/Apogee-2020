@@ -1,4 +1,7 @@
+import 'package:apogee_main/auth/data/auth_repository.dart';
+import 'package:apogee_main/auth/login_screen.dart';
 import 'package:apogee_main/events/EventsScreen.dart';
+import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/wallet/view/CartScreen.dart';
 import 'package:apogee_main/wallet/view/MenuScreen.dart';
 import 'package:apogee_main/wallet/view/OrderScreen.dart';
@@ -7,16 +10,21 @@ import 'package:apogee_main/wallet/view/StallScreen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 
 
-void main() => runApp(MyApp());
+void main() => runApp(MainApp());
 
-class MyApp extends StatelessWidget {
+class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseAnalytics analytics = FirebaseAnalytics();
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Apogee App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         appBarTheme: AppBarTheme(

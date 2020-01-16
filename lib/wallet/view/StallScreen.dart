@@ -1,15 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:apogee_main/shared/UIMessageListener.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/screen.dart';
-import 'package:apogee_main/wallet/controller/CartController.dart';
+
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
-import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
+
 import 'package:apogee_main/wallet/data/database/dataClasses/StallDataItem.dart';
-import 'package:apogee_main/wallet/view/CartItemWidget.dart';
-import 'package:apogee_main/wallet/view/CartQuantityWidget.dart';
+
 import 'package:apogee_main/shared/constants/strings.dart' as prefix0;
 import 'package:apogee_main/wallet/view/MenuScreen.dart';
 import 'package:apogee_main/wallet/view/StallItemWidget.dart';
@@ -22,8 +19,8 @@ class StallScreen extends StatefulWidget{
 
 }
 
-class _StallScreenState extends State<StallScreen>  implements UIMessageListener {
-  MyStallModel _myStallModel;
+class _StallScreenState extends State<StallScreen> {
+  //MyStallModel _myStallModel;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +28,7 @@ class _StallScreenState extends State<StallScreen>  implements UIMessageListener
         selectedTabIndex: 0,
         title: "Stall",
         child: ChangeNotifierProvider<MyStallModel>(
-          create: (BuildContext context) => MyStallModel(this),
+          create: (BuildContext context) => MyStallModel(),
           child: Container(
             child: Column(
               children: <Widget>[
@@ -39,7 +36,7 @@ class _StallScreenState extends State<StallScreen>  implements UIMessageListener
                   flex: 1,
                   child: Consumer<MyStallModel>(
                     builder: (context, mystallmodel, child) {
-                      _myStallModel = mystallmodel;
+                     // _myStallModel = mystallmodel;
                       return mystallmodel.isLoading ? Center(child: CircularProgressIndicator()) :
                       mystallmodel.stallItems.isEmpty ? Center(child: Text("No Stalls are available")) :
                       Container(
@@ -75,28 +72,6 @@ class _StallScreenState extends State<StallScreen>  implements UIMessageListener
         )
     );
   }
-
-  @override
-  void onAlertMessageRecived({String message, String title = "Alert", List<Widget> actions}) {
-    // TODO: implement onAlertMessageRecived
-  }
-
-  @override
-  void onAuthenticationExpiered() {
-    // TODO: implement onAuthenticationExpiered
-  }
-
-  @override
-  void onSnackbarMessageRecived({String message}) {
-    // TODO: implement onSnackbarMessageRecived
-  }
-
-  @override
-  void onToastMessageRecived({String message}) {
-    // TODO: implement onToastMessageRecived
-  }
-
-
 
   /*@override
   void onAlertMessageRecived({String message, String title = "Alert", List<Widget> actions}) {
@@ -134,7 +109,6 @@ class MyStallModel with ChangeNotifier{
   //List<StallDataItem> stallItems;
 
   WalletDao _walletDao;
-  UIMessageListener uiMessageListener;
   CustomHttpNetworkClient _networkClient;
   Map<String, String> headerMap = {HttpHeaders.authorizationHeader: "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyOTg2LCJ1c2VybmFtZSI6Im91dGd1eSIsImV4cCI6MTU3OTQ0Mjk3OSwiZW1haWwiOiIifQ.jkUfUC72EpPGeD4tvKn0wRYfsMK27oudMuZW4W6-MbY"};
   List<StallDataItem> stallItems = [
@@ -152,11 +126,10 @@ class MyStallModel with ChangeNotifier{
     )
   ];
 
-  MyStallModel(uiMessageListener) {
+  MyStallModel() {
     this._walletDao = WalletDao();
     this._networkClient = CustomHttpNetworkClient(
         baseUrl: prefix0.baseUrl,
-        uiMessageListener: uiMessageListener,
         headers: headerMap
     );
     displayStallDataItems();
