@@ -1,4 +1,3 @@
-import 'package:apogee_main/shared/UIMessageListener.dart';
 import 'package:apogee_main/shared/screen.dart';
 import 'package:apogee_main/wallet/controller/CartController.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
@@ -12,7 +11,7 @@ class CartScreen extends StatefulWidget {
   _CartScreenState createState() => _CartScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> implements UIMessageListener, CartQuantityListener {
+class _CartScreenState extends State<CartScreen> implements CartQuantityListener {
   CartController _controller;
 
   @override
@@ -21,7 +20,7 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener, C
       selectedTabIndex: -1,
       title: "Cart",
       child: ChangeNotifierProvider<CartController>(
-        create: (BuildContext context) => CartController(this),
+        create: (BuildContext context) => CartController(),
         child: Container(
           child: Column(
             children: <Widget>[
@@ -93,26 +92,6 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener, C
         ),
       )
     );
-  }
-
-  @override
-  void onAlertMessageRecived({String message, String title = "Alert", List<Widget> actions}) {
-    // TODO: implement onAlertMessageRecived
-  }
-
-  @override
-  void onAuthenticationExpiered() {
-    // TODO: implement onAuthenticationExpiered
-  }
-
-  @override
-  void onSnackbarMessageRecived({String message}) {
-    // TODO: implement onSnackbarMessageRecived
-  }
-
-  @override
-  void onToastMessageRecived({String message}) {
-    // TODO: implement onToastMessageRecived
   }
 
   @override

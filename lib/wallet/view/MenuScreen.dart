@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:apogee_main/shared/UIMessageListener.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/screen.dart';
 import 'package:apogee_main/wallet/controller/CartController.dart';
@@ -25,7 +23,7 @@ class MenuScreen extends StatefulWidget {
   MenuScreen(this.id);
 }
 
-class _MenuScreenState extends State<MenuScreen> implements UIMessageListener, CartQuantityListener {
+class _MenuScreenState extends State<MenuScreen> implements CartQuantityListener {
   MyMenuModel _myMenuModel;
   @override
   Widget build(BuildContext context) {
@@ -113,26 +111,6 @@ class _MenuScreenState extends State<MenuScreen> implements UIMessageListener, C
   }
 
   @override
-  void onAlertMessageRecived({String message, String title = "Alert", List<Widget> actions}) {
-    // TODO: implement onAlertMessageRecived
-  }
-
-  @override
-  void onAuthenticationExpiered() {
-    // TODO: implement onAuthenticationExpiered
-  }
-
-  @override
-  void onSnackbarMessageRecived({String message}) {
-    // TODO: implement onSnackbarMessageRecived
-  }
-
-  @override
-  void onToastMessageRecived({String message}) {
-    // TODO: implement onToastMessageRecived
-  }
-
-  @override
   void onQuantityChanged({int id, int quantity}) {
     //_controller.cartItemQuantityChanged(id, quantity);
   }
@@ -146,7 +124,6 @@ class MyMenuModel with ChangeNotifier{
   //List<StallDataItem> stallItems;
 
   WalletDao _walletDao;
-  UIMessageListener uiMessageListener;
   Map<String, String> headerMap = {HttpHeaders.authorizationHeader: "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyOTg2LCJ1c2VybmFtZSI6Im91dGd1eSIsImV4cCI6MTU3OTQ0Mjk3OSwiZW1haWwiOiIifQ.jkUfUC72EpPGeD4tvKn0wRYfsMK27oudMuZW4W6-MbY"};
   List<StallModifiedMenuItem> menuItems= [];
 

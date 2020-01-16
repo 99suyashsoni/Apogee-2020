@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:apogee_main/shared/UIMessageListener.dart';
 import 'package:apogee_main/shared/constants/strings.dart' as prefix0;
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/network/NetworkClient.dart';
@@ -12,7 +10,6 @@ import 'package:collection/collection.dart';
 
 class CartController with ChangeNotifier {
   WalletDao _walletDao;
-  UIMessageListener uiMessageListener;
   CustomHttpNetworkClient _networkClient;
   Map<String, String> headerMap = {HttpHeaders.authorizationHeader: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyOTg2LCJ1c2VybmFtZSI6Im91dGd1eSIsImV4cCI6MTU3OTQwNTYyMCwiZW1haWwiOiIifQ.Pci9SeEJ5Vb4q4Vtr3jjYVE9E3rYVhF44K8PcYOk03U"};
   List<CartItem> cartItems = [
@@ -41,11 +38,10 @@ class CartController with ChangeNotifier {
   ];
   bool isLoading = false;
 
-  CartController(this.uiMessageListener) {
+  CartController() {
     this._walletDao = WalletDao();
     this._networkClient = CustomHttpNetworkClient(
       baseUrl: prefix0.baseUrl,
-      uiMessageListener: uiMessageListener,
       headers: headerMap
     );
     // isLoading = true;

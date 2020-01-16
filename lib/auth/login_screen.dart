@@ -1,7 +1,6 @@
 import 'package:apogee_main/auth/data/auth_repository.dart';
-import 'package:apogee_main/shared/UIMessageListener.dart';
+import 'package:apogee_main/events/eventsScreen.dart';
 import 'package:apogee_main/shared/screen.dart';
-import 'package:apogee_main/wallet/view/CartScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +25,7 @@ class _Login extends StatefulWidget{
   _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<_Login> implements UIMessageListener{
+class _LoginState extends State<_Login>{
 
   bool _isLoading = false;
 
@@ -53,7 +52,7 @@ class _LoginState extends State<_Login> implements UIMessageListener{
               if(loginCheck){
                 Navigator.push(context,
                     MaterialPageRoute(
-                      builder: (context) => CartScreen(),
+                      builder: (context) => EventsScreen(),
                     ));
               }
               else{
@@ -67,25 +66,4 @@ class _LoginState extends State<_Login> implements UIMessageListener{
       ],
     );
   }
-
-  @override
-  void onAlertMessageRecived({String message, String title = "Alert", List<Widget> actions}) {
-    // TODO: implement onAlertMessageRecived
-  }
-
-  @override
-  void onAuthenticationExpiered() {
-    // TODO: implement onAuthenticationExpiered
-  }
-
-  @override
-  void onSnackbarMessageRecived({String message}) {
-    // TODO: implement onSnackbarMessageRecived
-  }
-
-  @override
-  void onToastMessageRecived({String message}) {
-    // TODO: implement onToastMessageRecived
-  }
-
 }

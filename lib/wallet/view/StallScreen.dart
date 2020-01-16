@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:apogee_main/shared/UIMessageListener.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/screen.dart';
 import 'package:apogee_main/wallet/controller/CartController.dart';
@@ -22,7 +20,7 @@ class StallScreen extends StatefulWidget{
 
 }
 
-class _StallScreenState extends State<StallScreen>  implements UIMessageListener {
+class _StallScreenState extends State<StallScreen> {
   MyStallModel _myStallModel;
 
   @override
@@ -31,7 +29,7 @@ class _StallScreenState extends State<StallScreen>  implements UIMessageListener
         selectedTabIndex: 0,
         title: "Stall",
         child: ChangeNotifierProvider<MyStallModel>(
-          create: (BuildContext context) => MyStallModel(this),
+          create: (BuildContext context) => MyStallModel(),
           child: Container(
             child: Column(
               children: <Widget>[
@@ -76,28 +74,6 @@ class _StallScreenState extends State<StallScreen>  implements UIMessageListener
     );
   }
 
-  @override
-  void onAlertMessageRecived({String message, String title = "Alert", List<Widget> actions}) {
-    // TODO: implement onAlertMessageRecived
-  }
-
-  @override
-  void onAuthenticationExpiered() {
-    // TODO: implement onAuthenticationExpiered
-  }
-
-  @override
-  void onSnackbarMessageRecived({String message}) {
-    // TODO: implement onSnackbarMessageRecived
-  }
-
-  @override
-  void onToastMessageRecived({String message}) {
-    // TODO: implement onToastMessageRecived
-  }
-
-
-
   /*@override
   void onAlertMessageRecived({String message, String title = "Alert", List<Widget> actions}) {
     // TODO: implement onAlertMessageRecived
@@ -134,7 +110,6 @@ class MyStallModel with ChangeNotifier{
   //List<StallDataItem> stallItems;
 
   WalletDao _walletDao;
-  UIMessageListener uiMessageListener;
   CustomHttpNetworkClient _networkClient;
   Map<String, String> headerMap = {HttpHeaders.authorizationHeader: "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyOTg2LCJ1c2VybmFtZSI6Im91dGd1eSIsImV4cCI6MTU3OTQ0Mjk3OSwiZW1haWwiOiIifQ.jkUfUC72EpPGeD4tvKn0wRYfsMK27oudMuZW4W6-MbY"};
   List<StallDataItem> stallItems = [
@@ -152,11 +127,10 @@ class MyStallModel with ChangeNotifier{
     )
   ];
 
-  MyStallModel(uiMessageListener) {
+  MyStallModel() {
     this._walletDao = WalletDao();
     this._networkClient = CustomHttpNetworkClient(
         baseUrl: prefix0.baseUrl,
-        uiMessageListener: uiMessageListener,
         headers: headerMap
     );
     displayStallDataItems();
