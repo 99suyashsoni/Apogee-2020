@@ -5,10 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkResponseHandler {
-  static ErrorState handleResponse({@required Function(String) onSuccess, @required http.Response response}) {
+  static Future<ErrorState> handleResponse({@required Function(String) onSuccess, @required http.Response response}) async {
     if(response != null) {
       if(response.statusCode == 200 || response.statusCode == 201) {
-        onSuccess(response.body);
+        await onSuccess(response.body);
         return ErrorState(
           state: 0,
           message: "Inshaalah Developers Played Well"
