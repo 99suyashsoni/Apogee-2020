@@ -35,8 +35,8 @@ class AuthRepository {
   Future<ErrorState> loginOutstee(String username, String password, String code) async{
     final String regToken = await _storage.read(key: "REGTOKEN") ?? "" ;
     Map<String, String> body = {
-      'username': 'outguy',
-      'password': 'outoutout'
+      'username': username,
+      'password': password
     };
 
     if(regToken != "")
@@ -46,6 +46,7 @@ class AuthRepository {
       body.addAll({'referral_code': code});
 
     isBitsian = false;
+    print(body);
     return await _client.post('wallet/auth', json.encode(body), setUser, false);
   }
 

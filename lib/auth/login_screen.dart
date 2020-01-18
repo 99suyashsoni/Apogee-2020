@@ -42,6 +42,8 @@ class _LoginState extends State<_Login>{
 
   AuthRepository _authRepository;
   bool _isLoading = false;
+  String _username;
+  String _password;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +55,26 @@ class _LoginState extends State<_Login>{
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Spacer(),
+        TextField(
+          onChanged: (user) {
+            setState(() {
+              _username = user;
+            });
+          },
+        ),
+        SizedBox(
+          height: 20.0,
+        ),
+        TextField(
+          onChanged: (pass) {
+            setState(() {
+              _password = pass;
+            });
+          },
+        ),
+        SizedBox(
+          height: 20.0,
+        ),
         RaisedButton(
           child: Text("Login"),
           onPressed: () async {
@@ -60,14 +82,14 @@ class _LoginState extends State<_Login>{
             setState(() {
               _isLoading = true;
             });
-            await repo.loginOutstee("outguy", "outoutout", "");
+            await repo.loginOutstee(_username, _password, "");
             repo.isLoggedIn.then((loginCheck) {
               setState(() {
                 _isLoading = false;
               });
               if(loginCheck){
                 Scaffold.of(context).showSnackBar(SnackBar(content: Text('Login Success')));
-                Navigator.pushNamed(context, '/events');
+                Navigator.popAndPushNamed(context, '/events');
               }
               else{
                 //to be decided
@@ -76,7 +98,8 @@ class _LoginState extends State<_Login>{
               //to be decided
             });
           },
-        )
+        ),
+        Spacer()
       ],
     );
   }
