@@ -13,6 +13,6 @@ import 'package:apogee_main/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MainApp());
+    await tester.pumpWidget(ApogeeApp());
   });
 }

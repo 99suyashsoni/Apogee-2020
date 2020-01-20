@@ -110,7 +110,6 @@ class MyStallModel with ChangeNotifier{
 
   WalletDao _walletDao;
   CustomHttpNetworkClient _networkClient;
-  Map<String, String> headerMap = {HttpHeaders.authorizationHeader: "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyOTg2LCJ1c2VybmFtZSI6Im91dGd1eSIsImV4cCI6MTU3OTQ0Mjk3OSwiZW1haWwiOiIifQ.jkUfUC72EpPGeD4tvKn0wRYfsMK27oudMuZW4W6-MbY"};
   List<StallDataItem> stallItems = [
     StallDataItem(
      stallId: 1,
@@ -126,14 +125,14 @@ class MyStallModel with ChangeNotifier{
     )
   ];
 
-  MyStallModel() {
-    this._walletDao = WalletDao();
-    this._networkClient = CustomHttpNetworkClient(
-        baseUrl: prefix0.baseUrl,
-        headers: headerMap
-    );
+  MyStallModel({
+    WalletDao walletDao,
+    CustomHttpNetworkClient networkClient
+  }): this._walletDao = walletDao,
+      this._networkClient = networkClient
+  {
     displayStallDataItems();
-    fetchStallData();
+    //fetchStallData();
     // isLoading = true;
     // loadCartItems();
   }

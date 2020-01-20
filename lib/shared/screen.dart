@@ -88,7 +88,7 @@ class _BottomNav extends StatelessWidget {
           _bottomNavItem(
             title: 'Profile',
             selectedIconData: Icons.star,
-            unselectedIconData: Icons.question_answer,
+            unselectedIconData: Icons.person,
             isSelected: currentIndex == 3,
           ),
           _bottomNavItem(
@@ -98,6 +98,23 @@ class _BottomNav extends StatelessWidget {
             isSelected: currentIndex == 4,
           ),
         ],
+        onTap: (i) {
+          if(i == currentIndex) {
+            return;
+          }
+
+          if(i == 0){
+            Navigator.of(context).pushNamedAndRemoveUntil('/stalls', ModalRoute.withName('/events'));
+          }else if(i == 1){
+            Navigator.of(context).pushNamedAndRemoveUntil('/orders', ModalRoute.withName('/events'));
+          }else if(i == 2){
+            Navigator.of(context).popUntil(ModalRoute.withName('/events'));
+          }else if(i == 3){
+            Navigator.of(context).pushNamedAndRemoveUntil('/profile', ModalRoute.withName('/events'));
+          }else if(i == 4){
+            Navigator.of(context).pushNamedAndRemoveUntil('/more', ModalRoute.withName('/events'));
+          }
+        },
       );
     }
     else{

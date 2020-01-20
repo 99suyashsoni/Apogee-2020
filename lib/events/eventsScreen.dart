@@ -9,10 +9,7 @@ class EventsScreen extends StatelessWidget{
 
     return  Screen(
       title: "Events",
-      child:ChangeNotifierProvider<EventsModel>(
-         create: (BuildContext context) => EventsModel(),
-         child: EventList(),
-         ),
+      child: EventList(),
       selectedTabIndex: 2,
     );
   
@@ -20,7 +17,6 @@ class EventsScreen extends StatelessWidget{
 }
 
 class EventList extends StatelessWidget {
- EventList();
   @override
   Widget build(BuildContext context) {
   
