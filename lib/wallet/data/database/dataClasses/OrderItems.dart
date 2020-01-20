@@ -1,10 +1,3 @@
-//  id INTEGER PRIMARY KEY AUTOINCREMENT,
-//     name TEXT NON NULL,
-//     item_id INTEGER NON NULL,
-//     quantity INTEGER NON NULL,
-//     unit_price INTEGER NON NULL,
-//     order_id INTEGER NON NULL
-
     class OrderItems {
 
   int itemId;
