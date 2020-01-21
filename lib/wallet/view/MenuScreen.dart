@@ -18,37 +18,11 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver implements CartQuantityListener {
-AppLifecycleState _lastLifecycleState;
-    @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    setState(() {
-      _lastLifecycleState = state;
-    });
-  }
-
 
 
   MyMenuModel _myMenuModel;
   @override
   Widget build(BuildContext context) {
-     if (_lastLifecycleState == null)
-     print("No lifecylce chage");
-
-     else if(_lastLifecycleState==AppLifecycleState.resumed)
-                  _myMenuModel.
-          
     
     return Screen(
         selectedTabIndex: -1,
@@ -155,8 +129,9 @@ class MyMenuModel with ChangeNotifier{
   MyMenuModel(uiMessageListener,int stallId) {
     this._walletDao = WalletDao();
      this.stallId=stallId;
+     isLoading = true;
     displayStallMenuItems(stallId);
-    // isLoading = true;
+     
     // loadCartItems();
   }
 

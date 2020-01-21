@@ -27,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> /*implements  CartQuantit
       selectedTabIndex: 3,
       title: "Profile",
       child: ChangeNotifierProvider<MyProfileModel>(
-        create: (BuildContext context) => MyProfileModel(this),
+        create: (BuildContext context) => MyProfileModel(),
         child: Container(
           child: Column(
             children: <Widget>[
@@ -100,13 +100,12 @@ class MyProfileModel with ChangeNotifier{
   int balance =-1;
   
    
-  MyProfileModel(uiMessageListener) {
-    this._walletDao = WalletDao();
-    this._networkClient = CustomHttpNetworkClient(
-        baseUrl: prefix0.baseUrl,
-        //uiMessageListener: uiMessageListener,
-        headers: headerMap
-    );
+  MyProfileModel({
+     WalletDao walletDao,
+    CustomHttpNetworkClient networkClient
+  }): this._walletDao = walletDao,
+      this._networkClient = networkClient{
+  
    
   }
   

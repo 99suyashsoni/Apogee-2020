@@ -73,34 +73,7 @@ class _StallScreenState extends State<StallScreen> {
     );
   }
 
-  /*@override
-  void onAlertMessageRecived({String message, String title = "Alert", List<Widget> actions}) {
-    // TODO: implement onAlertMessageRecived
-  }
-
-  @override
-  void onAuthenticationExpiered() {
-    // TODO: implement onAuthenticationExpiered
-  }
-
-  @override
-  void onSnackbarMessageRecived({String message}) {
-    // TODO: implement onSnackbarMessageRecived
-  }
-
-  @override
-  void onToastMessageRecived({String message}) {
-    // TODO: implement onToastMessageRecived
-  }*/
-
-/*
-  @override
-  void onQuantityChanged({int id, int quantity}) {
-    _controller.cartItemQuantityChanged(id, quantity);
-  }
-*/
-
-
+  
 }
 
 class MyStallModel with ChangeNotifier{
@@ -131,10 +104,11 @@ class MyStallModel with ChangeNotifier{
   }): this._walletDao = walletDao,
       this._networkClient = networkClient
   {
+    isLoading = true;
     displayStallDataItems();
-    //fetchStallData();
-    // isLoading = true;
-    // loadCartItems();
+    fetchStallData();
+   
+   
   }
 
   Future<Null> displayStallDataItems() async {

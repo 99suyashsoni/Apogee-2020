@@ -26,7 +26,7 @@ class _OrderScreenState extends State<OrderScreen>  {
         selectedTabIndex: 1,
         title: "Orders",
         child: ChangeNotifierProvider<MyOrderModel>(
-          create: (BuildContext context) => MyOrderModel(this),
+          create: (BuildContext context) => MyOrderModel(),
           child: Container(
             child: Column(
               children: <Widget>[
@@ -97,18 +97,17 @@ class MyOrderModel with ChangeNotifier{
   List<Orders> orderData = [];
   List<OrderItems> orderDetails = [];
 
-  MyOrderModel(uiMessageListener) {
-    this._walletDao = WalletDao();
-    this._networkClient = CustomHttpNetworkClient(
-        baseUrl: prefix0.baseUrl,
-       // uiMessageListener: uiMessageListener,
-        headers: headerMap
-    );
-    //
+  MyOrderModel({
+     WalletDao walletDao,
+    CustomHttpNetworkClient networkClient
+  }): this._walletDao = walletDao,
+      this._networkClient = networkClient{
+    
+     isLoading = true;
     displayOrderData();
     fetchOrderData();
-     isLoading = true;
-    // loadCartItems();
+    
+   
   }
 
   Future<Null> displayOrderData() async {
