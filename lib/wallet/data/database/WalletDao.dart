@@ -85,6 +85,7 @@ class WalletDao {
   }
 
   Future<Null> insertCartItems(List<dynamic> cartJson) async {
+   print("insert cart items called");
     var database = await databaseInstance();
     await database.transaction((transaction) async {
       await transaction.delete("cart_data");

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/screen.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallModifiedMenuItem.dart';
@@ -27,7 +28,7 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
     return Screen(
         selectedTabIndex: -1,
         title: "Menu",
-        child: ChangeNotifierProvider<MyMenuModel>(
+       child: ChangeNotifierProvider<MyMenuModel>(
           create: (BuildContext context) => MyMenuModel(this,widget.id),
           child: Container(
             child: Column(
@@ -37,6 +38,7 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
                   child: Consumer<MyMenuModel>(
                     builder: (context, mymenumodel, child) {
                       _myMenuModel = mymenumodel;
+                      mymenumodel.stallId=widget.id;
                       return mymenumodel.isLoading ? Center(child: CircularProgressIndicator(),) :
                       mymenumodel.menuItems.isEmpty ? Center(child: Text("No menu available for this stall"),) :
                       Container(
@@ -81,9 +83,9 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
                                     padding: EdgeInsets.only(right: 8.0),
                                     child: GestureDetector(
                                       child: Text("View cart"),
-                                      onTap: () {
-                                        Navigator.of(context).pushNamed('/cart');
-
+                                      onTap: () async {
+                                        await Navigator.of(context).pushNamed('/cart');
+                                        mymenumodel.displayStallMenuItems(widget.id);
                                        /* controller.placeOrder();*/
                                         Scaffold
                                             .of(context)
@@ -103,7 +105,7 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
               ],
             ),
           ),
-        )
+       ),
     );
   }
 
@@ -121,6 +123,7 @@ class MyMenuModel with ChangeNotifier{
   //List<StallDataItem> stallItems;
 
   WalletDao _walletDao;
+//  CustomHttpNetworkClient _networkClient;
   int stallId;
 
   Map<String, String> headerMap = {HttpHeaders.authorizationHeader: "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyOTg2LCJ1c2VybmFtZSI6Im91dGd1eSIsImV4cCI6MTU3OTQ0Mjk3OSwiZW1haWwiOiIifQ.jkUfUC72EpPGeD4tvKn0wRYfsMK27oudMuZW4W6-MbY"};
@@ -136,6 +139,7 @@ class MyMenuModel with ChangeNotifier{
   }
 
   Future<Null> displayStallMenuItems(int stallId) async {
+    print("try: display called");
     menuItems = await _walletDao.getModifiedMenuItems(stallId, 1);
     isLoading = false;
     notifyListeners();

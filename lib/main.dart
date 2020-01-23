@@ -12,6 +12,7 @@ import 'package:apogee_main/wallet/view/MenuScreen.dart';
 import 'package:apogee_main/wallet/view/OrderScreen.dart';
 import 'package:apogee_main/wallet/view/ProfileScreen.dart';
 import 'package:apogee_main/wallet/view/StallScreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +22,15 @@ import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 
-void main() async {
+void main() {
 
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
+
+   print("Print 1");
 
   final secureStorage = new FlutterSecureStorage();
+
+  print("Print 2");
 
   final customHttpNetworkClient = CustomHttpNetworkClient(
     baseUrl: "https://www.bits-oasis.org/",
@@ -37,8 +42,10 @@ void main() async {
   final eventsDao = EventsDao();
   final eventsModel = EventsModel(eventsDao: eventsDao, networkClient: customHttpNetworkClient);
   final walletDao = WalletDao();
+  final firestoreDatabase=Firestore.instance;
   final cartController = CartController(walletDao: walletDao, networkClient: customHttpNetworkClient);
   final stallModel = MyStallModel(walletDao: walletDao, networkClient: customHttpNetworkClient);
+   //final menuModel = MyMenuModel(walletDao: walletDao, networkClient: customHttpNetworkClient);
 
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
@@ -50,7 +57,7 @@ void main() async {
     authRepository: authRepository,
     eventsModel: eventsModel,
     cartController: cartController,
-    stallModell: stallModel,
+    stallModel: stallModel,
   ));
 }
 
@@ -60,14 +67,14 @@ class ApogeeApp extends StatelessWidget {
     @required this.authRepository,
     @required this.eventsModel,
     @required this.cartController,
-    @required this.stallModell,
+    @required this.stallModel,
     Key key
   }) : super(key: key);
 
   final AuthRepository authRepository;
   final EventsModel eventsModel;
   final CartController cartController;
-  final MyStallModel stallModell;
+  final MyStallModel stallModel;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +102,7 @@ class ApogeeApp extends StatelessWidget {
         },
         '/stalls': (context) {
           return ChangeNotifierProvider.value(
-            value: stallModell,
+            value: stallModel,
             child: StallScreen(),
           );
         },
@@ -110,8 +117,21 @@ class ApogeeApp extends StatelessWidget {
             value: cartController,
             child: CartScreen(),
           );
-        }
+        },
+        '/cart': (context) {
+          return ChangeNotifierProvider.value(
+            value: cartController,
+            child: CartScreen(),
+          );
+        },
+        /*'/menu': (context) {
+          return ChangeNotifierProvider.value(
+            value: menumo,
+            child: CartScreen(),
+          );
+        },*/
       },
+
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics)
       ],

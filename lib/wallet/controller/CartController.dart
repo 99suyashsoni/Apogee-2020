@@ -105,6 +105,7 @@ class CartController with ChangeNotifier {
 
   @override
   void dispose() {
+    print("try: dispose called on close cart");
     // As a safety measure, just before the cart is disposed, I update the database with the list that the controller has maintained
     // This is a logical step as the user would always see the data that was maintained by the controller. So, if we save the last
     // set of data that was maintained by the controller, there would never be any cases of data inconsistency visible to the user

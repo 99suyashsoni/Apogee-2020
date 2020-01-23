@@ -9,7 +9,7 @@ class LoginScreen extends StatelessWidget{
     this.authRepository
   });
 
-  final AuthRepository authRepository;
+   final AuthRepository authRepository;
 
   @override
   Widget build(BuildContext context) {
