@@ -14,8 +14,9 @@ class MenuScreen extends StatefulWidget {
   _MenuScreenState createState() => _MenuScreenState();
 
   int id;
+  WalletDao walletDao;
 
-  MenuScreen(this.id);
+  MenuScreen(this.id,this.walletDao);
 }
 
 class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver implements CartQuantityListener {
@@ -29,7 +30,7 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
         selectedTabIndex: -1,
         title: "Menu",
        child: ChangeNotifierProvider<MyMenuModel>(
-          create: (BuildContext context) => MyMenuModel(this,widget.id),
+          create: (BuildContext context) => MyMenuModel(widget.id,widget.walletDao),
           child: Container(
             child: Column(
               children: <Widget>[
@@ -123,15 +124,14 @@ class MyMenuModel with ChangeNotifier{
   //List<StallDataItem> stallItems;
 
   WalletDao _walletDao;
-//  CustomHttpNetworkClient _networkClient;
   int stallId;
 
-  Map<String, String> headerMap = {HttpHeaders.authorizationHeader: "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyOTg2LCJ1c2VybmFtZSI6Im91dGd1eSIsImV4cCI6MTU3OTQ0Mjk3OSwiZW1haWwiOiIifQ.jkUfUC72EpPGeD4tvKn0wRYfsMK27oudMuZW4W6-MbY"};
   List<StallModifiedMenuItem> menuItems= [];
 
-  MyMenuModel(uiMessageListener,int stallId) {
-    this._walletDao = WalletDao();
+  MyMenuModel(int stallId, WalletDao walletDao) {
+    this._walletDao = walletDao;
      this.stallId=stallId;
+
      isLoading = true;
     displayStallMenuItems(stallId);
      

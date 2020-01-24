@@ -38,15 +38,13 @@ void main() async {
     client: Client()
   );
 
+
+  //All repo and dao to be made singleton here
   final authRepository = AuthRepository(client: customHttpNetworkClient, secureStorage: secureStorage);
   final eventsDao = EventsDao();
-  final eventsModel = EventsModel(eventsDao: eventsDao, networkClient: customHttpNetworkClient);
   final walletDao = WalletDao();
-  final firestoreDatabase=Firestore.instance;
-  final cartController = CartController(walletDao: walletDao, networkClient: customHttpNetworkClient);
-  final stallModel = MyStallModel(walletDao: walletDao, networkClient: customHttpNetworkClient);
-  final orderModel = MyOrderModel(walletDao: walletDao, networkClient: customHttpNetworkClient);
-   //final menuModel = MyMenuModel(walletDao: walletDao, networkClient: customHttpNetworkClient);
+  //final firestoreDB= Firestore.instance;
+
 
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
@@ -56,10 +54,12 @@ void main() async {
 
   runApp(ApogeeApp(
     authRepository: authRepository,
-    eventsModel: eventsModel,
-    cartController: cartController,
-    stallModel: stallModel,
-    orderModel:orderModel,
+    eventsDao: eventsDao,
+    customHttpNetworkClient: customHttpNetworkClient,
+    walletDao: walletDao,
+
+   // firestoreDB: firestoreDB
+
   ));
 }
 
@@ -67,19 +67,24 @@ class ApogeeApp extends StatelessWidget {
 
   const ApogeeApp({
     @required this.authRepository,
-    @required this.eventsModel,
-    @required this.cartController,
-    @required this.stallModel,
-    @required this.orderModel,
+    @required this.eventsDao,
+    @required this.customHttpNetworkClient,
+    @required this.walletDao,
+    @required this.secureStorage,
+   // @required this.firestoreDB,
+
     Key key
   }) : super(key: key);
 
   final AuthRepository authRepository;
-  final EventsModel eventsModel;
-  final CartController cartController;
-  final MyStallModel stallModel;
-  final MyOrderModel orderModel;
+  final EventsDao eventsDao;
+  final CustomHttpNetworkClient customHttpNetworkClient;
+  final WalletDao walletDao;
+  final FlutterSecureStorage secureStorage;
+  //final Firestore
 
+
+  //Make controller instance while passing so that functions of constructor are called every time the screen opens
   @override
   Widget build(BuildContext context) {
     FirebaseAnalytics analytics = FirebaseAnalytics();
@@ -94,37 +99,36 @@ class ApogeeApp extends StatelessWidget {
         },
         '/events': (context) {
           return ChangeNotifierProvider.value(
-            value: eventsModel,
+            value: EventsModel(eventsDao: eventsDao, networkClient: customHttpNetworkClient),
             child: EventsScreen(),
           );
         },
         '/orders': (context) {
-          return ChangeNotifierProvider.value(
-            value: orderModel,
-            child: OrderScreen(),
-          );
+          return
+             //MyOrderModel(walletDao: walletDao, networkClient: customHttpNetworkClient),
+             OrderScreen( walletDao, customHttpNetworkClient,secureStorage);
         },
         '/stalls': (context) {
           return ChangeNotifierProvider.value(
-            value: stallModel,
+            value: MyStallModel(walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: StallScreen(),
           );
         },
         '/profile': (context) {
           return ChangeNotifierProvider.value(
-            value: cartController,
+            value: CartController(walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: CartScreen(),
           );
         },
         '/more': (context) {
           return ChangeNotifierProvider.value(
-            value: cartController,
+            value: CartController(walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: CartScreen(),
           );
         },
         '/cart': (context) {
           return ChangeNotifierProvider.value(
-            value: cartController,
+            value: CartController(walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: CartScreen(),
           );
         },

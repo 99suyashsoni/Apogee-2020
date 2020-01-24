@@ -1,13 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/screen.dart';
-
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
-
 import 'package:apogee_main/wallet/data/database/dataClasses/StallDataItem.dart';
-
-import 'package:apogee_main/shared/constants/strings.dart' as prefix0;
 import 'package:apogee_main/wallet/view/MenuScreen.dart';
 import 'package:apogee_main/wallet/view/StallItemWidget.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +57,7 @@ class _StallScreenState extends State<StallScreen> {
                                                     builder: (context) =>
                                                         MenuScreen(mystallmodel
                                                             .stallItems[index]
-                                                            .stallId),
+                                                            .stallId,mystallmodel._walletDao),
                                                     settings: RouteSettings(
                                                         name:
                                                             "/menuItems$index")));
@@ -108,13 +103,15 @@ class MyStallModel with ChangeNotifier {
   }
 
   Future<Null> displayStallDataItems() async {
+     print("try: inside displayStallItems");
     stallItems = await _walletDao.getAllStalls();
     isLoading = false;
     notifyListeners();
-    print("Updated CartItems = $stallItems");
+    print("try: sucessfully displayed stakllitems = $stallItems");
   }
 
   Future<Null> fetchStallData() async {
+    print("try: inside fetchstalldata");
     isLoading = true;
     notifyListeners();
     _networkClient.get(
