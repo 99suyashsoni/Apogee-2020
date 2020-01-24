@@ -22,7 +22,7 @@ import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 
-void main() {
+void main() async {
 
   // WidgetsFlutterBinding.ensureInitialized();
 
@@ -45,6 +45,7 @@ void main() {
   final firestoreDatabase=Firestore.instance;
   final cartController = CartController(walletDao: walletDao, networkClient: customHttpNetworkClient);
   final stallModel = MyStallModel(walletDao: walletDao, networkClient: customHttpNetworkClient);
+  final orderModel = MyOrderModel(walletDao: walletDao, networkClient: customHttpNetworkClient);
    //final menuModel = MyMenuModel(walletDao: walletDao, networkClient: customHttpNetworkClient);
 
   SystemChrome.setSystemUIOverlayStyle(
@@ -58,6 +59,7 @@ void main() {
     eventsModel: eventsModel,
     cartController: cartController,
     stallModel: stallModel,
+    orderModel:orderModel,
   ));
 }
 
@@ -68,6 +70,7 @@ class ApogeeApp extends StatelessWidget {
     @required this.eventsModel,
     @required this.cartController,
     @required this.stallModel,
+    @required this.orderModel,
     Key key
   }) : super(key: key);
 
@@ -75,6 +78,7 @@ class ApogeeApp extends StatelessWidget {
   final EventsModel eventsModel;
   final CartController cartController;
   final MyStallModel stallModel;
+  final MyOrderModel orderModel;
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +100,8 @@ class ApogeeApp extends StatelessWidget {
         },
         '/orders': (context) {
           return ChangeNotifierProvider.value(
-            value: cartController,
-            child: CartScreen(),
+            value: orderModel,
+            child: OrderScreen(),
           );
         },
         '/stalls': (context) {

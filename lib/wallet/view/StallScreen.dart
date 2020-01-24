@@ -21,8 +21,10 @@ class StallScreen extends StatefulWidget {
 class _StallScreenState extends State<StallScreen> {
   // MyStallModel _myStallModel;
 
+
   @override
   Widget build(BuildContext context) {
+   // Provider.of<MyStallModel>(context, listen: false).fetchStallData();
     return Screen(
       selectedTabIndex: 0,
       title: "Stall",
