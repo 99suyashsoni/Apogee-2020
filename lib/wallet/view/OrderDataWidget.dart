@@ -1,13 +1,14 @@
+
 import 'package:apogee_main/shared/constants/appColors.dart';
-import 'package:apogee_main/wallet/data/database/dataClasses/StallDataItem.dart';
+import 'package:apogee_main/wallet/data/database/dataClasses/Orders.dart';
 import 'package:flutter/material.dart';
 
-class StallItemWidget extends StatelessWidget {
-  StallDataItem stallDataItem;
+class OrderDataWidget extends StatelessWidget {
+  Orders orders;
   /*CartQuantityListener cartQuantityListener;*/
 
-  StallItemWidget({
-    @required this.stallDataItem,
+   OrderDataWidget({
+    @required this.orders,
    // @required this.cartQuantityListener
   });
 
@@ -31,7 +32,7 @@ class StallItemWidget extends StatelessWidget {
               children: <Widget>[
                 Container(
                     margin: EdgeInsets.only(bottom: 4.0),
-                    child: Text(stallDataItem.stallName, style: Theme.of(context).textTheme.title)
+                    child: Text(orders.orderId.toString(), style: Theme.of(context).textTheme.title)
                 ),
               ],
             ),

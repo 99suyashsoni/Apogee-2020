@@ -10,7 +10,7 @@ class CartController with ChangeNotifier {
   WalletDao _walletDao;
   CustomHttpNetworkClient _networkClient;
   List<CartItem> cartItems = [
-    CartItem(
+   /* CartItem(
       basePrice: 200,
       currentPrice: 150,
       discount: 50,
@@ -31,18 +31,31 @@ class CartController with ChangeNotifier {
       quantity: 1,
       vendorId: 2,
       vendorName: "Vendor 1"
-    )
+    )*/
   ];
   bool isLoading = false;
+
+// aks
+  // CartController() {
+  //   this._walletDao = WalletDao();
+  //   this._networkClient = CustomHttpNetworkClient(
+  //     baseUrl: prefix0.baseUrl,
+  //     headers: headerMap
+  //   );
+  //    isLoading = true;
+  //    loadCartItems();
+  // }
+
 
   CartController({
     WalletDao walletDao,
     CustomHttpNetworkClient networkClient
   }): this._walletDao = walletDao,
       this._networkClient = networkClient {
-    // isLoading = true;
-    // loadCartItems();
+     isLoading = true;
+     loadCartItems();
   }
+
 
   Future<Null> loadCartItems() async {
     cartItems = await _walletDao.getAllCartItems();
@@ -92,10 +105,12 @@ class CartController with ChangeNotifier {
 
   @override
   void dispose() {
+    print("try: dispose called on close cart");
     // As a safety measure, just before the cart is disposed, I update the database with the list that the controller has maintained
     // This is a logical step as the user would always see the data that was maintained by the controller. So, if we save the last
     // set of data that was maintained by the controller, there would never be any cases of data inconsistency visible to the user
     _walletDao.insertCartItems(cartItems);
     super.dispose();
   }
+  
 }

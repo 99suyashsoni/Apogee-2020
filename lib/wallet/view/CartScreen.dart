@@ -1,6 +1,7 @@
+import 'dart:io';
+
 import 'package:apogee_main/shared/screen.dart';
 import 'package:apogee_main/wallet/controller/CartController.dart';
-import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:apogee_main/wallet/view/CartItemWidget.dart';
 import 'package:apogee_main/wallet/view/CartQuantityWidget.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +18,10 @@ class _CartScreenState extends State<CartScreen> implements CartQuantityListener
   @override
   Widget build(BuildContext context) {
     return Screen(
-      selectedTabIndex: -1,
+      selectedTabIndex: 1,
       title: "Cart",
-      child: ChangeNotifierProvider<CartController>(
-        create: (BuildContext context) => CartController(),
+//      child: ChangeNotifierProvider<CartController>(
+//        create: (BuildContext context) => CartController(),
         child: Container(
           child: Column(
             children: <Widget>[
@@ -29,7 +30,7 @@ class _CartScreenState extends State<CartScreen> implements CartQuantityListener
                 child: Consumer<CartController>(
                   builder: (context, controller, child) {
                     _controller = controller;
-                    return controller.isLoading ? Center(child: CircularProgressIndicator(),) : 
+                    return controller.isLoading ? Center(child: CircularProgressIndicator(),) :
                       controller.cartItems.isEmpty ? Center(child: Text("There are no items in your cart"),) :
                         Container(
                           child: Column(
@@ -90,7 +91,7 @@ class _CartScreenState extends State<CartScreen> implements CartQuantityListener
             ],
           ),
         ),
-      )
+      //)
     );
   }
 
@@ -98,6 +99,9 @@ class _CartScreenState extends State<CartScreen> implements CartQuantityListener
   void onQuantityChanged({int id, int quantity}) {
     _controller.cartItemQuantityChanged(id, quantity);
   }
+
+  
+  
 
   
 }

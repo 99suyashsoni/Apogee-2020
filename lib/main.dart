@@ -9,7 +9,10 @@ import 'package:apogee_main/wallet/controller/CartController.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/view/CartScreen.dart';
 import 'package:apogee_main/wallet/view/MenuScreen.dart';
+import 'package:apogee_main/wallet/view/OrderScreen.dart';
+import 'package:apogee_main/wallet/view/ProfileScreen.dart';
 import 'package:apogee_main/wallet/view/StallScreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +24,13 @@ import 'package:provider/provider.dart';
 
 void main() async {
 
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
+
+   print("Print 1");
 
   final secureStorage = new FlutterSecureStorage();
+
+  print("Print 2");
 
   final customHttpNetworkClient = CustomHttpNetworkClient(
     baseUrl: "https://www.bits-oasis.org/",
@@ -36,6 +43,8 @@ void main() async {
   final authRepository = AuthRepository(client: customHttpNetworkClient, secureStorage: secureStorage);
   final eventsDao = EventsDao();
   final walletDao = WalletDao();
+  //final firestoreDB= Firestore.instance;
+
 
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
@@ -48,6 +57,9 @@ void main() async {
     eventsDao: eventsDao,
     customHttpNetworkClient: customHttpNetworkClient,
     walletDao: walletDao,
+
+   // firestoreDB: firestoreDB
+
   ));
 }
 
@@ -58,6 +70,9 @@ class ApogeeApp extends StatelessWidget {
     @required this.eventsDao,
     @required this.customHttpNetworkClient,
     @required this.walletDao,
+    @required this.secureStorage,
+   // @required this.firestoreDB,
+
     Key key
   }) : super(key: key);
 
@@ -65,6 +80,9 @@ class ApogeeApp extends StatelessWidget {
   final EventsDao eventsDao;
   final CustomHttpNetworkClient customHttpNetworkClient;
   final WalletDao walletDao;
+  final FlutterSecureStorage secureStorage;
+  //final Firestore
+
 
   //Make controller instance while passing so that functions of constructor are called every time the screen opens
   @override
@@ -86,10 +104,9 @@ class ApogeeApp extends StatelessWidget {
           );
         },
         '/orders': (context) {
-          return ChangeNotifierProvider.value(
-            value: CartController(walletDao: walletDao, networkClient: customHttpNetworkClient),
-            child: CartScreen(),
-          );
+          return
+             //MyOrderModel(walletDao: walletDao, networkClient: customHttpNetworkClient),
+             OrderScreen( walletDao, customHttpNetworkClient,secureStorage);
         },
         '/stalls': (context) {
           return ChangeNotifierProvider.value(
@@ -108,8 +125,21 @@ class ApogeeApp extends StatelessWidget {
             value: CartController(walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: CartScreen(),
           );
-        }
+        },
+        '/cart': (context) {
+          return ChangeNotifierProvider.value(
+            value: CartController(walletDao: walletDao, networkClient: customHttpNetworkClient),
+            child: CartScreen(),
+          );
+        },
+        /*'/menu': (context) {
+          return ChangeNotifierProvider.value(
+            value: menumo,
+            child: CartScreen(),
+          );
+        },*/
       },
+
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics)
       ],

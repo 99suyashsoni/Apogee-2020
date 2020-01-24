@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:apogee_main/events/data/dataClasses/Events.dart';
 import 'package:apogee_main/shared/constants/strings.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
