@@ -1,42 +1,51 @@
-import 'package:apogee_main/shared/UIMessageListener.dart';
+import 'dart:io';
+
 import 'package:apogee_main/shared/network/NetworkClient.dart';
 import 'package:apogee_main/shared/network/NetworkResponseHandler.dart';
+import 'package:apogee_main/shared/network/errorState.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 
 class CustomHttpNetworkClient implements NetworkClient {
   String baseUrl;
-  Map<String, String> headers;
-  UIMessageListener uiMessageListener;
   Client _networkClient;
+  FlutterSecureStorage _secureStorage;
 
   CustomHttpNetworkClient({
     Client client,
     @required this.baseUrl,
-    this.headers,
-    @required this.uiMessageListener
-  }) : this._networkClient = client ?? Client();
+    @required FlutterSecureStorage secureStorage
+  }) : this._networkClient = client ?? Client(),
+       this._secureStorage = secureStorage;
 
   @override
-  Future<Null> get(String url, Function(String) onSucess) async {
+  Future<ErrorState> get(String url, Function(String) onSucess) async {
     url = url ?? "";
-    Response response = await _networkClient.get("$baseUrl$url", headers: headers);
-    NetworkResponseHandler.handleResponse(
+    print("try: inside get networkcliner url $url ");
+
+    Response response = await _networkClient.get("$baseUrl$url", headers: {'Content-Type': 'application/json', HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? ""});
+    print("try: get url $url Code = ${response.statusCode} Response = ${response.body}");
+
+    return await NetworkResponseHandler.handleResponse(
       response: response,
-      messageListener: uiMessageListener,
       onSuccess: onSucess
     );
   }
 
   @override
-  Future<Null> post(String url, String body, Function(String) onSucess) async {
+  Future<ErrorState> post(String url, String body, Function(String) onSucess/*, [bool wantAuth = true]*/) async {
     url = url ?? "";
-    Response response = await _networkClient.post("$baseUrl$url");
-    print("Code = ${response.statusCode}");
-    print("Response = ${response.body}");
-    NetworkResponseHandler.handleResponse(
+    print("try: inside post networkcliner url $url ");
+    final headers = {'Content-Type': 'application/json'};
+    //if(wantAuth){
+      headers.addAll({HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? ""});
+    //}
+    Response response = await _networkClient.post("$baseUrl$url", headers: headers, body: body);
+    print("try: post  url $url Code = ${response.statusCode} Response = ${response.body}");
+
+    return await NetworkResponseHandler.handleResponse(
       response: response,
-      messageListener: uiMessageListener,
       onSuccess: onSucess
     );
   }

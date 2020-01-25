@@ -3,7 +3,6 @@ import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/OrderItems.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallDataItem.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallModifiedMenuItem.dart';
-import 'package:sqflite/sqflite.dart';
 
 import 'dataClasses/Orders.dart';
 
@@ -61,7 +60,7 @@ class WalletDao {
 
   Future<Null> clearAllCartItems() async {
     var database = await databaseInstance();
-    var result = await database.rawQuery("""DELETE * FROM cart_data""");
+    var result = await database.rawQuery("""DELETE  FROM cart_data""");
     print("Result for deleting cart items = $result");
   }
 
@@ -69,7 +68,7 @@ class WalletDao {
     var database = await databaseInstance();
     if(itemId == null)
       return;
-    var result = await database.rawQuery("""DELETE FROM cart_data WHERE itemId = ?""", [itemId]);
+    var result = await database.rawQuery("""DELETE FROM cart_data WHERE item_id = ?""", [itemId]);
     print("Result of deleting object from cart = $result");
   }
 
@@ -86,6 +85,7 @@ class WalletDao {
   }
 
   Future<Null> insertCartItems(List<dynamic> cartJson) async {
+   print("insert cart items called");
     var database = await databaseInstance();
     await database.transaction((transaction) async {
       await transaction.delete("cart_data");
@@ -133,7 +133,7 @@ class WalletDao {
 
   Future<List<Orders>> getOrderData() async {
     var database = await databaseInstance();
-    List<Map<String, dynamic>> result = await database.rawQuery("""SELECT * FROM orders""");
+    List<Map<String, dynamic>> result = await database.rawQuery("""SELECT * FROM orders ORDER BY id DESC""");
     if(result == null || result.isEmpty) 
       return [];
     List<Orders> orderData = [];

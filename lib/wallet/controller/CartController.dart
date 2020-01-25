@@ -1,20 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:apogee_main/shared/UIMessageListener.dart';
-import 'package:apogee_main/shared/constants/strings.dart' as prefix0;
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
-import 'package:apogee_main/shared/network/NetworkClient.dart';
+import 'package:apogee_main/shared/network/errorState.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:collection/collection.dart';
 
 class CartController with ChangeNotifier {
+  int state=0;
   WalletDao _walletDao;
-  UIMessageListener uiMessageListener;
   CustomHttpNetworkClient _networkClient;
-  Map<String, String> headerMap = {HttpHeaders.authorizationHeader: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyOTg2LCJ1c2VybmFtZSI6Im91dGd1eSIsImV4cCI6MTU3OTQwNTYyMCwiZW1haWwiOiIifQ.Pci9SeEJ5Vb4q4Vtr3jjYVE9E3rYVhF44K8PcYOk03U"};
   List<CartItem> cartItems = [
    /* CartItem(
       basePrice: 200,
@@ -41,16 +37,27 @@ class CartController with ChangeNotifier {
   ];
   bool isLoading = false;
 
-  CartController(this.uiMessageListener) {
-    this._walletDao = WalletDao();
-    this._networkClient = CustomHttpNetworkClient(
-      baseUrl: prefix0.baseUrl,
-      uiMessageListener: uiMessageListener,
-      headers: headerMap
-    );
+// aks
+  // CartController() {
+  //   this._walletDao = WalletDao();
+  //   this._networkClient = CustomHttpNetworkClient(
+  //     baseUrl: prefix0.baseUrl,
+  //     headers: headerMap
+  //   );
+  //    isLoading = true;
+  //    loadCartItems();
+  // }
+
+
+  CartController({
+    WalletDao walletDao,
+    CustomHttpNetworkClient networkClient
+  }): this._walletDao = walletDao,
+      this._networkClient = networkClient {
      isLoading = true;
      loadCartItems();
   }
+
 
   Future<Null> loadCartItems() async {
     cartItems = await _walletDao.getAllCartItems();
@@ -74,6 +81,14 @@ class CartController with ChangeNotifier {
     }
   }
 
+  int getTotalPrice(){
+      int price=0;
+    for(var item in cartItems){
+          price+=item.quantity*item.currentPrice;
+    }
+    return price;
+  }
+
   Future<Null> placeOrder() async {
     isLoading = true;
     notifyListeners();
@@ -90,20 +105,26 @@ class CartController with ChangeNotifier {
     Map<String, dynamic> body = {
       "orderdict": finalMap
     };
-    _networkClient.post("wallet/orders", json.encode(body), (response) async {
+    print("Final map sent = $body");
+    ErrorState errorState =await _networkClient.post("wallet/orders", json.encode(body), (response) async {
       await _walletDao.clearAllCartItems();
       cartItems.clear();
       isLoading = false;
       notifyListeners();
     },);
+    if(errorState.state==2){
+      state=2;
+    }
   }
 
   @override
   void dispose() {
+    print("try: dispose called on close cart");
     // As a safety measure, just before the cart is disposed, I update the database with the list that the controller has maintained
     // This is a logical step as the user would always see the data that was maintained by the controller. So, if we save the last
     // set of data that was maintained by the controller, there would never be any cases of data inconsistency visible to the user
     _walletDao.insertCartItems(cartItems);
     super.dispose();
   }
+  
 }

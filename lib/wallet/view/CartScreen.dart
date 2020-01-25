@@ -1,7 +1,7 @@
-import 'package:apogee_main/shared/UIMessageListener.dart';
+import 'dart:io';
+
 import 'package:apogee_main/shared/screen.dart';
 import 'package:apogee_main/wallet/controller/CartController.dart';
-import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:apogee_main/wallet/view/CartItemWidget.dart';
 import 'package:apogee_main/wallet/view/CartQuantityWidget.dart';
 import 'package:flutter/material.dart';
@@ -12,16 +12,16 @@ class CartScreen extends StatefulWidget {
   _CartScreenState createState() => _CartScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> implements UIMessageListener, CartQuantityListener {
+class _CartScreenState extends State<CartScreen> implements CartQuantityListener {
   CartController _controller;
 
   @override
   Widget build(BuildContext context) {
     return Screen(
-      selectedTabIndex: 1,
+      selectedTabIndex: -1,
       title: "Cart",
-      child: ChangeNotifierProvider<CartController>(
-        create: (BuildContext context) => CartController(this),
+//      child: ChangeNotifierProvider<CartController>(
+//        create: (BuildContext context) => CartController(),
         child: Container(
           child: Column(
             children: <Widget>[
@@ -30,7 +30,7 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener, C
                 child: Consumer<CartController>(
                   builder: (context, controller, child) {
                     _controller = controller;
-                    return controller.isLoading ? Center(child: CircularProgressIndicator(),) : 
+                    return controller.isLoading ? Center(child: CircularProgressIndicator(),) :
                       controller.cartItems.isEmpty ? Center(child: Text("There are no items in your cart"),) :
                         Container(
                           child: Column(
@@ -44,12 +44,12 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener, C
                                   },
                                 ),
                               ),
-                              Align(
+                             /*  Align(
                                 alignment: Alignment.centerRight,
                                 child: Container(
                                   child: Text("Total: \u20B9 ${11000}"),
                                 ),
-                              ),
+                              ), */
                               Container(
                                 margin: EdgeInsets.only(top: 4.0),
                                 child: Row(
@@ -64,7 +64,7 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener, C
                                     ),
                                     Container(
                                       margin: EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Text("\u20B9 1000", style: Theme.of(context).textTheme.body1,),
+                                      child: Text("\u20B9 "+controller.getTotalPrice().toString(), style: Theme.of(context).textTheme.body1,),
                                     ),
                                     Expanded(
                                       flex: 1,
@@ -72,11 +72,15 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener, C
                                     ),
                                     Container(
                                       padding: EdgeInsets.only(right: 8.0),
-                                      child: GestureDetector(
-                                        child: Text("Place Order"),
-                                        onTap: () {
-                                          controller.placeOrder();
-                                        },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: GestureDetector(
+                                          child: Text("Place Order",
+                                          ),
+                                          onTap: () {
+                                            controller.placeOrder();
+                                          },
+                                        ),
                                       ),
                                     )
                                   ],
@@ -91,34 +95,17 @@ class _CartScreenState extends State<CartScreen> implements UIMessageListener, C
             ],
           ),
         ),
-      )
+      //)
     );
-  }
-
-  @override
-  void onAlertMessageRecived({String message, String title = "Alert", List<Widget> actions}) {
-    // TODO: implement onAlertMessageRecived
-  }
-
-  @override
-  void onAuthenticationExpiered() {
-    // TODO: implement onAuthenticationExpiered
-  }
-
-  @override
-  void onSnackbarMessageRecived({String message}) {
-    // TODO: implement onSnackbarMessageRecived
-  }
-
-  @override
-  void onToastMessageRecived({String message}) {
-    // TODO: implement onToastMessageRecived
   }
 
   @override
   void onQuantityChanged({int id, int quantity}) {
     _controller.cartItemQuantityChanged(id, quantity);
   }
+
+  
+  
 
   
 }

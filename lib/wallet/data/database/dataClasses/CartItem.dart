@@ -33,7 +33,7 @@ class CartItem {
     vendorName: map["vendorName"].toString() ?? ""
   );
 
-  Map<String, String> toMapForOrder() => {
-    itemId.toString(): quantity.toString()
+  Map<String, int> toMapForOrder() => {
+    itemId.toString(): quantity
   };
 }
