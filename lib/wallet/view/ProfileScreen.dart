@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
+import 'package:apogee_main/shared/network/errorState.dart';
 import 'package:apogee_main/shared/screen.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -35,6 +37,10 @@ class _ProfileScreenState extends State<ProfileScreen> /*implements  CartQuantit
                 child: Consumer<MyProfileModel>(
                   builder: (context, myProfileModel, child) {
                   //  _myProfileModel = myProfileModel;
+                  if(myProfileModel.state ==2) {
+                    Fluttertoast.showToast(msg: myProfileModel.message);
+                    myProfileModel.state=0;
+                  }
                     return myProfileModel.isLoading ? Center(child: CircularProgressIndicator(),) : 
                      // myProfileModel.cartItems.isEmpty ? Center(child: Text("There are no items in your cart"),) :
                         Container(
@@ -92,7 +98,8 @@ class MyProfileModel with ChangeNotifier{
   bool isLoading=false;
   bool validInput=true;
   //List<StallDataItem> stallItems;
-
+  int state=0;
+  String message ="";
   WalletDao _walletDao;
 
   CustomHttpNetworkClient _networkClient;
@@ -121,13 +128,21 @@ class MyProfileModel with ChangeNotifier{
     Map<String,int> body={
       "amount": amount
     };
-    _networkClient.post("monetary/add/swd", json.encode(body), (response) async {
+   ErrorState errorState= await _networkClient.post("monetary/add/swd", json.encode(body), (response) async {
       // TODO: money firebase se dikhana h 
       //amount
       print(response);
       isLoading = false;
       notifyListeners();
     },);
+
+     if(errorState.state==2){
+      state=2;
+      message=errorState.message;
+      isLoading=false;
+      notifyListeners();
+    }
+    
   }
 
   

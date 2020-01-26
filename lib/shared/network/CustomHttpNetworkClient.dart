@@ -24,9 +24,18 @@ class CustomHttpNetworkClient implements NetworkClient {
     url = url ?? "";
     print("try: inside get networkcliner url $url ");
 
-    Response response = await _networkClient.get("$baseUrl$url", headers: {'Content-Type': 'application/json', HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? ""});
-    print("try: get url $url Code = ${response.statusCode} Response = ${response.body}");
+    // Response response = await _networkClient.get("$baseUrl$url", headers: {'Content-Type': 'application/json', HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? ""});
+    // print("try: get url $url Code = ${response.statusCode} Response = ${response.body}");
+    Response response;
 
+
+    try{response = await _networkClient.get("$baseUrl$url", headers: {'Content-Type': 'application/json', HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? ""});
+    print("try: get url $url Code = ${response.statusCode} Response = ${response.body}");
+    } on SocketException{
+         print("try: get url $url  socket Exception");
+         return ErrorState(message: "SocketException",state: 2);
+
+}
     return await NetworkResponseHandler.handleResponse(
       response: response,
       onSuccess: onSucess

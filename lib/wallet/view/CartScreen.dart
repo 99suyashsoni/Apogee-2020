@@ -5,6 +5,7 @@ import 'package:apogee_main/wallet/controller/CartController.dart';
 import 'package:apogee_main/wallet/view/CartItemWidget.dart';
 import 'package:apogee_main/wallet/view/CartQuantityWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
@@ -30,6 +31,10 @@ class _CartScreenState extends State<CartScreen> implements CartQuantityListener
                 child: Consumer<CartController>(
                   builder: (context, controller, child) {
                     _controller = controller;
+                    if(controller.state ==2) {
+                    Fluttertoast.showToast(msg: controller.message);
+                    controller.state=0;
+                  }
                     return controller.isLoading ? Center(child: CircularProgressIndicator(),) :
                       controller.cartItems.isEmpty ? Center(child: Text("There are no items in your cart"),) :
                         Container(

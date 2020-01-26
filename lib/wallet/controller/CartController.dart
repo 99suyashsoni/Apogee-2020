@@ -9,6 +9,7 @@ import 'package:collection/collection.dart';
 
 class CartController with ChangeNotifier {
   int state=0;
+  String message="";
   WalletDao _walletDao;
   CustomHttpNetworkClient _networkClient;
   List<CartItem> cartItems = [
@@ -112,9 +113,13 @@ class CartController with ChangeNotifier {
       isLoading = false;
       notifyListeners();
     },);
-    if(errorState.state==2){
+     if(errorState.state==2){
       state=2;
+      message=errorState.message;
+      isLoading=false;
+      notifyListeners();
     }
+
   }
 
   @override

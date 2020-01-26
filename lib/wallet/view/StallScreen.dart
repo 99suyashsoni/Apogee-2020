@@ -6,7 +6,10 @@ import 'package:apogee_main/wallet/data/database/dataClasses/StallDataItem.dart'
 import 'package:apogee_main/wallet/view/MenuScreen.dart';
 import 'package:apogee_main/wallet/view/StallItemWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+
+import '../../shared/network/errorState.dart';
 
 class StallScreen extends StatefulWidget {
   @override
@@ -31,6 +34,10 @@ class _StallScreenState extends State<StallScreen> {
               child: Consumer<MyStallModel>(
                 builder: (context, mystallmodel, child) {
                   // _myStallModel = mystallmodel;
+                  if(mystallmodel.state ==2) {
+                      Fluttertoast.showToast(msg: mystallmodel.message);
+                      mystallmodel.state=0;
+                     }
                   return mystallmodel.isLoading
                       ? Center(child: CircularProgressIndicator())
                       : mystallmodel.stallItems.isEmpty
@@ -82,6 +89,8 @@ class _StallScreenState extends State<StallScreen> {
 //            Navigator.of(context).pushNamedAndRemoveUntil('/stalls', ModalRoute.withName('/events'));
 class MyStallModel with ChangeNotifier {
   bool isLoading = false;
+  int state;
+  String message="";
 
   //List<StallDataItem> stallItems;
 
@@ -114,7 +123,7 @@ class MyStallModel with ChangeNotifier {
     print("try: inside fetchstalldata");
     isLoading = true;
     notifyListeners();
-    _networkClient.get(
+   ErrorState errorState= await _networkClient.get(
       "wallet/vendors/",
       (response) async {
         await _walletDao.insertAllStalls((json.decode(response)));
@@ -123,5 +132,11 @@ class MyStallModel with ChangeNotifier {
         notifyListeners();
       },
     );
+     if(errorState.state==2){
+      state=2;
+      message=errorState.message;
+      isLoading=false;
+      notifyListeners();
+    }
   }
 }
