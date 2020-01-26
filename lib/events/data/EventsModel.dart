@@ -10,6 +10,7 @@ import 'package:apogee_main/events/data/database/EventsDao.dart';
 class EventsModel with ChangeNotifier {
   EventsDao _eventsDao;
   List<Events> events = [];
+  List<String> dates =['Day 1','Day 2','Day 3','Day 4'];
   bool isLoading = false;
   CustomHttpNetworkClient _networkClient;
 
@@ -26,13 +27,19 @@ class EventsModel with ChangeNotifier {
       var body = jsonDecode(json);
       _eventsDao.insertAllEvents(body);
       isLoading = false;
-      getAllEvents();
+      getEventsByDate("2019-10-20");
+      getAllDates();
       notifyListeners();
     });
   }
+  Future<Null> getAllDates() async{
+    dates = await _eventsDao.getDates();
+    print('dates:$dates');
+    notifyListeners();
+  }
 
-  Future<Null> getAllEvents() async {
-    events = await _eventsDao.getAllEvents();
+  Future<Null> getEventsByDate(String date) async{
+    events = await _eventsDao.getEventsByDate(date);
     print('events:$events');
     isLoading = false;
     notifyListeners();
