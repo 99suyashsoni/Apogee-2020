@@ -128,7 +128,7 @@ class MyProfileModel with ChangeNotifier{
     Map<String,int> body={
       "amount": amount
     };
-   ErrorState errorState= await _networkClient.post("monetary/add/swd", json.encode(body), (response) async {
+   ErrorState errorState= await _networkClient.post("wallet/monetary/add/swd", json.encode(body), (response) async {
       // TODO: money firebase se dikhana h 
       //amount
       print(response);
