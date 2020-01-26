@@ -55,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> /*implements  CartQuantit
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
-                                   snapshot.hasData? (snapshot.data["total_balance"] ?? "???").toString(): "???",
+                                  snapshot==null? "???": snapshot.hasData? (snapshot.data["total_balance"] ?? "???").toString(): "???",
                                     textAlign: TextAlign.center)
                                 ],
                               ),
