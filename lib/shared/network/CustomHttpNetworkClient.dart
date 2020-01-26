@@ -24,9 +24,19 @@ class CustomHttpNetworkClient implements NetworkClient {
     url = url ?? "";
     print("try: inside get networkcliner url $url ");
 
-    Response response = await _networkClient.get("$baseUrl$url", headers: {'Content-Type': 'application/json', HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? ""});
-    print("try: get url $url Code = ${response.statusCode} Response = ${response.body}");
+    // Response response = await _networkClient.get("$baseUrl$url", headers: {'Content-Type': 'application/json', HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? ""});
+    // print("try: get url $url Code = ${response.statusCode} Response = ${response.body}");
+    Response response;
 
+
+    try{
+    response = await _networkClient.get("$baseUrl$url", headers: {'Content-Type': 'application/json', HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? ""});
+    print("try: get url $url Code = ${response.statusCode} Response = ${response.body}");
+    } catch(e)
+    {
+      print("try: get url $url  ${e.toString()}");
+      return ErrorState(message: "${e.toString()}",state: 2); 
+    }
     return await NetworkResponseHandler.handleResponse(
       response: response,
       onSuccess: onSucess
@@ -41,8 +51,16 @@ class CustomHttpNetworkClient implements NetworkClient {
     //if(wantAuth){
       headers.addAll({HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? ""});
     //}
-    Response response = await _networkClient.post("$baseUrl$url", headers: headers, body: body);
+    Response response;
+  try{
+       response = await _networkClient.post("$baseUrl$url", headers: headers, body: body);
     print("try: post  url $url Code = ${response.statusCode} Response = ${response.body}");
+  }
+  catch(e)
+  {
+    print("try: post  url $url ${e.toString()}");
+    return ErrorState(message: "${e.toString()}",state: 2);
+  }
 
     return await NetworkResponseHandler.handleResponse(
       response: response,

@@ -16,8 +16,8 @@ class NetworkResponseHandler {
         );
       } else {
         return ErrorState(
-            state: 0,
-            message: "Inshaalah Developers Played Well"
+            state: 2,
+            message: "${response.statusCode} Inshaalah Developers Played Well"
         );
           // TODO discuss with backend and sort error handling
       }

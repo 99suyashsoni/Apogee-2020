@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
+import 'package:apogee_main/shared/network/errorState.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:collection/collection.dart';
 
 class CartController with ChangeNotifier {
+  int state=0;
+  String message="";
   WalletDao _walletDao;
   CustomHttpNetworkClient _networkClient;
   List<CartItem> cartItems = [
@@ -79,6 +82,14 @@ class CartController with ChangeNotifier {
     }
   }
 
+  int getTotalPrice(){
+      int price=0;
+    for(var item in cartItems){
+          price+=item.quantity*item.currentPrice;
+    }
+    return price;
+  }
+
   Future<Null> placeOrder() async {
     isLoading = true;
     notifyListeners();
@@ -95,12 +106,20 @@ class CartController with ChangeNotifier {
     Map<String, dynamic> body = {
       "orderdict": finalMap
     };
-    _networkClient.post("wallet/orders", json.encode(body), (response) async {
+    print("Final map sent = $body");
+    ErrorState errorState =await _networkClient.post("wallet/orders", json.encode(body), (response) async {
       await _walletDao.clearAllCartItems();
       cartItems.clear();
       isLoading = false;
       notifyListeners();
     },);
+     if(errorState.state==2){
+      state=2;
+      message=errorState.message;
+      isLoading=false;
+      notifyListeners();
+    }
+
   }
 
   @override

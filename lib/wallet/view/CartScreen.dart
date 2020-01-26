@@ -5,6 +5,7 @@ import 'package:apogee_main/wallet/controller/CartController.dart';
 import 'package:apogee_main/wallet/view/CartItemWidget.dart';
 import 'package:apogee_main/wallet/view/CartQuantityWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class _CartScreenState extends State<CartScreen> implements CartQuantityListener
   @override
   Widget build(BuildContext context) {
     return Screen(
-      selectedTabIndex: 1,
+      selectedTabIndex: -1,
       title: "Cart",
 //      child: ChangeNotifierProvider<CartController>(
 //        create: (BuildContext context) => CartController(),
@@ -30,6 +31,10 @@ class _CartScreenState extends State<CartScreen> implements CartQuantityListener
                 child: Consumer<CartController>(
                   builder: (context, controller, child) {
                     _controller = controller;
+                    if(controller.state ==2) {
+                    Fluttertoast.showToast(msg: controller.message);
+                    controller.state=0;
+                  }
                     return controller.isLoading ? Center(child: CircularProgressIndicator(),) :
                       controller.cartItems.isEmpty ? Center(child: Text("There are no items in your cart"),) :
                         Container(
@@ -44,12 +49,12 @@ class _CartScreenState extends State<CartScreen> implements CartQuantityListener
                                   },
                                 ),
                               ),
-                              Align(
+                             /*  Align(
                                 alignment: Alignment.centerRight,
                                 child: Container(
                                   child: Text("Total: \u20B9 ${11000}"),
                                 ),
-                              ),
+                              ), */
                               Container(
                                 margin: EdgeInsets.only(top: 4.0),
                                 child: Row(
@@ -64,7 +69,7 @@ class _CartScreenState extends State<CartScreen> implements CartQuantityListener
                                     ),
                                     Container(
                                       margin: EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Text("\u20B9 1000", style: Theme.of(context).textTheme.body1,),
+                                      child: Text("\u20B9 "+controller.getTotalPrice().toString(), style: Theme.of(context).textTheme.body1,),
                                     ),
                                     Expanded(
                                       flex: 1,
@@ -72,11 +77,15 @@ class _CartScreenState extends State<CartScreen> implements CartQuantityListener
                                     ),
                                     Container(
                                       padding: EdgeInsets.only(right: 8.0),
-                                      child: GestureDetector(
-                                        child: Text("Place Order"),
-                                        onTap: () {
-                                          controller.placeOrder();
-                                        },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: GestureDetector(
+                                          child: Text("Place Order",
+                                          ),
+                                          onTap: () {
+                                            controller.placeOrder();
+                                          },
+                                        ),
                                       ),
                                     )
                                   ],

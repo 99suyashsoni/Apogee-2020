@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/screen.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
+import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallModifiedMenuItem.dart';
 import 'package:apogee_main/wallet/view/CartQuantityWidget.dart';
 import 'package:flutter/material.dart';
@@ -54,19 +55,19 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
                                 },
                               ),
                             ),
-                            Align(
+                          /*   Align(
                               alignment: Alignment.centerRight,
                               child: Container(
                                 child: Text("Total: \u20B9 ${1000}"),
                               ),
-                            ),
+                            ), */
                             Container(
                               margin: EdgeInsets.only(top: 4.0),
                               child: Row(
                                 children: <Widget>[
                                   Container(
                                     padding: EdgeInsets.only(left: 8.0),
-                                    child: Text(mymenumodel.menuItems.length.toString()+" items", style: Theme.of(context).textTheme.body1,),
+                                    child: Text(mymenumodel.cartItems.length.toString()+" items", style: Theme.of(context).textTheme.body1,),
                                   ),
                                   Expanded(
                                     flex: 1,
@@ -74,24 +75,28 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
                                   ),
                                   Container(
                                     margin: EdgeInsets.symmetric(horizontal: 8.0),
-                                    child: Text("\u20B9 1000", style: Theme.of(context).textTheme.body1,),
+                                    child: Text("\u20B9 "+mymenumodel.getTotalPrice().toString(), style: Theme.of(context).textTheme.body1,),
                                   ),
-                                  Expanded(
+                                 /*  Expanded(
                                     flex: 1,
                                     child: Container(),
-                                  ),
+                                  ), */
                                   Container(
                                     padding: EdgeInsets.only(right: 8.0),
-                                    child: GestureDetector(
-                                      child: Text("View cart"),
-                                      onTap: () async {
-                                        await Navigator.of(context).pushNamed('/cart');
-                                        mymenumodel.displayStallMenuItems(widget.id);
-                                       /* controller.placeOrder();*/
-                                        Scaffold
-                                            .of(context)
-                                            .showSnackBar(SnackBar(content: Text("to open cart")));
-                                      },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: GestureDetector(
+                                        child: Text("View cart"),
+                                        onTap: () async {
+                                          await Navigator.of(context).pushNamed('/cart');
+                                          mymenumodel.displayStallMenuItems(widget.id);
+                                          mymenumodel.getCartItems();
+                                         /* controller.placeOrder();*/
+                                          Scaffold
+                                              .of(context)
+                                              .showSnackBar(SnackBar(content: Text("to open cart")));
+                                        },
+                                      ),
                                     ),
                                   )
                                 ],
@@ -127,6 +132,7 @@ class MyMenuModel with ChangeNotifier{
   int stallId;
 
   List<StallModifiedMenuItem> menuItems= [];
+  List<CartItem> cartItems=[];
 
   MyMenuModel(int stallId, WalletDao walletDao) {
     this._walletDao = walletDao;
@@ -134,6 +140,7 @@ class MyMenuModel with ChangeNotifier{
 
      isLoading = true;
     displayStallMenuItems(stallId);
+    getCartItems();
      
     // loadCartItems();
   }
@@ -169,12 +176,25 @@ class MyMenuModel with ChangeNotifier{
         _walletDao.updateCartItemQuantity(id, quantity);
       }
     }
+    getCartItems();
   }
 
-
-
-
-
+   Future<Null> getCartItems() async {
+    print("try: dget cart items called in Menu Screen");
+    cartItems = await _walletDao.getAllCartItems();
+    // isLoading = false;
+    notifyListeners();
+    print("Updated CartItems = $cartItems");
+  }
+   
+  int getTotalPrice(){
+         int price=0;
+         for(var item in cartItems){
+           price+=item.quantity*item.currentPrice;
+         }
+         return price;
+    
+     }
 
 
 }

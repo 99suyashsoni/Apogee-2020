@@ -60,7 +60,7 @@ class WalletDao {
 
   Future<Null> clearAllCartItems() async {
     var database = await databaseInstance();
-    var result = await database.rawQuery("""DELETE * FROM cart_data""");
+    var result = await database.rawQuery("""DELETE  FROM cart_data""");
     print("Result for deleting cart items = $result");
   }
 
@@ -68,7 +68,7 @@ class WalletDao {
     var database = await databaseInstance();
     if(itemId == null)
       return;
-    var result = await database.rawQuery("""DELETE FROM cart_data WHERE itemId = ?""", [itemId]);
+    var result = await database.rawQuery("""DELETE FROM cart_data WHERE item_id = ?""", [itemId]);
     print("Result of deleting object from cart = $result");
   }
 
@@ -133,7 +133,7 @@ class WalletDao {
 
   Future<List<Orders>> getOrderData() async {
     var database = await databaseInstance();
-    List<Map<String, dynamic>> result = await database.rawQuery("""SELECT * FROM orders""");
+    List<Map<String, dynamic>> result = await database.rawQuery("""SELECT * FROM orders ORDER BY id DESC""");
     if(result == null || result.isEmpty) 
       return [];
     List<Orders> orderData = [];

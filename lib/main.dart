@@ -104,9 +104,11 @@ class ApogeeApp extends StatelessWidget {
           );
         },
         '/orders': (context) {
+          MyOrderModel model = MyOrderModel( walletDao, customHttpNetworkClient);
           return
-             //MyOrderModel(walletDao: walletDao, networkClient: customHttpNetworkClient),
-             OrderScreen( walletDao, customHttpNetworkClient,secureStorage);
+           ChangeNotifierProvider.value(
+               value:model,
+               child: OrderScreen( model, walletDao, customHttpNetworkClient,secureStorage),);
         },
         '/stalls': (context) {
           return ChangeNotifierProvider.value(
@@ -116,8 +118,8 @@ class ApogeeApp extends StatelessWidget {
         },
         '/profile': (context) {
           return ChangeNotifierProvider.value(
-            value: CartController(walletDao: walletDao, networkClient: customHttpNetworkClient),
-            child: CartScreen(),
+            value: MyProfileModel(walletDao: walletDao, networkClient: customHttpNetworkClient),
+            child: ProfileScreen(),
           );
         },
         '/more': (context) {
