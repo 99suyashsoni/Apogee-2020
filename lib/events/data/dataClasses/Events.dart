@@ -17,7 +17,7 @@ class RawEvent{
 }
 
 class Events{
-    int id;
+    final int id;
     String name;
     String about;
     String rules;
@@ -38,6 +38,7 @@ Events({
     this.details,
     this.contact
 });
+
 
 
 

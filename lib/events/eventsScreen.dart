@@ -57,7 +57,7 @@ class EventList extends StatelessWidget {
                                color: Colors.accents[index % Colors.accents.length],
                                boxShadow: [new BoxShadow(
                                  color: Colors.grey[100],
-                                 blurRadius: 10.0,
+                                 blurRadius: 20.0,
                                ),],
                                shape: BoxShape.circle
                              ),
@@ -81,8 +81,11 @@ class EventList extends StatelessWidget {
                            mainAxisSize: MainAxisSize.max,
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: <Widget>[
-                               Text(controller.events[index].name,
-                               style: TextStyle(fontSize: 20.0,color: Colors.black),
+                               Padding(
+                                 padding: const EdgeInsets.all(8.0),
+                                 child: Text(controller.events[index].name,
+                                 style: TextStyle(fontSize: 20.0,color: Colors.black),
+                                 ),
                                ),
                             
                               ],
