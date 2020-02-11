@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:apogee_main/auth/data/auth_repository.dart';
 import 'package:apogee_main/auth/login_screen.dart';
 import 'package:apogee_main/events/data/EventsModel.dart';
@@ -23,32 +25,35 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  final secureStorage = new FlutterSecureStorage();
+  runZoned(() async {
+    final secureStorage = new FlutterSecureStorage();
+    final customHttpNetworkClient = CustomHttpNetworkClient(
+        baseUrl: "https://www.bits-oasis.org/",
+        secureStorage: secureStorage,
+        client: Client()
+    );
 
-  final customHttpNetworkClient = CustomHttpNetworkClient(
-    baseUrl: "https://www.bits-oasis.org/",
-    secureStorage: secureStorage,
-    client: Client()
-  );
+    //All repo and dao to be made singleton here
+    final authRepository = AuthRepository(client: customHttpNetworkClient, secureStorage: secureStorage);
+    final eventsDao = EventsDao();
+    final walletDao = WalletDao();
 
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarColor: Color(0xFF5A534A),
+        )
+    );
 
-  //All repo and dao to be made singleton here
-  final authRepository = AuthRepository(client: customHttpNetworkClient, secureStorage: secureStorage);
-  final eventsDao = EventsDao();
-  final walletDao = WalletDao();
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      statusBarColor: Color(0xFF5A534A),
-    )
-  );
+    runApp(ApogeeApp(
+      authRepository: authRepository,
+      eventsDao: eventsDao,
+      customHttpNetworkClient: customHttpNetworkClient,
+      walletDao: walletDao,
+    ));
+  });
 
-  runApp(ApogeeApp(
-    authRepository: authRepository,
-    eventsDao: eventsDao,
-    customHttpNetworkClient: customHttpNetworkClient,
-    walletDao: walletDao,
-  ));
 }
 
 class ApogeeApp extends StatelessWidget {
