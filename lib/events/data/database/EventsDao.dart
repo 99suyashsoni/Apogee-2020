@@ -10,7 +10,7 @@ Future<Null> insertAllEvents(Map<String,dynamic> eventsJson) async{
   print('body : $rawEventList');
   await database.transaction((transaction) async{
    await transaction.delete("events_data");
-   for(var events in rawEventList.take(2)){
+   for(var events in rawEventList.take(3)){
      for(var event in events){
      await transaction.rawInsert("""INSERT INTO events_data(event_id,name,about,rules,time,date,details,venue,contact) VALUES(?,?,?,?,?,?,?,?,?) """,[
        int.parse(event["id"].toString()) ?? 0,
@@ -18,7 +18,7 @@ Future<Null> insertAllEvents(Map<String,dynamic> eventsJson) async{
        event["about"].toString() ??"",
        event["rules"].toString() ??"",
        event["timings"].toString() ??"",
-       event["date_time"].toString() ??"",
+       event["date_time"].toString().substring(0,10) ??"",
        event["details"].toString() ??"",
        event["venue"].toString() ??"",
        event["contact"].toString() ??""
@@ -39,4 +39,30 @@ Future<List<Events>> getAllEvents() async{
   }
   return eventList;
 }
+
+Future<List<String>> getDates() async{
+  var database = await databaseInstance();
+  List<Map<String,dynamic>> dates = await database.rawQuery("SELECT DISTINCT date from events_data WHERE date!='TBA' ORDER BY date");
+  if(dates==null||dates.isEmpty)
+   return [];
+  List<String> dateList =[];  
+  for(var date in dates){
+    dateList.add(date["date"].toString());
+  }
+
+  return dateList;
+}
+
+Future<List<Events>> getEventsByDate(String date) async{
+  var database = await databaseInstance();
+  List<Map<String,dynamic>> events = await database.rawQuery("""SELECT * FROM events_data WHERE date = ? ORDER BY time""",[date]);
+  if(events == null || events.isEmpty)
+  return [];
+  List<Events> eventList = [];
+  for(var event in events){
+    eventList.add(Events.fromMap(event));
+  }
+  return eventList;
+}
+
 }

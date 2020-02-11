@@ -1,16 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
+import 'package:apogee_main/shared/network/errorState.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:collection/collection.dart';
 
 class CartController with ChangeNotifier {
+  int state=0;
+  String message="";
   WalletDao _walletDao;
   CustomHttpNetworkClient _networkClient;
   List<CartItem> cartItems = [
-    CartItem(
+   /* CartItem(
       basePrice: 200,
       currentPrice: 150,
       discount: 50,
@@ -31,18 +34,31 @@ class CartController with ChangeNotifier {
       quantity: 1,
       vendorId: 2,
       vendorName: "Vendor 1"
-    )
+    )*/
   ];
   bool isLoading = false;
+
+// aks
+  // CartController() {
+  //   this._walletDao = WalletDao();
+  //   this._networkClient = CustomHttpNetworkClient(
+  //     baseUrl: prefix0.baseUrl,
+  //     headers: headerMap
+  //   );
+  //    isLoading = true;
+  //    loadCartItems();
+  // }
+
 
   CartController({
     WalletDao walletDao,
     CustomHttpNetworkClient networkClient
   }): this._walletDao = walletDao,
       this._networkClient = networkClient {
-    // isLoading = true;
-    // loadCartItems();
+     isLoading = true;
+     loadCartItems();
   }
+
 
   Future<Null> loadCartItems() async {
     cartItems = await _walletDao.getAllCartItems();
@@ -66,6 +82,14 @@ class CartController with ChangeNotifier {
     }
   }
 
+  int getTotalPrice(){
+      int price=0;
+    for(var item in cartItems){
+          price+=item.quantity*item.currentPrice;
+    }
+    return price;
+  }
+
   Future<Null> placeOrder() async {
     isLoading = true;
     notifyListeners();
@@ -82,20 +106,30 @@ class CartController with ChangeNotifier {
     Map<String, dynamic> body = {
       "orderdict": finalMap
     };
-    _networkClient.post("wallet/orders", json.encode(body), (response) async {
+    print("Final map sent = $body");
+    ErrorState errorState =await _networkClient.post("wallet/orders", json.encode(body), (response) async {
       await _walletDao.clearAllCartItems();
       cartItems.clear();
       isLoading = false;
       notifyListeners();
     },);
+     if(errorState.state==2){
+      state=2;
+      message=errorState.message;
+      isLoading=false;
+      notifyListeners();
+    }
+
   }
 
   @override
   void dispose() {
+    print("try: dispose called on close cart");
     // As a safety measure, just before the cart is disposed, I update the database with the list that the controller has maintained
     // This is a logical step as the user would always see the data that was maintained by the controller. So, if we save the last
     // set of data that was maintained by the controller, there would never be any cases of data inconsistency visible to the user
     _walletDao.insertCartItems(cartItems);
     super.dispose();
   }
+  
 }

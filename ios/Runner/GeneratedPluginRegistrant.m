@@ -4,6 +4,12 @@
 
 #import "GeneratedPluginRegistrant.h"
 
+#if __has_include(<cloud_firestore/CloudFirestorePlugin.h>)
+#import <cloud_firestore/CloudFirestorePlugin.h>
+#else
+@import cloud_firestore;
+#endif
+
 #if __has_include(<firebase_analytics/FLTFirebaseAnalyticsPlugin.h>)
 #import <firebase_analytics/FLTFirebaseAnalyticsPlugin.h>
 #else
@@ -16,8 +22,8 @@
 @import firebase_auth;
 #endif
 
-#if __has_include(<firebase_core/FLTFirebaseCorePlugin.h>)
-#import <firebase_core/FLTFirebaseCorePlugin.h>
+#if __has_include(<firebase_core/FirebaseCorePlugin.h>)
+#import <firebase_core/FirebaseCorePlugin.h>
 #else
 @import firebase_core;
 #endif
@@ -28,8 +34,8 @@
 @import firebase_crashlytics;
 #endif
 
-#if __has_include(<firebase_dynamic_links/FLTFirebaseDynamicLinksPlugin.h>)
-#import <firebase_dynamic_links/FLTFirebaseDynamicLinksPlugin.h>
+#if __has_include(<firebase_dynamic_links/FirebaseDynamicLinksPlugin.h>)
+#import <firebase_dynamic_links/FirebaseDynamicLinksPlugin.h>
 #else
 @import firebase_dynamic_links;
 #endif
@@ -70,8 +76,8 @@
 @import sqflite;
 #endif
 
-#if __has_include(<url_launcher/FLTURLLauncherPlugin.h>)
-#import <url_launcher/FLTURLLauncherPlugin.h>
+#if __has_include(<url_launcher/UrlLauncherPlugin.h>)
+#import <url_launcher/UrlLauncherPlugin.h>
 #else
 @import url_launcher;
 #endif
@@ -79,6 +85,7 @@
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
+  [FLTCloudFirestorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTCloudFirestorePlugin"]];
   [FLTFirebaseAnalyticsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAnalyticsPlugin"]];
   [FLTFirebaseAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAuthPlugin"]];
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
@@ -90,7 +97,7 @@
   [FLTGoogleSignInPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleSignInPlugin"]];
   [FLTSharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharedPreferencesPlugin"]];
   [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
-  [FLTURLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTURLLauncherPlugin"]];
+  [FLTUrlLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTUrlLauncherPlugin"]];
 }
 
 @end

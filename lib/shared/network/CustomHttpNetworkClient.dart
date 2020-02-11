@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:apogee_main/shared/network/NetworkClient.dart';
 import 'package:apogee_main/shared/network/NetworkResponseHandler.dart';
 import 'package:apogee_main/shared/network/errorState.dart';
@@ -20,7 +22,21 @@ class CustomHttpNetworkClient implements NetworkClient {
   @override
   Future<ErrorState> get(String url, Function(String) onSucess) async {
     url = url ?? "";
-    Response response = await _networkClient.get("$baseUrl$url", headers: {'Content-Type': 'application/json', 'Authorization': await _secureStorage.read(key: 'JWT') ?? ""});
+    print("try: inside get networkcliner url $url ");
+
+    // Response response = await _networkClient.get("$baseUrl$url", headers: {'Content-Type': 'application/json', HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? ""});
+    // print("try: get url $url Code = ${response.statusCode} Response = ${response.body}");
+    Response response;
+
+
+    try{
+    response = await _networkClient.get("$baseUrl$url", headers: {'Content-Type': 'application/json', HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? ""});
+    print("try: get url $url Code = ${response.statusCode} Response = ${response.body}");
+    } catch(e)
+    {
+      print("try: get url $url  ${e.toString()}");
+      return ErrorState(message: "${e.toString()}",state: 2); 
+    }
     return await NetworkResponseHandler.handleResponse(
       response: response,
       onSuccess: onSucess
@@ -28,15 +44,24 @@ class CustomHttpNetworkClient implements NetworkClient {
   }
 
   @override
-  Future<ErrorState> post(String url, String body, Function(String) onSucess, [bool wantAuth = true]) async {
+  Future<ErrorState> post(String url, String body, Function(String) onSucess/*, [bool wantAuth = true]*/) async {
     url = url ?? "";
+    print("try: inside post networkcliner url $url ");
     final headers = {'Content-Type': 'application/json'};
-    if(wantAuth){
-      headers.addAll({'Authorization': await _secureStorage.read(key: 'JWT') ?? ""});
-    }
-    Response response = await _networkClient.post("$baseUrl$url", headers: headers, body: body);
-    print("Code = ${response.statusCode}");
-    print("Response = ${response.body}");
+    //if(wantAuth){
+      headers.addAll({HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? ""});
+    //}
+    Response response;
+  try{
+       response = await _networkClient.post("$baseUrl$url", headers: headers, body: body);
+    print("try: post  url $url Code = ${response.statusCode} Response = ${response.body}");
+  }
+  catch(e)
+  {
+    print("try: post  url $url ${e.toString()}");
+    return ErrorState(message: "${e.toString()}",state: 2);
+  }
+
     return await NetworkResponseHandler.handleResponse(
       response: response,
       onSuccess: onSucess

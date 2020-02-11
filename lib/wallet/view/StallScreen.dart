@@ -1,165 +1,142 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/screen.dart';
-import 'package:apogee_main/wallet/controller/CartController.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
-import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallDataItem.dart';
-import 'package:apogee_main/wallet/view/CartItemWidget.dart';
-import 'package:apogee_main/wallet/view/CartQuantityWidget.dart';
-import 'package:apogee_main/shared/constants/strings.dart' as prefix0;
 import 'package:apogee_main/wallet/view/MenuScreen.dart';
 import 'package:apogee_main/wallet/view/StallItemWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-class StallScreen extends StatefulWidget{
+import '../../shared/network/errorState.dart';
+
+class StallScreen extends StatefulWidget {
   @override
   _StallScreenState createState() => _StallScreenState();
-
 }
 
 class _StallScreenState extends State<StallScreen> {
-  MyStallModel _myStallModel;
+  // MyStallModel _myStallModel;
+
 
   @override
   Widget build(BuildContext context) {
+   // Provider.of<MyStallModel>(context, listen: false).fetchStallData();
     return Screen(
-        selectedTabIndex: 0,
-        title: "Stall",
-        child: ChangeNotifierProvider<MyStallModel>(
-          create: (BuildContext context) => MyStallModel(),
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Consumer<MyStallModel>(
-                    builder: (context, mystallmodel, child) {
-                      _myStallModel = mystallmodel;
-                      return mystallmodel.isLoading ? Center(child: CircularProgressIndicator()) :
-                      mystallmodel.stallItems.isEmpty ? Center(child: Text("No Stalls are available")) :
-                      Container(
-                        child: Column(
-                          children: <Widget>[
-                            Expanded(
-                              flex: 1,
-                              child: ListView.builder(
-                                itemCount: mystallmodel.stallItems.length,
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    child: StallItemWidget(stallDataItem:mystallmodel.stallItems[index]),
-                                    onTap: (){
-                                      Scaffold
-                                          .of(context)
-                                          .showSnackBar(SnackBar(content: Text(index.toString())));
-                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => MenuScreen(mystallmodel.stallItems[index].stallId), settings: RouteSettings(name: "/menuItems$index")));
-                                      //TODO: open menu Screen
-                                    },
-                                  );
-                                },
+      selectedTabIndex: 0,
+      title: "Stall",
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: Consumer<MyStallModel>(
+                builder: (context, mystallmodel, child) {
+                  // _myStallModel = mystallmodel;
+                  if(mystallmodel.state ==2) {
+                      Fluttertoast.showToast(msg: mystallmodel.message);
+                      mystallmodel.state=0;
+                     }
+                  return mystallmodel.isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : mystallmodel.stallItems.isEmpty
+                          ? Center(child: Text("No Stalls are available"))
+                          : Container(
+                              child: Column(
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 1,
+                                    child: ListView.builder(
+                                      itemCount: mystallmodel.stallItems.length,
+                                      itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                          child: StallItemWidget(
+                                              stallDataItem: mystallmodel
+                                                  .stallItems[index]),
+                                          onTap: () {
+                                            Scaffold.of(context).showSnackBar(
+                                                SnackBar(
+                                                    content: Text(
+                                                        index.toString())));
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MenuScreen(mystallmodel
+                                                            .stallItems[index]
+                                                            .stallId,mystallmodel._walletDao),
+                                                    settings: RouteSettings(
+                                                        name:
+                                                            "/menuItems$index")));
+                                            //TODO: open menu Screen
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+                            );
+                },
+              ),
             ),
-          ),
-        )
+          ],
+        ),
+      ),
     );
   }
-
-  /*@override
-  void onAlertMessageRecived({String message, String title = "Alert", List<Widget> actions}) {
-    // TODO: implement onAlertMessageRecived
-  }
-
-  @override
-  void onAuthenticationExpiered() {
-    // TODO: implement onAuthenticationExpiered
-  }
-
-  @override
-  void onSnackbarMessageRecived({String message}) {
-    // TODO: implement onSnackbarMessageRecived
-  }
-
-  @override
-  void onToastMessageRecived({String message}) {
-    // TODO: implement onToastMessageRecived
-  }*/
-
-/*
-  @override
-  void onQuantityChanged({int id, int quantity}) {
-    _controller.cartItemQuantityChanged(id, quantity);
-  }
-*/
-
-
 }
+//            Navigator.of(context).pushNamedAndRemoveUntil('/stalls', ModalRoute.withName('/events'));
+class MyStallModel with ChangeNotifier {
+  bool isLoading = false;
+  int state;
+  String message="";
 
-class MyStallModel with ChangeNotifier{
-
-  bool isLoading=false;
   //List<StallDataItem> stallItems;
 
   WalletDao _walletDao;
   CustomHttpNetworkClient _networkClient;
   List<StallDataItem> stallItems = [
     StallDataItem(
-     stallId: 1,
-     stallName: "Stall 1",
-     closed:  false,
-     imageUrl: "ukbgukvsx"
-    ),
+        stallId: 1, stallName: "Stall 1", closed: false, imageUrl: "ukbgukvsx"),
     StallDataItem(
-        stallId: 2,
-        stallName: "Stall 2",
-        closed:  false,
-        imageUrl: "ukbgukvsx"
-    )
+        stallId: 2, stallName: "Stall 2", closed: false, imageUrl: "ukbgukvsx")
   ];
 
-  MyStallModel({
-    WalletDao walletDao,
-    CustomHttpNetworkClient networkClient
-  }): this._walletDao = walletDao,
-      this._networkClient = networkClient
-  {
+  MyStallModel({WalletDao walletDao, CustomHttpNetworkClient networkClient})
+      : this._walletDao = walletDao,
+        this._networkClient = networkClient {
+    isLoading = true;
     displayStallDataItems();
-    //fetchStallData();
-    // isLoading = true;
-    // loadCartItems();
+    fetchStallData();
   }
 
   Future<Null> displayStallDataItems() async {
+     print("try: inside displayStallItems");
     stallItems = await _walletDao.getAllStalls();
     isLoading = false;
     notifyListeners();
-    print("Updated CartItems = $stallItems");
+    print("try: sucessfully displayed stakllitems = $stallItems");
   }
-
-
 
   Future<Null> fetchStallData() async {
+    print("try: inside fetchstalldata");
     isLoading = true;
     notifyListeners();
-    _networkClient.get("wallet/vendors/",  (response) async {
-      await _walletDao.insertAllStalls((json.decode(response)));
-      isLoading = false;
-      displayStallDataItems();
+   ErrorState errorState= await _networkClient.get(
+      "wallet/vendors/",
+      (response) async {
+        await _walletDao.insertAllStalls((json.decode(response)));
+        isLoading = false;
+        displayStallDataItems();
+        notifyListeners();
+      },
+    );
+     if(errorState.state==2){
+      state=2;
+      message=errorState.message;
+      isLoading=false;
       notifyListeners();
-
-    },);
+    }
   }
-
-
-
-
 }

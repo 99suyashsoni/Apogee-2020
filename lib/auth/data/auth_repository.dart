@@ -50,7 +50,7 @@ class AuthRepository {
 
     isBitsian = false;
     print(body);
-    return await _client.post('wallet/auth', json.encode(body), setUser, false);
+    return await _client.post('wallet/auth', json.encode(body), setUser/*, false*/);
   }
 
   Future<void> logout() async {
@@ -92,7 +92,7 @@ class AuthRepository {
     await _storage.delete(key: 'REFERRAL_CODE');
 
     await _storage.write(key: 'NAME', value: user['name']);
-    await _storage.write(key: 'JWT', value: 'Bearer ${user['JWT']}');
+    await _storage.write(key: 'JWT', value: 'JWT ${user['JWT']}');
     await _storage.write(key: 'EMAIL', value: user['email']);
     await _storage.write(key: 'CONTACT', value: user['phone']);
     await _storage.write(key: 'ID', value: user['user_id'].toString());

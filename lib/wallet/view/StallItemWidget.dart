@@ -1,7 +1,5 @@
 import 'package:apogee_main/shared/constants/appColors.dart';
-import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallDataItem.dart';
-import 'package:apogee_main/wallet/view/CartQuantityWidget.dart';
 import 'package:flutter/material.dart';
 
 class StallItemWidget extends StatelessWidget {

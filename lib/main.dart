@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:apogee_main/auth/data/auth_repository.dart';
 import 'package:apogee_main/auth/login_screen.dart';
 import 'package:apogee_main/events/data/EventsModel.dart';
@@ -11,7 +10,10 @@ import 'package:apogee_main/wallet/controller/CartController.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/view/CartScreen.dart';
 import 'package:apogee_main/wallet/view/MenuScreen.dart';
+import 'package:apogee_main/wallet/view/OrderScreen.dart';
+import 'package:apogee_main/wallet/view/ProfileScreen.dart';
 import 'package:apogee_main/wallet/view/StallScreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +51,7 @@ void main() async {
         eventsDao: eventsDao,
         customHttpNetworkClient: customHttpNetworkClient,
         walletDao: walletDao,
+        secureStorage: secureStorage,
       ));
     } else {
       runApp(ApogeeApp(
@@ -57,26 +60,31 @@ void main() async {
         eventsDao: eventsDao,
         customHttpNetworkClient: customHttpNetworkClient,
         walletDao: walletDao,
+        secureStorage: secureStorage,
       ));
     }
   });
 }
 
 class ApogeeApp extends StatelessWidget {
-  const ApogeeApp(
-      {@required this.initialRoute,
-      @required this.authRepository,
-      @required this.eventsDao,
-      @required this.customHttpNetworkClient,
-      @required this.walletDao,
-      Key key})
-      : super(key: key);
+  const ApogeeApp({
+    @required this.initialRoute,
+    @required this.authRepository,
+    @required this.eventsDao,
+    @required this.customHttpNetworkClient,
+    @required this.walletDao,
+    @required this.secureStorage,
+    Key key,
+  }) : super(key: key);
 
   final String initialRoute;
   final AuthRepository authRepository;
   final EventsDao eventsDao;
   final CustomHttpNetworkClient customHttpNetworkClient;
   final WalletDao walletDao;
+  final FlutterSecureStorage secureStorage;
+
+  //final Firestore
 
   //Make controller instance while passing so that functions of constructor are called every time the screen opens
   @override
@@ -117,9 +125,9 @@ class ApogeeApp extends StatelessWidget {
         },
         '/profile': (context) {
           return ChangeNotifierProvider.value(
-            value: CartController(
+            value: MyProfileModel(
                 walletDao: walletDao, networkClient: customHttpNetworkClient),
-            child: CartScreen(),
+            child: ProfileScreen(),
           );
         },
         '/more': (context) {
@@ -128,7 +136,14 @@ class ApogeeApp extends StatelessWidget {
                 walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: CartScreen(),
           );
-        }
+        },
+        '/cart': (context) {
+          return ChangeNotifierProvider.value(
+            value: CartController(
+                walletDao: walletDao, networkClient: customHttpNetworkClient),
+            child: CartScreen(),
+          );
+        },
       },
       navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
     );
