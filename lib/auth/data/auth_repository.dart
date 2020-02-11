@@ -28,12 +28,12 @@ class AuthRepository {
   }
 
   Future<ErrorState> loginBitsian(String id, String code) async {
-    final String regToken = await _storage.read(key: "REGTOKEN") ?? "";
+    final String regToken = await _storage.read(key: 'REGTOKEN') ?? "";
     Map<String, dynamic> body = {'id_token': id};
 
-    if (regToken != "") body.addAll({'reg_token': regToken});
+    if (regToken != '') body.addAll({'reg_token': regToken});
 
-    if (code != "") body.addAll({'referral_code': code});
+    if (code != '') body.addAll({'referral_code': code});
 
     isBitsian = true;
     return await _client.post('wallet/auth', jsonEncode(body), setUser);
@@ -41,12 +41,12 @@ class AuthRepository {
 
   Future<ErrorState> loginOutstee(
       String username, String password, String code) async {
-    final String regToken = await _storage.read(key: "REGTOKEN") ?? "";
+    final String regToken = await _storage.read(key: 'REGTOKEN') ?? "";
     Map<String, String> body = {'username': username, 'password': password};
 
-    if (regToken != "") body.addAll({'reg_token': regToken});
+    if (regToken != '') body.addAll({'reg_token': regToken});
 
-    if (code != "") body.addAll({'referral_code': code});
+    if (code != '') body.addAll({'referral_code': code});
 
     isBitsian = false;
     print(body);

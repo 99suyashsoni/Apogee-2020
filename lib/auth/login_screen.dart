@@ -3,52 +3,34 @@ import 'package:apogee_main/shared/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget{
-
-  LoginScreen({
-    this.authRepository
-  });
-
-  final AuthRepository authRepository;
-
+class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Screen(
       title: "Login",
-      child: _Login(authRepository: authRepository),
+      child: _Login(),
       selectedTabIndex: -1,
     );
   }
 }
 
-class _Login extends StatefulWidget{
-
-  const _Login({
-    this.authRepository,
-    Key key,
-}) : super(key: key);
-
-  final AuthRepository authRepository;
+class _Login extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState(authRepository: authRepository);
+  _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<_Login>{
+class _LoginState extends State<_Login> {
 
-  _LoginState({
-    @required
-    AuthRepository authRepository
-    }): this._authRepository = authRepository;
-
-  AuthRepository _authRepository;
   bool _isLoading = false;
   String _username;
   String _password;
 
   @override
   Widget build(BuildContext context) {
-    if(_isLoading) {
-      return Center(child: CircularProgressIndicator(),);
+    if (_isLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     }
 
     return Column(
@@ -78,7 +60,7 @@ class _LoginState extends State<_Login>{
         RaisedButton(
           child: Text("Login"),
           onPressed: () async {
-            final repo = _authRepository;
+            final repo = Provider.of<AuthRepository>(context);
             setState(() {
               _isLoading = true;
             });
@@ -87,11 +69,37 @@ class _LoginState extends State<_Login>{
               setState(() {
                 _isLoading = false;
               });
-              if(loginCheck){
-                Scaffold.of(context).showSnackBar(SnackBar(content: Text('Login Success')));
+              if (loginCheck) {
+                Scaffold.of(context)
+                    .showSnackBar(SnackBar(content: Text('Login Success')));
                 Navigator.of(context).pop();
+              } else {
+                //to be decided
               }
-              else{
+            }).catchError((error) {
+              //to be decided
+            });
+          },
+        ),
+        SizedBox(height: 20.0),
+        RaisedButton(
+          child: Text('Bits Login'),
+          onPressed: () async {
+            final repo = Provider.of<AuthRepository>(context);
+            String idToken = await repo.signInWithGoogle();
+            setState(() {
+              _isLoading = true;
+            });
+            await repo.loginBitsian(idToken, '');
+            repo.isLoggedIn.then((loginCheck) {
+              setState(() {
+                _isLoading = false;
+              });
+              if (loginCheck) {
+                Scaffold.of(context)
+                    .showSnackBar(SnackBar(content: Text('Login Success')));
+                Navigator.of(context).pop();
+              } else {
                 //to be decided
               }
             }).catchError((error) {

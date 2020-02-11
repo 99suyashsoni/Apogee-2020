@@ -20,9 +20,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
-
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
   runZoned(() async {
@@ -30,23 +28,21 @@ void main() async {
     final customHttpNetworkClient = CustomHttpNetworkClient(
         baseUrl: "https://www.bits-oasis.org/",
         secureStorage: secureStorage,
-        client: Client()
-    );
+        client: Client());
 
     //All repo and dao to be made singleton here
-    final authRepository = AuthRepository(client: customHttpNetworkClient, secureStorage: secureStorage);
+    final authRepository = AuthRepository(
+        client: customHttpNetworkClient, secureStorage: secureStorage);
     final eventsDao = EventsDao();
     final walletDao = WalletDao();
 
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarColor: Color(0xFF5A534A),
-        )
-    );
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Color(0xFF5A534A),
+    ));
 
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-    if(secureStorage.read(key: 'JWT') != null){
+    if (secureStorage.read(key: 'JWT') != null) {
       runApp(ApogeeApp(
         initialRoute: '/',
         authRepository: authRepository,
@@ -54,7 +50,7 @@ void main() async {
         customHttpNetworkClient: customHttpNetworkClient,
         walletDao: walletDao,
       ));
-    }else{
+    } else {
       runApp(ApogeeApp(
         initialRoute: '/events',
         authRepository: authRepository,
@@ -64,19 +60,17 @@ void main() async {
       ));
     }
   });
-
 }
 
 class ApogeeApp extends StatelessWidget {
-
-  const ApogeeApp({
-    @required this.initialRoute,
-    @required this.authRepository,
-    @required this.eventsDao,
-    @required this.customHttpNetworkClient,
-    @required this.walletDao,
-    Key key
-  }) : super(key: key);
+  const ApogeeApp(
+      {@required this.initialRoute,
+      @required this.authRepository,
+      @required this.eventsDao,
+      @required this.customHttpNetworkClient,
+      @required this.walletDao,
+      Key key})
+      : super(key: key);
 
   final String initialRoute;
   final AuthRepository authRepository;
@@ -95,42 +89,48 @@ class ApogeeApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) {
-           return LoginScreen(authRepository: authRepository);
+          return Provider.value(
+            value: authRepository,
+            child: LoginScreen(),
+          );
         },
         '/events': (context) {
           return ChangeNotifierProvider.value(
-            value: EventsModel(eventsDao: eventsDao, networkClient: customHttpNetworkClient),
+            value: EventsModel(
+                eventsDao: eventsDao, networkClient: customHttpNetworkClient),
             child: EventsScreen(),
           );
         },
         '/orders': (context) {
           return ChangeNotifierProvider.value(
-            value: CartController(walletDao: walletDao, networkClient: customHttpNetworkClient),
+            value: CartController(
+                walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: CartScreen(),
           );
         },
         '/stalls': (context) {
           return ChangeNotifierProvider.value(
-            value: MyStallModel(walletDao: walletDao, networkClient: customHttpNetworkClient),
+            value: MyStallModel(
+                walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: StallScreen(),
           );
         },
         '/profile': (context) {
           return ChangeNotifierProvider.value(
-            value: CartController(walletDao: walletDao, networkClient: customHttpNetworkClient),
+            value: CartController(
+                walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: CartScreen(),
           );
         },
         '/more': (context) {
           return ChangeNotifierProvider.value(
-            value: CartController(walletDao: walletDao, networkClient: customHttpNetworkClient),
+            value: CartController(
+                walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: CartScreen(),
           );
         }
       },
-      navigatorObservers: [
-        FirebaseAnalyticsObserver(analytics: analytics)
-      ],
+      navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
     );
   }
 }
