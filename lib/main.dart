@@ -46,12 +46,23 @@ void main() async {
 
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-    runApp(ApogeeApp(
-      authRepository: authRepository,
-      eventsDao: eventsDao,
-      customHttpNetworkClient: customHttpNetworkClient,
-      walletDao: walletDao,
-    ));
+    if(secureStorage.read(key: 'JWT') != null){
+      runApp(ApogeeApp(
+        initialRoute: '/',
+        authRepository: authRepository,
+        eventsDao: eventsDao,
+        customHttpNetworkClient: customHttpNetworkClient,
+        walletDao: walletDao,
+      ));
+    }else{
+      runApp(ApogeeApp(
+        initialRoute: '/events',
+        authRepository: authRepository,
+        eventsDao: eventsDao,
+        customHttpNetworkClient: customHttpNetworkClient,
+        walletDao: walletDao,
+      ));
+    }
   });
 
 }
@@ -59,6 +70,7 @@ void main() async {
 class ApogeeApp extends StatelessWidget {
 
   const ApogeeApp({
+    @required this.initialRoute,
     @required this.authRepository,
     @required this.eventsDao,
     @required this.customHttpNetworkClient,
@@ -66,6 +78,7 @@ class ApogeeApp extends StatelessWidget {
     Key key
   }) : super(key: key);
 
+  final String initialRoute;
   final AuthRepository authRepository;
   final EventsDao eventsDao;
   final CustomHttpNetworkClient customHttpNetworkClient;
