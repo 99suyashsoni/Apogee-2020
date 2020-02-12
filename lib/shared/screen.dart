@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Screen extends StatelessWidget {
+class 
+Screen extends StatelessWidget {
 
   const Screen({
     @required this.title,
@@ -16,10 +17,10 @@ class Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   title: Text(title),
+      //   centerTitle: true,
+      // ),
       body: Container(
         //for gradient, to be written later
         decoration: BoxDecoration(

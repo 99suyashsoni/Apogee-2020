@@ -6,13 +6,13 @@ import 'package:apogee_main/events/eventsScreen.dart';
 import 'package:apogee_main/shared/constants/app_theme_data.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/wallet/controller/CartController.dart';
+import 'package:apogee_main/wallet/controller/ProfileController_PreApogee.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/view/CartScreen.dart';
-import 'package:apogee_main/wallet/view/MenuScreen.dart';
 import 'package:apogee_main/wallet/view/OrderScreen.dart';
-import 'package:apogee_main/wallet/view/ProfileScreen.dart';
+import 'package:apogee_main/wallet/view/ProfileScreenPreApogee.dart';
 import 'package:apogee_main/wallet/view/StallScreen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
@@ -24,13 +24,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
 
-  // WidgetsFlutterBinding.ensureInitialized();
-
-   print("Print 1");
-
   final secureStorage = new FlutterSecureStorage();
-
-  print("Print 2");
 
   final customHttpNetworkClient = CustomHttpNetworkClient(
     baseUrl: "https://www.bits-oasis.org/",
@@ -43,12 +37,11 @@ void main() async {
   final authRepository = AuthRepository(client: customHttpNetworkClient, secureStorage: secureStorage);
   final eventsDao = EventsDao();
   final walletDao = WalletDao();
-  //final firestoreDB= Firestore.instance;
 
 
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
-      statusBarColor: Color(0xFF5A534A),
+      statusBarColor: Colors.lightBlue
     )
   );
 
@@ -57,9 +50,7 @@ void main() async {
     eventsDao: eventsDao,
     customHttpNetworkClient: customHttpNetworkClient,
     walletDao: walletDao,
-
-   // firestoreDB: firestoreDB
-
+    secureStorage: secureStorage,
   ));
 }
 
@@ -71,8 +62,6 @@ class ApogeeApp extends StatelessWidget {
     @required this.customHttpNetworkClient,
     @required this.walletDao,
     @required this.secureStorage,
-   // @required this.firestoreDB,
-
     Key key
   }) : super(key: key);
 
@@ -81,8 +70,6 @@ class ApogeeApp extends StatelessWidget {
   final CustomHttpNetworkClient customHttpNetworkClient;
   final WalletDao walletDao;
   final FlutterSecureStorage secureStorage;
-  //final Firestore
-
 
   //Make controller instance while passing so that functions of constructor are called every time the screen opens
   @override
@@ -117,9 +104,10 @@ class ApogeeApp extends StatelessWidget {
           );
         },
         '/profile': (context) {
+          //ProfileScreenPreApogeeController controller = 
           return ChangeNotifierProvider.value(
-            value: MyProfileModel(walletDao: walletDao, networkClient: customHttpNetworkClient),
-            child: ProfileScreen(),
+            value: ProfileScreenPreApogeeController(secureStorage: secureStorage),
+            child: ProfileScreenPreApogee(secureStorage),            
           );
         },
         '/more': (context) {
