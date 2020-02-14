@@ -23,7 +23,6 @@ import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
   runZoned(() async {
@@ -33,9 +32,12 @@ void main() async {
         secureStorage: secureStorage,
         client: Client());
 
+    final analytics = FirebaseAnalytics();
     //All repo and dao to be made singleton here
     final authRepository = AuthRepository(
-        client: customHttpNetworkClient, secureStorage: secureStorage);
+      client: customHttpNetworkClient,
+      secureStorage: secureStorage,
+    );
     final eventsDao = EventsDao();
     final walletDao = WalletDao();
 
@@ -47,7 +49,8 @@ void main() async {
 
     if (secureStorage.read(key: 'JWT') != null) {
       runApp(ApogeeApp(
-        initialRoute: '/',
+        initialRoute: '/login',
+        analytics: analytics,
         authRepository: authRepository,
         eventsDao: eventsDao,
         customHttpNetworkClient: customHttpNetworkClient,
@@ -56,7 +59,8 @@ void main() async {
       ));
     } else {
       runApp(ApogeeApp(
-        initialRoute: '/events',
+        initialRoute: '/',
+        analytics: analytics,
         authRepository: authRepository,
         eventsDao: eventsDao,
         customHttpNetworkClient: customHttpNetworkClient,
@@ -70,6 +74,7 @@ void main() async {
 class ApogeeApp extends StatelessWidget {
   const ApogeeApp({
     @required this.initialRoute,
+    @required this.analytics,
     @required this.authRepository,
     @required this.eventsDao,
     @required this.customHttpNetworkClient,
@@ -79,6 +84,7 @@ class ApogeeApp extends StatelessWidget {
   }) : super(key: key);
 
   final String initialRoute;
+  final FirebaseAnalytics analytics;
   final AuthRepository authRepository;
   final EventsDao eventsDao;
   final CustomHttpNetworkClient customHttpNetworkClient;
@@ -88,20 +94,19 @@ class ApogeeApp extends StatelessWidget {
   //Make controller instance while passing so that functions of constructor are called every time the screen opens
   @override
   Widget build(BuildContext context) {
-    FirebaseAnalytics analytics = FirebaseAnalytics();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Apogee App',
       theme: appThemeData,
-      initialRoute: '/',
+      initialRoute: initialRoute,
       routes: {
-        '/': (context) {
+        '/login': (context) {
           return Provider.value(
             value: authRepository,
             child: LoginScreen(),
           );
         },
-        '/events': (context) {
+        '/': (context) {
           return ChangeNotifierProvider.value(
             value: EventsModel(
                 eventsDao: eventsDao, networkClient: customHttpNetworkClient),
@@ -123,15 +128,11 @@ class ApogeeApp extends StatelessWidget {
           );
         },
         '/profile': (context) {
-          //ProfileScreenPreApogeeController controller = 
+          //ProfileScreenPreApogeeController controller =
           return ChangeNotifierProvider.value(
             value: MyProfileModel(
                 walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: ProfileScreen(),
-//=======
-//            value: ProfileScreenPreApogeeController(secureStorage: secureStorage),
-//            child: ProfileScreenPreApogee(secureStorage),
-//>>>>>>> 105d44fd1775888a624d6a6d3b16560415a0c224
           );
         },
         '/more': (context) {
@@ -149,7 +150,11 @@ class ApogeeApp extends StatelessWidget {
           );
         },
       },
-      navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
     );
   }
 }
+//            value: ProfileScreenPreApogeeController(secureStorage: secureStorage),
+//            child: ProfileScreenPreApogee(secureStorage),
