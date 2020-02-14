@@ -7,13 +7,13 @@ import 'package:apogee_main/events/eventsScreen.dart';
 import 'package:apogee_main/shared/constants/app_theme_data.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/wallet/controller/CartController.dart';
+import 'package:apogee_main/wallet/controller/ProfileController_PreApogee.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/view/CartScreen.dart';
-import 'package:apogee_main/wallet/view/MenuScreen.dart';
 import 'package:apogee_main/wallet/view/OrderScreen.dart';
 import 'package:apogee_main/wallet/view/ProfileScreen.dart';
+import 'package:apogee_main/wallet/view/ProfileScreenPreApogee.dart';
 import 'package:apogee_main/wallet/view/StallScreen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +23,7 @@ import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
 
   runZoned(() async {
@@ -84,8 +85,6 @@ class ApogeeApp extends StatelessWidget {
   final WalletDao walletDao;
   final FlutterSecureStorage secureStorage;
 
-  //final Firestore
-
   //Make controller instance while passing so that functions of constructor are called every time the screen opens
   @override
   Widget build(BuildContext context) {
@@ -124,10 +123,15 @@ class ApogeeApp extends StatelessWidget {
           );
         },
         '/profile': (context) {
+          //ProfileScreenPreApogeeController controller = 
           return ChangeNotifierProvider.value(
             value: MyProfileModel(
                 walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: ProfileScreen(),
+//=======
+//            value: ProfileScreenPreApogeeController(secureStorage: secureStorage),
+//            child: ProfileScreenPreApogee(secureStorage),
+//>>>>>>> 105d44fd1775888a624d6a6d3b16560415a0c224
           );
         },
         '/more': (context) {

@@ -40,6 +40,8 @@ dependencies:
   url_launcher: ^5.2.5
   flutter_secure_storage: ^3.3.1+1
   intl: ^0.16.1
+  flutter_svg: ^0.17.1
+  qr_flutter: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +58,13 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  fonts:
+    - family: Google-Sans
+      fonts:
+      - asset: fonts/Google-Sans-Fonts-master/GoogleSans-Regular.ttf
+       
+  assets:
+  - assets/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="365" height="721" viewBox="0 0 365 721">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.181" y1="0.083" x2="1.155" y2="0.841" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#1589fe"/>
+      <stop offset="1" stop-color="#03399d"/>
+    </linearGradient>
+    <clipPath id="clip-Login_2">
+      <rect width="365" height="721"/>
+    </clipPath>
+  </defs>
+  <g id="Login_2" data-name="Login – 2" clip-path="url(#clip-Login_2)">
+    <rect width="365" height="721" fill="url(#linear-gradient)"/>
+  </g>
+</svg>

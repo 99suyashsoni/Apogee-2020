@@ -1,0 +1,235 @@
+{
+  "project_info": {
+    "project_number": "1005380465971",
+    "firebase_url": "https://oasis19-c481d.firebaseio.com",
+    "project_id": "oasis19-c481d",
+    "storage_bucket": "oasis19-c481d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005380465971:android:1e1202dda8e8e6c7bffa46",
+        "android_client_info": {
+          "package_name": "com.dvm.appd.oasis.dbg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005380465971-lih34v43o6o74kmpgepmsotoqa25v0n1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dvm.appd.oasis.dbg",
+            "certificate_hash": "37100823a85725ff09254aa1d2e37f50100ae3ed"
+          }
+        },
+        {
+          "client_id": "1005380465971-2ntjp3kvunic1r0rnre4q4esorfv1qqh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dvm.appd.oasis.dbg",
+            "certificate_hash": "04406b170c8b6490fb15ccbf8c1f231188d8fa05"
+          }
+        },
+        {
+          "client_id": "1005380465971-59sdjjl0fnsskievp6tu31csjt7lp0kq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dvm.appd.oasis.dbg",
+            "certificate_hash": "539ee6c572a0eec7a1711ae92259b26550a23dfb"
+          }
+        },
+        {
+          "client_id": "1005380465971-eb1mviff7bhuce5qgk80e4uvg5s7mr1f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dvm.appd.oasis.dbg",
+            "certificate_hash": "630c70f9c4a464f9ca636e4dd7306ac9bdad20b8"
+          }
+        },
+        {
+          "client_id": "1005380465971-0d7cq8t03n63fgp5ftpmcdof5b97qglc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzFQXNO1LYt8-erNYdKYl9AhEehbEseVY"
+        },
+        {
+          "current_key": "AIzaSyDYV4A2ZbHzirPAIQ2yXTd6wx_4UiAzugw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005380465971-dku54t11d22mnk06pkcs6jjilnjfe2sd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1005380465971-i5tt96af41hat8sctbfhhkumni9faiuf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dvm.oasisWallet",
+                "app_store_id": "1439811592"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005380465971:android:fc8a584ce604ea4abffa46",
+        "android_client_info": {
+          "package_name": "com.example.apogee_main"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005380465971-0d7cq8t03n63fgp5ftpmcdof5b97qglc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzFQXNO1LYt8-erNYdKYl9AhEehbEseVY"
+        },
+        {
+          "current_key": "AIzaSyDYV4A2ZbHzirPAIQ2yXTd6wx_4UiAzugw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005380465971-dku54t11d22mnk06pkcs6jjilnjfe2sd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1005380465971-i5tt96af41hat8sctbfhhkumni9faiuf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dvm.oasisWallet",
+                "app_store_id": "1439811592"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005380465971:android:45ec18fd2717bb01bffa46",
+        "android_client_info": {
+          "package_name": "com.oasis.vendorapp.dbg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005380465971-0d7cq8t03n63fgp5ftpmcdof5b97qglc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzFQXNO1LYt8-erNYdKYl9AhEehbEseVY"
+        },
+        {
+          "current_key": "AIzaSyDYV4A2ZbHzirPAIQ2yXTd6wx_4UiAzugw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005380465971-dku54t11d22mnk06pkcs6jjilnjfe2sd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1005380465971-i5tt96af41hat8sctbfhhkumni9faiuf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dvm.oasisWallet",
+                "app_store_id": "1439811592"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005380465971:android:b8e2f78e9a1b25d7bffa46",
+        "android_client_info": {
+          "package_name": "v2015.oasis.pilani.bits.com.home"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005380465971-l4007hi9kmk6nbfio5d7h8ci0iafnkbr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "v2015.oasis.pilani.bits.com.home",
+            "certificate_hash": "630c70f9c4a464f9ca636e4dd7306ac9bdad20b8"
+          }
+        },
+        {
+          "client_id": "1005380465971-dtf03sbqcqm9l8dbo6933cb1dv972i9m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "v2015.oasis.pilani.bits.com.home",
+            "certificate_hash": "539ee6c572a0eec7a1711ae92259b26550a23dfb"
+          }
+        },
+        {
+          "client_id": "1005380465971-kha9brj5objhab591brbc0i0s00u9mtk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "v2015.oasis.pilani.bits.com.home",
+            "certificate_hash": "04406b170c8b6490fb15ccbf8c1f231188d8fa05"
+          }
+        },
+        {
+          "client_id": "1005380465971-l3v211a2g30fb064kvrbsuulvjjpj4nr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "v2015.oasis.pilani.bits.com.home",
+            "certificate_hash": "3e3656984ac86de1f42d58275b47dfd44e39fe48"
+          }
+        },
+        {
+          "client_id": "1005380465971-0d7cq8t03n63fgp5ftpmcdof5b97qglc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzFQXNO1LYt8-erNYdKYl9AhEehbEseVY"
+        },
+        {
+          "current_key": "AIzaSyDYV4A2ZbHzirPAIQ2yXTd6wx_4UiAzugw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005380465971-dku54t11d22mnk06pkcs6jjilnjfe2sd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1005380465971-i5tt96af41hat8sctbfhhkumni9faiuf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dvm.oasisWallet",
+                "app_store_id": "1439811592"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
