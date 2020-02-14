@@ -46,7 +46,7 @@ void main() async {
     ));
 
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    if (!((await secureStorage.read(key: 'JWT')).startsWith('JWT'))) {
+    if ((await secureStorage.read(key: 'JWT')) == null) {
       runApp(ApogeeApp(
         initialRoute: '/login',
         analytics: analytics,
@@ -148,6 +148,12 @@ class ApogeeApp extends StatelessWidget {
             child: CartScreen(),
           );
         },
+        '/pre-profile': (context) {
+          return ChangeNotifierProvider.value(
+            value: ProfileScreenPreApogeeController(secureStorage: secureStorage),
+            child: ProfileScreenPreApogee(secureStorage),
+          );
+        },
       },
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
@@ -155,5 +161,4 @@ class ApogeeApp extends StatelessWidget {
     );
   }
 }
-//            value: ProfileScreenPreApogeeController(secureStorage: secureStorage),
-//            child: ProfileScreenPreApogee(secureStorage),
+
