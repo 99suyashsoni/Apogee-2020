@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/network/errorState.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 
 class AuthRepository {
-  AuthRepository(
-      {@required CustomHttpNetworkClient client,
-      @required FlutterSecureStorage secureStorage})
-      : this._client = client,
+  AuthRepository({
+    @required CustomHttpNetworkClient client,
+    @required FlutterSecureStorage secureStorage,
+  })  : this._client = client,
         this._storage = secureStorage;
 
   final CustomHttpNetworkClient _client;
@@ -50,7 +51,8 @@ class AuthRepository {
 
     isBitsian = false;
     print(body);
-    return await _client.post('wallet/auth', json.encode(body), setUser/*, false*/);
+    return await _client.post(
+        'wallet/auth', json.encode(body), setUser /*, false*/);
   }
 
   Future<void> logout() async {

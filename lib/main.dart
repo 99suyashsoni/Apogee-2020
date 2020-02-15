@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:apogee_main/auth/data/auth_repository.dart';
 import 'package:apogee_main/auth/login_screen.dart';
+import 'package:apogee_main/auth/phone_login_screen.dart';
 import 'package:apogee_main/events/data/EventsModel.dart';
 import 'package:apogee_main/events/data/database/EventsDao.dart';
 import 'package:apogee_main/events/eventsScreen.dart';
@@ -16,6 +17,7 @@ import 'package:apogee_main/wallet/view/ProfileScreenPreApogee.dart';
 import 'package:apogee_main/wallet/view/StallScreen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -33,6 +35,7 @@ void main() async {
         client: Client());
 
     final analytics = FirebaseAnalytics();
+    final auth = FirebaseAuth.instance;
     //All repo and dao to be made singleton here
     final authRepository = AuthRepository(
       client: customHttpNetworkClient,
@@ -48,13 +51,14 @@ void main() async {
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     if ((await secureStorage.read(key: 'JWT')) == null) {
       runApp(ApogeeApp(
-        initialRoute: '/login',
+        initialRoute: '/phone-ver',
         analytics: analytics,
         authRepository: authRepository,
         eventsDao: eventsDao,
         customHttpNetworkClient: customHttpNetworkClient,
         walletDao: walletDao,
         secureStorage: secureStorage,
+        auth: auth,
       ));
     } else {
       runApp(ApogeeApp(
@@ -65,6 +69,7 @@ void main() async {
         customHttpNetworkClient: customHttpNetworkClient,
         walletDao: walletDao,
         secureStorage: secureStorage,
+        auth: auth,
       ));
     }
   });
@@ -79,6 +84,7 @@ class ApogeeApp extends StatelessWidget {
     @required this.customHttpNetworkClient,
     @required this.walletDao,
     @required this.secureStorage,
+    @required this.auth,
     Key key,
   }) : super(key: key);
 
@@ -89,6 +95,7 @@ class ApogeeApp extends StatelessWidget {
   final CustomHttpNetworkClient customHttpNetworkClient;
   final WalletDao walletDao;
   final FlutterSecureStorage secureStorage;
+  final FirebaseAuth auth;
 
   //Make controller instance while passing so that functions of constructor are called every time the screen opens
   @override
@@ -105,7 +112,12 @@ class ApogeeApp extends StatelessWidget {
             child: LoginScreen(),
           );
         },
-        '/': (context) {
+        '/phone-ver': (context) {
+          return Provider.value(
+            value: auth,
+            child: PhoneLoginScreen(),);
+        },
+        '/events': (context) {
           return ChangeNotifierProvider.value(
             value: EventsModel(
                 eventsDao: eventsDao, networkClient: customHttpNetworkClient),
@@ -148,9 +160,10 @@ class ApogeeApp extends StatelessWidget {
             child: CartScreen(),
           );
         },
-        '/pre-profile': (context) {
+        '/': (context) {
           return ChangeNotifierProvider.value(
-            value: ProfileScreenPreApogeeController(secureStorage: secureStorage),
+            value: ProfileScreenPreApogeeController(
+                secureStorage: secureStorage),
             child: ProfileScreenPreApogee(secureStorage),
           );
         },
