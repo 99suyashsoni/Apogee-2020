@@ -18,6 +18,7 @@ import 'package:apogee_main/wallet/view/StallScreen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -36,13 +37,35 @@ void main() async {
 
     final analytics = FirebaseAnalytics();
     final auth = FirebaseAuth.instance;
+    final messaging = FirebaseMessaging();
+
+    await messaging.requestNotificationPermissions(IosNotificationSettings());
     //All repo and dao to be made singleton here
     final authRepository = AuthRepository(
       client: customHttpNetworkClient,
       secureStorage: secureStorage,
+      messaging: messaging,
     );
     final eventsDao = EventsDao();
     final walletDao = WalletDao();
+
+//    Future<dynamic> myBackgroundMessageHandler(
+//        Map<String, dynamic> message) async {
+//      return Future<void>.value();
+//    }
+
+    messaging.configure(
+      /*onBackgroundMessage: myBackgroundMessageHandler,*/
+      onLaunch: (Map<String, dynamic> message) async {
+        print(message.toString());
+      },
+      onMessage: (Map<String, dynamic> message) async {
+        print(message.toString());
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print(message.toString());
+      },
+    );
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Color(0xFF5A534A),
@@ -51,7 +74,7 @@ void main() async {
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     if ((await secureStorage.read(key: 'JWT')) == null) {
       runApp(ApogeeApp(
-        initialRoute: '/phone-ver',
+        initialRoute: '/login',
         analytics: analytics,
         authRepository: authRepository,
         eventsDao: eventsDao,
@@ -115,7 +138,8 @@ class ApogeeApp extends StatelessWidget {
         '/phone-ver': (context) {
           return Provider.value(
             value: auth,
-            child: PhoneLoginScreen(),);
+            child: PhoneLoginScreen(),
+          );
         },
         '/events': (context) {
           return ChangeNotifierProvider.value(
@@ -162,8 +186,8 @@ class ApogeeApp extends StatelessWidget {
         },
         '/': (context) {
           return ChangeNotifierProvider.value(
-            value: ProfileScreenPreApogeeController(
-                secureStorage: secureStorage),
+            value:
+                ProfileScreenPreApogeeController(secureStorage: secureStorage),
             child: ProfileScreenPreApogee(secureStorage),
           );
         },
@@ -174,4 +198,3 @@ class ApogeeApp extends StatelessWidget {
     );
   }
 }
-

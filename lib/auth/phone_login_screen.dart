@@ -71,13 +71,14 @@ class _PhoneLoginState extends State<_PhoneLogin> {
                   setState(() {
                     verificationId = verId;
                   });
-                  smsOtpDialog(context).then((value) {});
-                  print('signIn');
+//                  smsOtpDialog(context).then((value) {});
+//                  print('signIn');
                 },
                 codeAutoRetrievalTimeout: (String verId) {
                   setState(() {
                     verificationId = verId;
                   });
+//                  smsOtpDialog(context).then((value) {});
                 },
               );
             },
@@ -120,7 +121,6 @@ class _PhoneLoginState extends State<_PhoneLogin> {
                       Navigator.of(context).pushReplacementNamed('/login');
                     }
                     else {
-                      signIn();
                     }
                   });
                 },
@@ -129,20 +129,6 @@ class _PhoneLoginState extends State<_PhoneLogin> {
           );
         }
     );
-  }
-
-  signIn() async {
-    try {
-      final AuthCredential credential = PhoneAuthProvider.getCredential(
-        verificationId: verificationId, smsCode: opt,);
-      final FirebaseUser currentUser = await _auth.currentUser();
-      final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
-      assert(user.uid == currentUser.uid);
-      Navigator.of(context).pop();
-      Navigator.of(context).pushReplacementNamed('/login');
-    } catch (e) {
-      print(e.toString());
-    }
   }
 }
 

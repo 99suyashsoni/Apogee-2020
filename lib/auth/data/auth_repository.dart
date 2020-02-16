@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/network/errorState.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -11,11 +12,14 @@ class AuthRepository {
   AuthRepository({
     @required CustomHttpNetworkClient client,
     @required FlutterSecureStorage secureStorage,
+    @required FirebaseMessaging messaging,
   })  : this._client = client,
-        this._storage = secureStorage;
+        this._storage = secureStorage,
+        this._messaging = messaging;
 
   final CustomHttpNetworkClient _client;
   final FlutterSecureStorage _storage;
+  final FirebaseMessaging _messaging;
   final _signIn = GoogleSignIn(
     scopes: ['email'],
     hostedDomain: 'pilani.bits-pilani.ac.in',
@@ -29,10 +33,15 @@ class AuthRepository {
   }
 
   Future<ErrorState> loginBitsian(String id, String code) async {
-    final String regToken = await _storage.read(key: 'REGTOKEN') ?? "";
-    Map<String, dynamic> body = {'id_token': id};
 
-    if (regToken != '') body.addAll({'reg_token': regToken});
+    await _messaging.subscribeToTopic('User');
+    await _messaging.subscribeToTopic('Bitsian');
+    //final String regToken = await _storage.read(key: 'REGTOKEN') ?? "";
+    final regToken = await _messaging.getToken();
+    print(regToken);
+    Map<String, dynamic> body = {'id_token': id, 'reg_token': regToken};
+
+    //if (regToken != '') body.addAll({'reg_token': regToken});
 
     if (code != '') body.addAll({'referral_code': code});
 
@@ -42,10 +51,15 @@ class AuthRepository {
 
   Future<ErrorState> loginOutstee(
       String username, String password, String code) async {
-    final String regToken = await _storage.read(key: 'REGTOKEN') ?? "";
-    Map<String, String> body = {'username': username, 'password': password};
 
-    if (regToken != '') body.addAll({'reg_token': regToken});
+    await _messaging.subscribeToTopic('User');
+    await _messaging.subscribeToTopic('Outstee');
+    //final String regToken = await _storage.read(key: 'REGTOKEN') ?? "";
+    final regToken = await _messaging.getToken();
+    print(regToken);
+    Map<String, String> body = {'username': username, 'password': password, 'reg_token': regToken};
+
+    //if (regToken != '') body.addAll({'reg_token': regToken});
 
     if (code != '') body.addAll({'referral_code': code});
 
@@ -82,6 +96,7 @@ class AuthRepository {
   }
 
   Future<void> setUser(String json) async {
+
     final user = jsonDecode(json) as Map<String, dynamic>;
 
     await _storage.delete(key: 'NAME');
