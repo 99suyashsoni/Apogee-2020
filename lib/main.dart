@@ -74,7 +74,7 @@ void main() async {
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     if ((await secureStorage.read(key: 'JWT')) == null) {
       runApp(ApogeeApp(
-        initialRoute: '/login',
+        initialRoute: '/phone-ver',
         analytics: analytics,
         authRepository: authRepository,
         eventsDao: eventsDao,
