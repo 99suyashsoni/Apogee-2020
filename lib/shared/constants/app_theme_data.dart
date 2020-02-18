@@ -1,3 +1,4 @@
+import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:flutter/material.dart';
 
 final appThemeData = ThemeData(
@@ -19,4 +20,40 @@ final appThemeData = ThemeData(
         subtitle: TextStyle(fontSize: 22, color: Colors.grey),
         body1: TextStyle(fontSize: 20)
     )
+);
+
+final orderCardThemeData = ThemeData(
+  textTheme: TextTheme(
+    headline: TextStyle(
+      fontSize: 16,
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'Google-Sans',
+      fontStyle: FontStyle.normal
+    ),
+    title: TextStyle(
+      fontSize: 14,
+      color: offWhite44,
+      fontFamily: 'Google-Sans',
+      fontStyle: FontStyle.normal
+    ),
+    subtitle: TextStyle(
+      fontSize: 11,
+      color: offWhite44,
+      fontFamily: 'Google-Sans',
+      fontStyle: FontStyle.normal
+    ),
+    body1: TextStyle(
+      fontSize: 16,
+      color: orderCardAmount,
+      fontFamily: 'Google-Sans',
+      fontStyle: FontStyle.normal
+    ),
+    body2: TextStyle(
+      fontSize: 14,
+      color: Colors.white,
+      fontFamily: 'Google-Sans',
+      fontStyle: FontStyle.normal
+    )
+  )
 );
