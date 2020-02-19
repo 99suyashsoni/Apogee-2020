@@ -1,5 +1,6 @@
 import 'package:apogee_main/events/data/dataClasses/Events.dart';
 import 'package:apogee_main/shared/database_helper.dart';
+import 'package:sqflite/sqflite.dart';
 
 class EventsDao{
 
@@ -7,24 +8,26 @@ Future<Null> insertAllEvents(Map<String,dynamic> eventsJson) async{
   var database = await databaseInstance();
 
   var body = eventsJson['data'] as List;
-  var rawEventList = body.map((f) => f['events']).toList().toSet().toList();
-  print('body : $rawEventList');
+  var rawEventList = body.map((f) => f['events']).toList();
   await database.transaction((transaction) async{
    await transaction.delete("events_data");
-   for(var event in rawEventList){
-     await transaction.rawInsert("""INSERT INTO events_data(event_id,name,about,rules,time,date,details,venue,contact) VALUES(?,?,?,?,?,?,?,?,?) """,[
+   for(var events in rawEventList){
+   
+     for(var event in events){
+        print('body : $event');
+     await transaction.insert("""INSERT INTO events_data(event_id,name,about,rules,time,date,details,venue,contact) VALUES(?,?,?,?,?,?,?,?,?) """,[
        int.parse(event["id"].toString()) ?? 0,
        event["name"].toString() ??"",
        event["about"].toString() ??"",
        event["rules"].toString() ??"",
        event["timings"].toString() ??"",
-       event["date_time"].toString().substring(0,10) ??"",
+       event["date_time"].toString() ??"",
        event["details"].toString() ??"",
        event["venue"].toString() ??"",
        event["contact"].toString() ??""
-     ]);
+     ],conflictAlgorithm: ConflictAlgorithm.replace);
    }
-
+   }
   });
 }
 
