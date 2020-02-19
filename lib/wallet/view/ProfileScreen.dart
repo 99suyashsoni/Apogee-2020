@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/network/errorState.dart';
 import 'package:apogee_main/shared/screen.dart';
+import 'package:apogee_main/wallet/controller/ProfileController_PreApogee.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +32,11 @@ class _ProfileScreenState extends State<ProfileScreen> /*implements  CartQuantit
         selectedTabIndex: 3,
         title: "Profile",
         child: Container(
+          decoration: new BoxDecoration(
+            image: DecorationImage(image: AssetImage('assets/background.png'),
+            fit: BoxFit.cover),
+             
+          ),
           child: Column(
             children: <Widget>[
               Expanded(
@@ -87,6 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> /*implements  CartQuantit
       }
     );
   }
+
 
   
 
@@ -147,9 +155,3 @@ class MyProfileModel with ChangeNotifier{
 
   
   }
-
-
-
-
-
-

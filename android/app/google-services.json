@@ -67,10 +67,10 @@
               "client_type": 3
             },
             {
-              "client_id": "1005380465971-5eov3mk0spudab6mf14j5i331ubjkpi8.apps.googleusercontent.com",
+              "client_id": "1005380465971-nusjattkhubumf22qb8ba85693d3td5s.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "io.flutter.flutter.app"
+                "bundle_id": "com.example.apogeeMain"
               }
             }
           ]
@@ -85,6 +85,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1005380465971-uqalpv2kocrp2tor5uueb5u51gvm9hl0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.apogee_main",
+            "certificate_hash": "539ee6c572a0eec7a1711ae92259b26550a23dfb"
+          }
+        },
         {
           "client_id": "1005380465971-0d7cq8t03n63fgp5ftpmcdof5b97qglc.apps.googleusercontent.com",
           "client_type": 3
@@ -106,10 +114,10 @@
               "client_type": 3
             },
             {
-              "client_id": "1005380465971-5eov3mk0spudab6mf14j5i331ubjkpi8.apps.googleusercontent.com",
+              "client_id": "1005380465971-nusjattkhubumf22qb8ba85693d3td5s.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "io.flutter.flutter.app"
+                "bundle_id": "com.example.apogeeMain"
               }
             }
           ]
@@ -145,10 +153,10 @@
               "client_type": 3
             },
             {
-              "client_id": "1005380465971-5eov3mk0spudab6mf14j5i331ubjkpi8.apps.googleusercontent.com",
+              "client_id": "1005380465971-nusjattkhubumf22qb8ba85693d3td5s.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "io.flutter.flutter.app"
+                "bundle_id": "com.example.apogeeMain"
               }
             }
           ]
@@ -216,10 +224,17 @@
               "client_type": 3
             },
             {
+<<<<<<< HEAD
               "client_id": "1005380465971-5eov3mk0spudab6mf14j5i331ubjkpi8.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "io.flutter.flutter.app"
+=======
+              "client_id": "1005380465971-nusjattkhubumf22qb8ba85693d3td5s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.apogeeMain"
+>>>>>>> 9dba4d8de7c172162fa35edece019afdf0783505
               }
             }
           ]

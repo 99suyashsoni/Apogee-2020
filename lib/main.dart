@@ -1,149 +1,199 @@
+import 'dart:async';
 import 'package:apogee_main/auth/data/auth_repository.dart';
 import 'package:apogee_main/auth/login_screen.dart';
+import 'package:apogee_main/auth/phone_login_screen.dart';
 import 'package:apogee_main/events/data/EventsModel.dart';
 import 'package:apogee_main/events/data/database/EventsDao.dart';
 import 'package:apogee_main/events/eventsScreen.dart';
 import 'package:apogee_main/shared/constants/app_theme_data.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/wallet/controller/CartController.dart';
+import 'package:apogee_main/wallet/controller/ProfileController_PreApogee.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/view/CartScreen.dart';
-import 'package:apogee_main/wallet/view/MenuScreen.dart';
 import 'package:apogee_main/wallet/view/OrderScreen.dart';
 import 'package:apogee_main/wallet/view/ProfileScreen.dart';
+import 'package:apogee_main/wallet/view/ProfileScreenPreApogee.dart';
 import 'package:apogee_main/wallet/view/StallScreen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
-
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-  // WidgetsFlutterBinding.ensureInitialized();
+  runZoned(() async {
+    final secureStorage = new FlutterSecureStorage();
+    final customHttpNetworkClient = CustomHttpNetworkClient(
+        baseUrl: "https://www.bits-oasis.org/",
+        secureStorage: secureStorage,
+        client: Client());
 
-   print("Print 1");
+    final analytics = FirebaseAnalytics();
+    final auth = FirebaseAuth.instance;
+    final messaging = FirebaseMessaging();
 
-  final secureStorage = new FlutterSecureStorage();
+    await messaging.requestNotificationPermissions(IosNotificationSettings());
+    //All repo and dao to be made singleton here
+    final authRepository = AuthRepository(
+      client: customHttpNetworkClient,
+      secureStorage: secureStorage,
+      messaging: messaging,
+    );
+    final eventsDao = EventsDao();
+    final walletDao = WalletDao();
 
-  print("Print 2");
+//    Future<dynamic> myBackgroundMessageHandler(
+//        Map<String, dynamic> message) async {
+//      return Future<void>.value();
+//    }
 
-  final customHttpNetworkClient = CustomHttpNetworkClient(
-    baseUrl: "https://www.bits-oasis.org/",
-    secureStorage: secureStorage,
-    client: Client()
-  );
+    messaging.configure(
+      /*onBackgroundMessage: myBackgroundMessageHandler,*/
+      onLaunch: (Map<String, dynamic> message) async {
+        print(message.toString());
+      },
+      onMessage: (Map<String, dynamic> message) async {
+        print(message.toString());
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print(message.toString());
+      },
+    );
 
-
-  //All repo and dao to be made singleton here
-  final authRepository = AuthRepository(client: customHttpNetworkClient, secureStorage: secureStorage);
-  final eventsDao = EventsDao();
-  final walletDao = WalletDao();
-  //final firestoreDB= Firestore.instance;
-
-
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Color(0xFF5A534A),
-    )
-  );
+    ));
 
-  runApp(ApogeeApp(
-    authRepository: authRepository,
-    eventsDao: eventsDao,
-    customHttpNetworkClient: customHttpNetworkClient,
-    walletDao: walletDao,
-
-   // firestoreDB: firestoreDB
-
-  ));
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    if ((await secureStorage.read(key: 'JWT')) == null) {
+      runApp(ApogeeApp(
+        initialRoute: '/phone-ver',
+        analytics: analytics,
+        authRepository: authRepository,
+        eventsDao: eventsDao,
+        customHttpNetworkClient: customHttpNetworkClient,
+        walletDao: walletDao,
+        secureStorage: secureStorage,
+        auth: auth,
+      ));
+    } else {
+      runApp(ApogeeApp(
+        initialRoute: '/',
+        analytics: analytics,
+        authRepository: authRepository,
+        eventsDao: eventsDao,
+        customHttpNetworkClient: customHttpNetworkClient,
+        walletDao: walletDao,
+        secureStorage: secureStorage,
+        auth: auth,
+      ));
+    }
+  });
 }
 
 class ApogeeApp extends StatelessWidget {
-
   const ApogeeApp({
+    @required this.initialRoute,
+    @required this.analytics,
     @required this.authRepository,
     @required this.eventsDao,
     @required this.customHttpNetworkClient,
     @required this.walletDao,
     @required this.secureStorage,
-   // @required this.firestoreDB,
-
-    Key key
+    @required this.auth,
+    Key key,
   }) : super(key: key);
 
+  final String initialRoute;
+  final FirebaseAnalytics analytics;
   final AuthRepository authRepository;
   final EventsDao eventsDao;
   final CustomHttpNetworkClient customHttpNetworkClient;
   final WalletDao walletDao;
   final FlutterSecureStorage secureStorage;
-  //final Firestore
-
+  final FirebaseAuth auth;
 
   //Make controller instance while passing so that functions of constructor are called every time the screen opens
   @override
   Widget build(BuildContext context) {
-    FirebaseAnalytics analytics = FirebaseAnalytics();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Apogee App',
       theme: appThemeData,
-      initialRoute: '/',
+      initialRoute: initialRoute,
       routes: {
-        '/': (context) {
-           return LoginScreen(authRepository: authRepository);
+        '/login': (context) {
+          return Provider.value(
+            value: authRepository,
+            child: LoginScreen(),
+          );
+        },
+        '/phone-ver': (context) {
+          return Provider.value(
+            value: auth,
+            child: PhoneLoginScreen(),
+          );
         },
         '/events': (context) {
           return ChangeNotifierProvider.value(
-            value: EventsModel(eventsDao: eventsDao, networkClient: customHttpNetworkClient),
+            value: EventsModel(
+                eventsDao: eventsDao, networkClient: customHttpNetworkClient),
             child: EventsScreen(),
           );
         },
         '/orders': (context) {
-          MyOrderModel model = MyOrderModel( walletDao, customHttpNetworkClient);
-          return
-           ChangeNotifierProvider.value(
-               value:model,
-               child: OrderScreen( model, walletDao, customHttpNetworkClient,secureStorage),);
+          return ChangeNotifierProvider.value(
+            value: CartController(
+                walletDao: walletDao, networkClient: customHttpNetworkClient),
+            child: CartScreen(),
+          );
         },
         '/stalls': (context) {
           return ChangeNotifierProvider.value(
-            value: MyStallModel(walletDao: walletDao, networkClient: customHttpNetworkClient),
+            value: MyStallModel(
+                walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: StallScreen(),
           );
         },
         '/profile': (context) {
+          //ProfileScreenPreApogeeController controller =
           return ChangeNotifierProvider.value(
-            value: MyProfileModel(walletDao: walletDao, networkClient: customHttpNetworkClient),
+            value: MyProfileModel(
+                walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: ProfileScreen(),
           );
         },
         '/more': (context) {
           return ChangeNotifierProvider.value(
-            value: CartController(walletDao: walletDao, networkClient: customHttpNetworkClient),
+            value: CartController(
+                walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: CartScreen(),
           );
         },
         '/cart': (context) {
           return ChangeNotifierProvider.value(
-            value: CartController(walletDao: walletDao, networkClient: customHttpNetworkClient),
+            value: CartController(
+                walletDao: walletDao, networkClient: customHttpNetworkClient),
             child: CartScreen(),
           );
         },
-        /*'/menu': (context) {
+        '/': (context) {
           return ChangeNotifierProvider.value(
-            value: menumo,
-            child: CartScreen(),
+            value:
+                ProfileScreenPreApogeeController(secureStorage: secureStorage),
+            child: ProfileScreenPreApogee(secureStorage),
           );
-        },*/
+        },
       },
-
       navigatorObservers: [
-        FirebaseAnalyticsObserver(analytics: analytics)
+        FirebaseAnalyticsObserver(analytics: analytics),
       ],
     );
   }
