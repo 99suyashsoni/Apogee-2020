@@ -224,17 +224,10 @@
               "client_type": 3
             },
             {
-<<<<<<< HEAD
-              "client_id": "1005380465971-5eov3mk0spudab6mf14j5i331ubjkpi8.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "io.flutter.flutter.app"
-=======
               "client_id": "1005380465971-nusjattkhubumf22qb8ba85693d3td5s.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.apogeeMain"
->>>>>>> 9dba4d8de7c172162fa35edece019afdf0783505
               }
             }
           ]

@@ -1,6 +1,5 @@
 import 'package:apogee_main/events/data/dataClasses/Events.dart';
 import 'package:apogee_main/shared/database_helper.dart';
-import 'package:sqflite/sqflite.dart';
 
 class EventsDao{
 
@@ -15,7 +14,7 @@ Future<Null> insertAllEvents(Map<String,dynamic> eventsJson) async{
    
      for(var event in events){
         print('body : $event');
-     await transaction.insert("""INSERT INTO events_data(event_id,name,about,rules,time,date,details,venue,contact) VALUES(?,?,?,?,?,?,?,?,?) """,[
+     await transaction.rawInsert("""INSERT INTO events_data(event_id,name,about,rules,time,date,details,venue,contact) VALUES(?,?,?,?,?,?,?,?,?) """,[
        int.parse(event["id"].toString()) ?? 0,
        event["name"].toString() ??"",
        event["about"].toString() ??"",
@@ -25,7 +24,7 @@ Future<Null> insertAllEvents(Map<String,dynamic> eventsJson) async{
        event["details"].toString() ??"",
        event["venue"].toString() ??"",
        event["contact"].toString() ??""
-     ],conflictAlgorithm: ConflictAlgorithm.replace);
+     ]);
    }
    }
   });

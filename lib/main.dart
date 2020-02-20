@@ -85,7 +85,7 @@ void main() async {
       ));
     } else {
       runApp(ApogeeApp(
-        initialRoute: '/',
+        initialRoute: '/login',
         analytics: analytics,
         authRepository: authRepository,
         eventsDao: eventsDao,
