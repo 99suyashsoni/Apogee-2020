@@ -28,8 +28,18 @@ class StallItemWidget extends StatelessWidget {
              Expanded(
                flex: 1,
                             child: CachedNetworkImage(
-  imageUrl: stallDataItem.imageUrl,
-  fit: BoxFit.cover,
+  imageUrl:stallDataItem.imageUrl,
+  imageBuilder: (context, imageProvider) => Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.only(topLeft: Radius.circular(8),topRight: Radius.circular(8)),
+      image: DecorationImage(
+          image: imageProvider,
+          fit: BoxFit.fill,
+          //colorFilter:
+            //  ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+            ),
+    ),
+  ),
   placeholder: (context, url) => CircularProgressIndicator(),
   errorWidget: (context, url, error) => Icon(Icons.error),
 ),
@@ -41,9 +51,11 @@ class StallItemWidget extends StatelessWidget {
               children: <Widget>[
                
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                   child: new Text(
                 stallDataItem.stallName,
+                maxLines: 2,
+                overflow:TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: new TextStyle(
                   fontSize: 14.0,
@@ -54,12 +66,25 @@ class StallItemWidget extends StatelessWidget {
                   ),
                 ),
                
-                Divider(color:Colors.white,indent: 8.0,height: 1.0,thickness: 1.0),
-               // new Text('Coffee, shakes , sandwiches and more'),
+               Row(
+                 children: <Widget>[
+                   Expanded(
+                     flex:1,
+                     child: Divider(color: Colors.white,height: 1,thickness: 1,indent: 8,)
+                   ),
+                   Expanded(
+                     flex:2,
+                     child: Divider(color: Colors.black,height: 1,thickness: 1,indent: 8,)
+                   )
+                 ],
+               ),
+               // new Text('Coffee, shakes , sandwiches and more .....'),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: new Text(
-                'Shakes, Sandwiches, Beverages & more',
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                                    child: new Text(
+                'Shakes, Sandwiches, Beverages & more ------------------',
+                maxLines: 2,
+                overflow:TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: new TextStyle(
                   fontSize: 12.0,

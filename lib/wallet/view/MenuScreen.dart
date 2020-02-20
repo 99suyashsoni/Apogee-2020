@@ -5,6 +5,7 @@ import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallModifiedMenuItem.dart';
 import 'package:apogee_main/wallet/view/CartQuantityWidget.dart';
+import 'package:apogee_main/wallet/view/MenuCategoryWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -49,9 +50,12 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
                             Expanded(
                               flex: 1,
                               child: ListView.builder(
-                                itemCount: mymenumodel.menuItems.length,
+                                itemCount: mymenumodel.getMenuCategories().length,
                                 itemBuilder: (context, index) {
-                                  return MenuItemWidget(item: mymenumodel.menuItems[index], cartQuantityListener: this,);
+                                  //return MenuItemWidget(item: mymenumodel.menuItems[index], cartQuantityListener: this,);
+                                  return MenuCategoryWidget(menuItems:mymenumodel.mapItems[mymenumodel.categories[index]],
+                                                            cartQuantityListener: this );
+                                                         
                                 },
                               ),
                             ),
@@ -133,6 +137,12 @@ class MyMenuModel with ChangeNotifier{
 
   List<StallModifiedMenuItem> menuItems= [];
   List<CartItem> cartItems=[];
+  List<String> categories=[];
+   Map<String,List<StallModifiedMenuItem>> mapItems=Map();
+   List<Widget> menuWidgets=[];
+     
+
+  
 
   MyMenuModel(int stallId, WalletDao walletDao) {
     this._walletDao = walletDao;
@@ -153,7 +163,29 @@ class MyMenuModel with ChangeNotifier{
     print("Updated CartItems = $menuItems");
   }
 
-  Future<Null> cartItemQuantityChanged(int id, int quantity) async {
+
+  List<String> getMenuCategories(){
+    if(categories.isNotEmpty){
+      categories.clear();
+      mapItems.clear();
+    }
+    for(var item in menuItems){
+      if(mapItems.containsKey(item.category))
+          mapItems[item.category].add(item);
+      else
+         {
+           List<StallModifiedMenuItem> tempList=[item];
+            mapItems[item.category]=tempList;
+         }    
+    }
+       mapItems.keys.forEach((k) => categories.add(k));
+      
+     return categories;
+
+  } 
+  
+  
+   Future<Null> cartItemQuantityChanged(int id, int quantity) async {
     if(quantity >= 0) {
       if(quantity == 0) {
         //cartItems.removeWhere((item) => item.itemId == id);

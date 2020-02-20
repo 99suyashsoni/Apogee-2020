@@ -105,15 +105,15 @@ class _BottomNav extends StatelessWidget {
           }
 
           if(i == 0){
-            Navigator.of(context).pushNamedAndRemoveUntil('/stalls', ModalRoute.withName('/events'));
+            Navigator.of(context).pushNamedAndRemoveUntil('/stalls', ModalRoute.withName('/'));
           }else if(i == 1){
-            Navigator.of(context).pushNamedAndRemoveUntil('/orders', ModalRoute.withName('/events'));
+            Navigator.of(context).pushNamedAndRemoveUntil('/orders', ModalRoute.withName('/'));
           }else if(i == 2){
-            Navigator.of(context).popUntil(ModalRoute.withName('/events'));
+            Navigator.of(context).popUntil(ModalRoute.withName('/'));
           }else if(i == 3){
-            Navigator.of(context).pushNamedAndRemoveUntil('/profile', ModalRoute.withName('/events'));
+            Navigator.of(context).pushNamedAndRemoveUntil('/profile', ModalRoute.withName('/'));
           }else if(i == 4){
-            Navigator.of(context).pushNamedAndRemoveUntil('/more', ModalRoute.withName('/events'));
+            Navigator.of(context).pushNamedAndRemoveUntil('/more', ModalRoute.withName('/'));
           }
         },
       );

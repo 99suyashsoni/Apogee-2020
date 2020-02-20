@@ -46,7 +46,7 @@ class _StallScreenState extends State<StallScreen> {
                             margin: EdgeInsets.all(16.0),
                               child: GridView.count(
                               crossAxisCount: 2,
-                              
+                              childAspectRatio: 2.0/2.5,
                               children: List.generate(mystallmodel.stallItems.length, (index) {
                                 return GestureDetector(
                                   child: StallItemWidget(

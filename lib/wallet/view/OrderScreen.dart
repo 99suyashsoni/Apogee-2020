@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:apogee_main/shared/constants/app_theme_data.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/network/errorState.dart';
 import 'package:apogee_main/shared/screen.dart';
+import 'package:apogee_main/wallet/controller/OrderController.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/Orders.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/OrderItems.dart';
+import 'package:apogee_main/wallet/view/OrderCard.dart';
 import 'package:apogee_main/wallet/view/OrderDataWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +24,7 @@ class OrderScreen extends StatefulWidget {
   WalletDao walletDao;
   CustomHttpNetworkClient networkClient;
   FlutterSecureStorage secureStorage;
-  MyOrderModel myOrderModel;
+  OrderController myOrderModel;
   OrderScreen(this.myOrderModel, this.walletDao, this.networkClient,
       this.secureStorage);
 }
@@ -60,7 +63,7 @@ class _OrderScreenState extends State<OrderScreen> implements OtpSeenListener {
 }
 
 class Widget1 extends StatelessWidget {
-  MyOrderModel myordermodel;
+  OrderController myordermodel;
   OtpSeenListener otpSeenListener;
   WalletDao walletDao;
   CustomHttpNetworkClient networkClient;
@@ -69,12 +72,13 @@ class Widget1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
    
-    return Consumer<MyOrderModel>(
+    return Consumer<OrderController>(
       builder: (context, myordermodel, child) {
          if(myordermodel.state ==2) {
            Fluttertoast.showToast(msg: myordermodel.message);
       myordermodel.state=0;
     }
+    print("Order Details = ${myordermodel.orderDetails}");
         return Screen(
             selectedTabIndex: 1,
             title: "Orders",
@@ -97,15 +101,15 @@ class Widget1 extends StatelessWidget {
                                       Expanded(
                                         flex: 1,
                                         child: ListView.builder(
-                                          itemCount:
-                                              myordermodel.orderData.length,
+                                          itemCount:myordermodel.orderData.length,
                                           itemBuilder: (context, index) {
                                             return GestureDetector(
-                                              child: OrderDataWidget(
-                                                orders: myordermodel
-                                                    .orderData[index],
-                                                otpSeenListener:
-                                                    otpSeenListener,
+                                              child: Theme(
+                                                data: orderCardThemeData,
+                                                child: OrderCard(
+                                                  orders: myordermodel.orderData[index],
+                                                  orderItems: myordermodel.orderDetails.where((item) => item.orderId == myordermodel.orderData[index].orderId).toList(),
+                                                ),
                                               ),
                                               onTap: () {
                                                
@@ -129,84 +133,5 @@ class Widget1 extends StatelessWidget {
             ));
       },
     );
-  }
-}
-
-class MyOrderModel with ChangeNotifier {
-  bool isLoading = false;
-  //List<StallDataItem> stallItems;
-  int state=0;
-  String message=" ";
-  WalletDao _walletDao;
-  CustomHttpNetworkClient _networkClient;
-  //Map<String, String> headerMap = {HttpHeaders.authorizationHeader: "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyOTg2LCJ1c2VybmFtZSI6Im91dGd1eSIsImV4cCI6MTU4MDQyMzA3MCwiZW1haWwiOiIifQ.r3FGPr7Z1aZvfZuCkb14jIt6hXeQ1SJfsfojZYW_vUA"};
-  List<Orders> orderData = [];
-  List<OrderItems> orderDetails = [];
-
-  MyOrderModel(WalletDao walletDao, CustomHttpNetworkClient networkClient)
-      : this._walletDao = walletDao,
-        this._networkClient = networkClient {
-    isLoading = true;
-    print("try: calling from order screen");
-    displayOrderData();
-    fetchOrderData();
-  }
-
-  Future<Null> displayOrderData() async {
-    print("try: inside diplay orders data ");
-    orderData = await _walletDao.getOrderData();
-    isLoading = false;
-    notifyListeners();
-    print("try: Updated orders = $orderData");
-  }
-
-  Future<Null> displayOrderDetails(int orderId) async {
-    orderDetails = await _walletDao.getOrderDetails(orderId);
-    isLoading = false;
-    notifyListeners();
-    print("Updated order details = $orderDetails");
-  }
-//TODO: insert and fetch order items and orders data
-
-  Future<Null> fetchOrderData() async {
-    print("try: fetch order data called");
-    // isLoading = true;
-    // notifyListeners();
-    _networkClient.get(
-      "wallet/orders/",
-      (response) async {
-        print("try: order responseee$response");
-        await _walletDao.insertAllOrders((json.decode(response)));
-        isLoading = false;
-        //TODO: harbar nahi update karna h
-        displayOrderData();
-        // notifyListeners();
-      },
-    );
-  }
-
-  Future<Null> makeOtpSeen(int orderid) async {
-    print("try: make otp seen  called");
-    isLoading = true;
-    notifyListeners();
-    Map<String, int> body = {"order_id": orderid};
-
-    ErrorState errorState= await _networkClient.post(
-      "wallet/orders/make_otp_seen",
-      json.encode(body),
-      (response) async {
-        print("try: make otp seen responseee$response");
-//      isLoading = false;
-//       notifyListeners();
-      },
-    );
-    if(errorState.state==2){
-      state=2;
-      message=errorState.message;
-      isLoading=false;
-      notifyListeners();
-    }
-
-    
   }
 }

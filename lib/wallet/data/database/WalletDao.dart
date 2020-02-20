@@ -144,15 +144,16 @@ class WalletDao {
     return orderData;
   }
 
- Future<List<OrderItems>> getOrderDetails(int orderId) async {
+ Future<List<OrderItems>> getAllOrderDetails() async {
     var database = await databaseInstance();
-    List<Map<String, dynamic>> result = await database.rawQuery("""SELECT * FROM order_items WHERE orderid=$orderId""");
+    List<Map<String, dynamic>> result = await database.rawQuery("""SELECT * FROM order_items""");
     if(result == null || result.isEmpty) 
       return [];
     List<OrderItems> orderDetails = [];
     for(var item in result) {
       orderDetails.add(OrderItems.fromMap(item));
     }
+    print("Order Details from database = $orderDetails");
     return orderDetails;
   }
 //TODO:  inset complete order dtaa after api call
@@ -177,12 +178,13 @@ class WalletDao {
         ]);
           //print(orderJs["orders"]);
           for(var item in order["items"] ){
-            await transaction.rawInsert("""INSERT INTO order_items (name,item_id,quantity,unit_price,order_id) 
+            await transaction.rawInsert("""INSERT INTO order_items (item_id,name,quantity,unit_price,order_id) 
                                                                 VALUES ( ?, ?, ?, ? , ?)""",[
             int.parse(item["id"].toString()),
             item["name"].toString(),
             int.parse(item["quantity"].toString()),
             int.parse(item["unit_price"].toString()),
+            int.parse(order["order-id"].toString())
             ]);
           }
         }
