@@ -23,7 +23,7 @@ class OrderCard extends StatelessWidget {
         color: orderCardBackground
       ), 
       padding: EdgeInsets.all(24.0),
-      margin: EdgeInsets.symmetric(horizontal: 32.0, vertical: 8.0),
+      margin: EdgeInsets.only(left: 32.0, right: 32.0, bottom: 16.0),
       child: Column(
         children: <Widget>[
           Container(
