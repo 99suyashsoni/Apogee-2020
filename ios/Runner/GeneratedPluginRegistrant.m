@@ -12,6 +12,8 @@
 #import <firebase_messaging/FirebaseMessagingPlugin.h>
 #import <flutter_secure_storage/FlutterSecureStoragePlugin.h>
 #import <fluttertoast/FluttertoastPlugin.h>
+#import <path_provider/PathProviderPlugin.h>
+#import <paytm_payments/PaytmPaymentsPlugin.h>
 #import <shared_preferences/SharedPreferencesPlugin.h>
 #import <sqflite/SqflitePlugin.h>
 #import <url_launcher/UrlLauncherPlugin.h>
@@ -28,6 +30,8 @@
   [FLTFirebaseMessagingPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseMessagingPlugin"]];
   [FlutterSecureStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterSecureStoragePlugin"]];
   [FluttertoastPlugin registerWithRegistrar:[registry registrarForPlugin:@"FluttertoastPlugin"]];
+  [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];
+  [PaytmPaymentsPlugin registerWithRegistrar:[registry registrarForPlugin:@"PaytmPaymentsPlugin"]];
   [FLTSharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharedPreferencesPlugin"]];
   [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
   [FLTUrlLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTUrlLauncherPlugin"]];

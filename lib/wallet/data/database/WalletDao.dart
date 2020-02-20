@@ -15,11 +15,12 @@ class WalletDao {
       await transaction.delete("stalls");
       await transaction.delete("stall_items");
       for(var stallJson in stallsJson) {
-        await transaction.rawInsert("""INSERT INTO stalls (stallId, stallName, closed, imageUrl) VALUES (?, ?, ?, ?)""", [
+        await transaction.rawInsert("""INSERT INTO stalls (stallId, stallName, closed, imageUrl, description) VALUES (?, ?, ?, ?, ?)""", [
           int.parse(stallJson["id"].toString()) ?? 0,
           stallJson["name"].toString() ?? "",
           stallJson["closed"] as bool ? 1:0 ?? 0,
-          stallJson["image_url"].toString() ?? ""
+          stallJson["image_url"].toString() ?? "",
+          stallJson["description"].toString() ??""
         ]);
         print(stallJson["menu"]);
 

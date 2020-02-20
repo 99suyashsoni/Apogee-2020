@@ -43,40 +43,30 @@ class _StallScreenState extends State<StallScreen> {
                       : mystallmodel.stallItems.isEmpty
                           ? Center(child: Text("No Stalls are available"))
                           : Container(
-                              child: Column(
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 1,
-                                    child: ListView.builder(
-                                      itemCount: mystallmodel.stallItems.length,
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                          child: StallItemWidget(
-                                              stallDataItem: mystallmodel
-                                                  .stallItems[index]),
-                                          onTap: () {
-                                            Scaffold.of(context).showSnackBar(
-                                                SnackBar(
-                                                    content: Text(
-                                                        index.toString())));
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MenuScreen(mystallmodel
-                                                            .stallItems[index]
-                                                            .stallId,mystallmodel._walletDao),
-                                                    settings: RouteSettings(
-                                                        name:
-                                                            "/menuItems$index")));
-                                            //TODO: open menu Screen
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
+                            margin: EdgeInsets.all(16.0),
+                              child: GridView.count(
+                              crossAxisCount: 2,
+                              
+                              children: List.generate(mystallmodel.stallItems.length, (index) {
+                                return GestureDetector(
+                                  child: StallItemWidget(
+                                    stallDataItem: mystallmodel.stallItems[index]),
+                                  onTap: () {
+                                        Navigator.of(context).push(
+                                         MaterialPageRoute(
+                                            builder: (context) =>
+                                              MenuScreen(mystallmodel
+                                                .stallItems[index]
+                                                .stallId,mystallmodel._walletDao),
+                                              settings: RouteSettings(name:"/menuItems$index")
+                                              ));
+                                  },
+                                );
+                              }),
                               ),
-                            );
+   
+                           );
+                
                 },
               ),
             ),
@@ -96,12 +86,7 @@ class MyStallModel with ChangeNotifier {
 
   WalletDao _walletDao;
   CustomHttpNetworkClient _networkClient;
-  List<StallDataItem> stallItems = [
-    StallDataItem(
-        stallId: 1, stallName: "Stall 1", closed: false, imageUrl: "ukbgukvsx"),
-    StallDataItem(
-        stallId: 2, stallName: "Stall 2", closed: false, imageUrl: "ukbgukvsx")
-  ];
+  List<StallDataItem> stallItems = [];
 
   MyStallModel({WalletDao walletDao, CustomHttpNetworkClient networkClient})
       : this._walletDao = walletDao,
