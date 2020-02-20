@@ -7,13 +7,13 @@ Future<Null> insertAllEvents(Map<String,dynamic> eventsJson) async{
   var database = await databaseInstance();
 
   var body = eventsJson['data'] as List;
-  var rawEventList = body.map((f) => f['events']).toList();
+  var rawEventList = body.map((f) => f['events']).toList().toSet().toList();
+  print('raweventList: $rawEventList');
   await database.transaction((transaction) async{
    await transaction.delete("events_data");
    for(var events in rawEventList){
    
      for(var event in events){
-        print('body : $event');
      await transaction.rawInsert("""INSERT INTO events_data(event_id,name,about,rules,time,date,details,venue,contact) VALUES(?,?,?,?,?,?,?,?,?) """,[
        int.parse(event["id"].toString()) ?? 0,
        event["name"].toString() ??"",
