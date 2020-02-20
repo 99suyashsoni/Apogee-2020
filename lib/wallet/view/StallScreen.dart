@@ -57,7 +57,9 @@ class _StallScreenState extends State<StallScreen> {
                                             builder: (context) =>
                                               MenuScreen(mystallmodel
                                                 .stallItems[index]
-                                                .stallId,mystallmodel._walletDao),
+                                                .stallId,mystallmodel
+                                                .stallItems[index]
+                                                .stallName,mystallmodel._networkClient,mystallmodel._walletDao),
                                               settings: RouteSettings(name:"/menuItems$index")
                                               ));
                                   },

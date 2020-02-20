@@ -5,6 +5,8 @@ import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallModifiedMenuItem.dart';
 import 'package:apogee_main/wallet/view/CartQuantityWidget.dart';
+import 'package:apogee_main/wallet/view/CartScreen.dart';
+import 'package:apogee_main/wallet/view/CartScreen_BottomSheet.dart';
 import 'package:apogee_main/wallet/view/MenuCategoryWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,9 +18,10 @@ class MenuScreen extends StatefulWidget {
   _MenuScreenState createState() => _MenuScreenState();
 
   int id;
+  String stallName;
+  CustomHttpNetworkClient networkClient;  
   WalletDao walletDao;
-
-  MenuScreen(this.id,this.walletDao);
+  MenuScreen(this.id,this.stallName,this.networkClient,this.walletDao);
 }
 
 class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver implements CartQuantityListener {
@@ -30,7 +33,7 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
     
     return Screen(
         selectedTabIndex: -1,
-        title: "Menu",
+        title: widget.stallName,
        child: ChangeNotifierProvider<MyMenuModel>(
           create: (BuildContext context) => MyMenuModel(widget.id,widget.walletDao),
           child: Container(
@@ -92,13 +95,13 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
                                       child: GestureDetector(
                                         child: Text("View cart"),
                                         onTap: () async {
-                                          await Navigator.of(context).pushNamed('/cart');
+                                          //await Navigator.of(context).pushNamed('/cart');
+                                          await showModalBottomSheet(context: context, builder:(context) =>
+                                          CartScreenBottomSheet(widget.networkClient,widget.walletDao));
                                           mymenumodel.displayStallMenuItems(widget.id);
                                           mymenumodel.getCartItems();
                                          /* controller.placeOrder();*/
-                                          Scaffold
-                                              .of(context)
-                                              .showSnackBar(SnackBar(content: Text("to open cart")));
+                                         
                                         },
                                       ),
                                     ),
