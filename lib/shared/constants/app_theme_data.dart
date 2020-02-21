@@ -22,7 +22,7 @@ final appThemeData = ThemeData(
     )
 );
 
-final orderCardThemeData = ThemeData(
+final cardThemeData = ThemeData(
   textTheme: TextTheme(
     headline: TextStyle(
       fontSize: 16,
