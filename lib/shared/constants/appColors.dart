@@ -8,8 +8,12 @@ Color strikeThroughLine = Colors.lightGreen;
 
 Color cartQuantityButtonBackground = Colors.lightBlue;
 
+Color topLevelScreensGradientStartColor = HexColor("#61D3D3");
+Color topLevelScreensGradientEndColor = HexColor("#6E92FA");
+
 // NOTE: Syntax fileName-function or as described below
-Color orderCardBackground = HexColor("#3D4253");
+Color orderScreenBackground = HexColor("#30305B");
+Color orderCardBackground = HexColor("#70474f7a");
 Color orderCardPending = HexColor("#FF003B");
 Color orderCardReady = HexColor("#ECFC03");
 Color orderCardFinished = HexColor("#21CD7D");
