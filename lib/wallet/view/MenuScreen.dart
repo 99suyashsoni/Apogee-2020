@@ -96,8 +96,13 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
                                         child: Text("View cart"),
                                         onTap: () async {
                                           //await Navigator.of(context).pushNamed('/cart');
-                                          await showModalBottomSheet(context: context, builder:(context) =>
-                                          CartScreenBottomSheet(widget.networkClient,widget.walletDao));
+                                          await showModalBottomSheet(
+                                            context: context, 
+                                            builder:(context) =>
+                                            Container(height:  MediaQuery.of(context).size.height * 0.75,
+                                              child: CartScreenBottomSheet(widget.networkClient,widget.walletDao)),
+                                            isScrollControlled: true,
+                                            );
                                           mymenumodel.displayStallMenuItems(widget.id);
                                           mymenumodel.getCartItems();
                                          /* controller.placeOrder();*/
