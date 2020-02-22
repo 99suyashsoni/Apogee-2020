@@ -20,14 +20,14 @@ Screen extends StatelessWidget {
       // appBar: AppBar(
       //   title: Text(title),
       //   centerTitle: true,
-      // ),
+     //  ),
       body: Container(
         //for gradient, to be written later
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.white,
-              Colors.white
+              Colors.black54,
+              Colors.black54,
             ],
             //fill anything later
           )

@@ -23,7 +23,12 @@ Color orderCardReadyShadow = HexColor("#DAF81929");
 Color orderCardFinishedShadow = HexColor("#19F8A629");
 Color orderCardAmount = HexColor("#00B2FF");
 
+Color eventCardBackground =HexColor("#043A68");
+Color eventBookmark=HexColor("#5DB1FF");
+
 // NOTE: If we need a color that has an opacity defferent from 100, we use the prefix
 // off before the color, followed by the name of color or its function, followed by it's
 // opacity in percentage
+Color offwhite74 = Color.fromRGBO(255, 255, 255, 0.74);
+Color offwhite80 = Color.fromRGBO(255, 255, 255, 0.80);
 Color offWhite44 = Color.fromRGBO(255, 255, 255, 0.44);
