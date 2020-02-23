@@ -34,6 +34,7 @@ class EventsModel with ChangeNotifier {
   }
   Future<Null> getAllDates() async{
     dates = await _eventsDao.getDates();
+    dates= dates.where((date)=>date !="").toList();
     print('dates:$dates');
     notifyListeners();
   }

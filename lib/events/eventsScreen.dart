@@ -6,11 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:apogee_main/shared/screen.dart';
 import 'package:provider/provider.dart';
 import 'package:apogee_main/shared/constants/app_theme_data.dart';
-
 import '../shared/constants/appColors.dart';
-import '../shared/constants/appColors.dart';
-import '../shared/constants/appColors.dart';
-import '../shared/constants/app_theme_data.dart';
 import '../shared/constants/app_theme_data.dart';
 
 class EventsScreen extends StatelessWidget{
@@ -29,27 +25,21 @@ class EventsScreen extends StatelessWidget{
   }
 }
 
-
+              
+         
 class EventList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   
     return Container(
       child:
-      Column(
-        children:<Widget>[
-          Expanded(
-          flex: 1,
-          child: Consumer<EventsModel>(
-            builder: (context,controller,child){
-              return controller.isLoading?Center(child: CircularProgressIndicator(),):
-              controller.events.isEmpty? Center(child: Text('No data',style: cardThemeData.textTheme.headline,),):
-              EventView(ncontroller: controller);
+      Consumer<EventsModel>(
+        builder: (context,controller,child){
+          return controller.isLoading?Center(child: CircularProgressIndicator(),):
+          controller.events.isEmpty? Center(child: Text('No data',style: cardThemeData.textTheme.headline,),):
+          Container(child: EventView(ncontroller: controller));
       } ,
-      ),
-        ),
-        ],),
-         );
+      )     );
    
   }
 
@@ -62,7 +52,7 @@ class EventView extends StatefulWidget{
   State<StatefulWidget> createState() => EventViewState();
   
 }
-
+ 
 class EventViewState extends State<EventView> with SingleTickerProviderStateMixin{
   PageController _pageController;
   TabController _tabController;
@@ -78,54 +68,56 @@ class EventViewState extends State<EventView> with SingleTickerProviderStateMixi
     } else {
       _pageController = PageController(initialPage: initialPage);
     }
-    _tabController = TabController(length: widget.ncontroller.dates.length, vsync: this);
+   _tabController = TabController(length: widget.ncontroller.dates.length, vsync: this);
   }
-    void _nextPage(int delta) {
+   
+void _nextPage(int delta) {
+  print(':called');
     final int newIndex = _tabController.index + delta;
     if (newIndex < 0 || newIndex >= _tabController.length) return;
     _tabController.animateTo(newIndex);
   }
-
   @override
   Widget build(BuildContext context) {
     return Column(
      crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
-      SizedBox(height: 20.0,),
+      // Container(height: 20.0,),
+
+    Container(
+      child: new TabBar(
+          
+          controller: _tabController,
+          labelColor: Colors.white,
+          indicatorColor: Colors.white,
+          tabs: List<Widget>.generate(widget.ncontroller.dates.length,(int index){
+      return new Tab(
+         //child: Padding(padding: EdgeInsets.all(8.0),
+         child:Container(
+        //   padding: EdgeInsets.all(8.0),
+        // alignment: Alignment.center,
+        // margin: EdgeInsets.only(top:30.0),
+         child: Dates(eventDate: widget.ncontroller.dates[index],)
+         ) ,
+         //  ),
+      );
+          }
+           ),
+           
+          ),
+    ),
 
       Expanded(
-              child: new TabBar(
-        
-        controller: _tabController,
-        labelColor: Colors.white,
-        tabs: List<Widget>.generate(widget.ncontroller.dates.length,(int index){
-              return new Tab(
-                 child: Padding(padding: EdgeInsets.all(8.0),
-                 child:Container(
-                   
-                 alignment: Alignment.center,
-                 margin: EdgeInsets.only(top:30.0),
-                 child: Dates(eventDate: widget.ncontroller.dates[index],)
-                 ) ,
-         ),
-    );
-        }
-         ),
-         
-        ),
-      ),
-
-      SizedBox(
-        height: MediaQuery.of(context).size.height,
               child: PageView.builder(controller: _pageController,
-        scrollDirection: Axis.horizontal,
-        onPageChanged: (index){
-    _nextPage(index);
-        },
-        itemCount: widget.ncontroller.dates.length,
-        itemBuilder:(_,index){
-        widget.ncontroller.getEventsByDate(widget.ncontroller.dates[index]);
-        return EventPage(eventList: widget.ncontroller.events);
+              scrollDirection: Axis.horizontal,
+              
+              onPageChanged: (index){
+                     _nextPage(index);
+             },
+          itemCount: widget.ncontroller.dates.length,
+          itemBuilder:(_,index){
+          widget.ncontroller.getEventsByDate(widget.ncontroller.dates[index]);
+          return EventPage(eventList: widget.ncontroller.events);
   }),
       ),
     ],
@@ -149,7 +141,7 @@ class EventPage extends StatelessWidget{
     return Column(
       children: <Widget>[
         Expanded(
-                    flex: 6,
+                    flex: 1,
                     child:ListView.builder(
                     itemCount: eventList.length,
                     itemBuilder: (context,index){
@@ -184,7 +176,7 @@ class Dates extends StatelessWidget{
         else
           return Container();  
     return Container(
-       child: Text(date,style: cardThemeData.textTheme.title,),
+       child: Text(date,style: cardThemeData.textTheme.subhead,),
     );
   }
 
@@ -218,9 +210,9 @@ EventCard({@required this.event});
             height:20.0
           ),
           Container(
-            child: Text(event.rules,
-            style: cardThemeData.textTheme.subtitle,),
-          ),
+              child: Text(event.details.split(">")[1],overflow: TextOverflow.ellipsis,
+              style: cardThemeData.textTheme.subtitle,),
+            ),
           SizedBox(
             height: 20.0
           ) ,
