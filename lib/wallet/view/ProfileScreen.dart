@@ -135,7 +135,7 @@ class _ProfileScreenState
                                 flex: 1,
                                 child: Center(
                                   child: Text(
-                                    "\u20B9${snapshot.data["balance"]}"
+                                    "\u20B9${snapshot.data["total_balance"]}"
                                   ),
                                 ),
                               ),
