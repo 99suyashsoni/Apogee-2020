@@ -87,7 +87,7 @@ void main() async {
       ));
     } else {
       runApp(ApogeeApp(
-        initialRoute: '/',
+        initialRoute: '/events',
         analytics: analytics,
         authRepository: authRepository,
         eventsDao: eventsDao,
@@ -127,6 +127,7 @@ class ApogeeApp extends StatelessWidget {
   Widget build(BuildContext context) {
     OrderController model;
     return MaterialApp(
+      
       debugShowCheckedModeBanner: false,
       title: 'Apogee App',
       theme: appThemeData,

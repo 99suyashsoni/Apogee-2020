@@ -24,6 +24,8 @@ class Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: Container(
         child: SafeArea(
           child: Container(
