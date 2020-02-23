@@ -15,45 +15,51 @@ class MenuItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(24,0, 8, 16),
+      margin: EdgeInsets.fromLTRB(8,0, 8, 8),
       //TODO: Max lines, size to all text boxes
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-         Row(
-           mainAxisAlignment: MainAxisAlignment.start,
-           crossAxisAlignment: CrossAxisAlignment.start,
-           children: <Widget>[
-             Icon(Icons.center_focus_strong),
-              Column(
-            children: <Widget>[
-              Text(item.itemName,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16),
-                ),
-                Padding(padding: EdgeInsets.only(top:8),
-                child: item.discount!=0?
-                          Text('data',
+          Container(
+              child: Icon(Icons.center_focus_strong),
+            ),
+         Expanded(
+            child: Container(
+              margin: EdgeInsets.only(left: 8.0,right: 8.0),
+              child: 
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(item.itemName+item.itemName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    color: Colors.white,
+                    
+                    fontSize: 16),
+                    ),
+                    Padding(padding: EdgeInsets.only(top:8),
+                    child: item.discount!=0?
+                      Text(
+                          'data',
                         style: TextStyle(
                           color: Colors.white,
+                          backgroundColor: Colors.red,
                           fontSize: 12,
-                        )
-                        , ): Text('data'),
+                        ),
+                      ):  Text('data'),
                     )
-            ],
+                  ],
+                ),
+            ),
           ),
-           ],
-         ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0,0,16.0,8.0),
+          Container(
+            margin: const EdgeInsets.fromLTRB(8.0,0,0,8.0),
             child: CartQuantityWidget(cartQuantityListener: cartQuantityListener, itemId: item.itemId, quantity: item.quantity,),
           )
-
-
         ],
-       
       ),
     );
   }

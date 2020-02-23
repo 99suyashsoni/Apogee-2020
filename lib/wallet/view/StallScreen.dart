@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/screen.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
@@ -27,6 +28,7 @@ class _StallScreenState extends State<StallScreen> {
       selectedTabIndex: 0,
       title: "Stall",
       child: Container(
+        color: screenBackground,
         child: Column(
           children: <Widget>[
             Expanded(

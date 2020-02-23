@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/screen.dart';
+import 'package:apogee_main/shared/utils/HexColor.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallModifiedMenuItem.dart';
@@ -37,6 +39,7 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
        child: ChangeNotifierProvider<MyMenuModel>(
           create: (BuildContext context) => MyMenuModel(widget.id,widget.walletDao),
           child: Container(
+            color:screenBackground ,
             child: Column(
               children: <Widget>[
                 Expanded(
@@ -49,72 +52,83 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
                       mymenumodel.menuItems.isEmpty ? Center(child: Text("No menu available for this stall"),) :
                       Container(
                         child: Column(
-                          children: <Widget>[
+                          children: mymenumodel.cartItems.isEmpty?
+                          <Widget>[
                             Expanded(
                               flex: 1,
                               child: ListView.builder(
                                 itemCount: mymenumodel.getMenuCategories().length,
                                 itemBuilder: (context, index) {
-                                  //return MenuItemWidget(item: mymenumodel.menuItems[index], cartQuantityListener: this,);
                                   return MenuCategoryWidget(menuItems:mymenumodel.mapItems[mymenumodel.categories[index]],
-                                                            cartQuantityListener: this );
-                                                         
+                                  cartQuantityListener: this );                  
                                 },
                               ),
                             ),
-                          /*   Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                child: Text("Total: \u20B9 ${1000}"),
+                          ]:
+                          <Widget>[
+                             Expanded(
+                              flex: 1,
+                              child: ListView.builder(
+                                itemCount: mymenumodel.getMenuCategories().length,
+                                itemBuilder: (context, index) {
+                                  return MenuCategoryWidget(menuItems:mymenumodel.mapItems[mymenumodel.categories[index]],
+                                  cartQuantityListener: this );                      
+                                },
                               ),
-                            ), */
+                            ),
                             Container(
-                              margin: EdgeInsets.only(top: 4.0),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors:[HexColor('#FCF379'),HexColor('#FA5C76')]),
+                              ),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  Container(
-                                    padding: EdgeInsets.only(left: 8.0),
-                                    child: Text(mymenumodel.cartItems.length.toString()+" items", style: Theme.of(context).textTheme.body1,),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 8.0),
-                                    child: Text("\u20B9 "+mymenumodel.getTotalPrice().toString(), style: Theme.of(context).textTheme.body1,),
-                                  ),
-                                 /*  Expanded(
-                                    flex: 1,
-                                    child: Container(),
-                                  ), */
-                                  Container(
-                                    padding: EdgeInsets.only(right: 8.0),
+                                   Container(
+                                     margin: EdgeInsets.all(12.0),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: cartItemBorder,width: 2)
+                                    ),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: GestureDetector(
-                                        child: Text("View cart"),
-                                        onTap: () async {
-                                          //await Navigator.of(context).pushNamed('/cart');
-                                          await showModalBottomSheet(
-                                            context: context, 
-                                            builder:(context) =>
-                                            Container(height:  MediaQuery.of(context).size.height * 0.75,
-                                              child: CartScreenBottomSheet(widget.networkClient,widget.walletDao)),
-                                            isScrollControlled: true,
-                                            );
-                                          mymenumodel.displayStallMenuItems(widget.id);
-                                          mymenumodel.getCartItems();
-                                         /* controller.placeOrder();*/
-                                         
-                                        },
+                                      padding: const EdgeInsets.all(6.0),
+                                      child: Text(mymenumodel.cartItems.length.toString(),
+                                      style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500)
+                                      
                                       ),
                                     ),
-                                  )
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: GestureDetector(
+                                      child: Text("View cart",
+                                        style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white)
+                                      ),
+                                      onTap: () async {
+                                        //await Navigator.of(context).pushNamed('/cart');
+                                        await showModalBottomSheet(
+                                          context: context, 
+                                          builder:(context) =>
+                                          Container(height:  MediaQuery.of(context).size.height * 0.75,
+                                            child: CartScreenBottomSheet(widget.networkClient,widget.walletDao)),
+                                          isScrollControlled: true,
+                                          );
+                                        mymenumodel.displayStallMenuItems(widget.id);
+                                        mymenumodel.getCartItems();
+                                       /* controller.placeOrder();*/
+                                      },
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Text("\u20B9 "+mymenumodel.getTotalPrice().toString(),
+                                      style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white)),
+                                  ),
                                 ],
                               ),
                             )
-                          ],
+                          ]
                         ),
                       );
                     },

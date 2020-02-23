@@ -20,7 +20,7 @@ class StallItemWidget extends StatelessWidget {
      
       decoration: BoxDecoration(
          borderRadius: new BorderRadius.all(Radius.circular(8)),
-         color: Colors.black
+         color: cardBackground
       ),
       child: Column(
           
@@ -40,8 +40,14 @@ class StallItemWidget extends StatelessWidget {
             ),
     ),
   ),
-  placeholder: (context, url) => CircularProgressIndicator(),
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  placeholder: (context, url) => Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Image.asset('assets/stall_placeholder.png',color:stallPlaceHolderBg,),
+  ),
+  errorWidget: (context, url, error) => Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Image.asset('assets/stall_placeholder.png',color:stallPlaceHolderBg,),
+  ),
 ),
              ),
             new Expanded(
@@ -57,12 +63,7 @@ class StallItemWidget extends StatelessWidget {
                 maxLines: 2,
                 overflow:TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
-                style: new TextStyle(
-                  fontSize: 14.0,
-                  
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.body2.copyWith(fontWeight: FontWeight.w500,color: Colors.white)
                   ),
                 ),
                
@@ -70,28 +71,24 @@ class StallItemWidget extends StatelessWidget {
                  children: <Widget>[
                    Expanded(
                      flex:1,
-                     child: Divider(color: Colors.white,height: 1,thickness: 1,indent: 8,)
+                     child: Divider(color: offStallNameDivider16,height: 2,thickness: 2,indent: 8,)
                    ),
                    Expanded(
                      flex:2,
-                     child: Divider(color: Colors.black,height: 1,thickness: 1,indent: 8,)
+                     child: Divider(color:Colors.transparent,height: 1,thickness: 1,indent: 8,)
                    )
                  ],
                ),
                // new Text('Coffee, shakes , sandwiches and more .....'),
+               //TODO: Remove harded coded text for stall description.
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                                     child: new Text(
-                'Shakes, Sandwiches, Beverages & more ------------------',
+                'Shakes, Sandwiches, Beverages & more',
                 maxLines: 2,
                 overflow:TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
-                style: new TextStyle(
-                  fontSize: 12.0,
-                  
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+                style:Theme.of(context).textTheme.subtitle.copyWith(fontSize: 12,color: stallDescription),
                   ),
                 ),
               ],

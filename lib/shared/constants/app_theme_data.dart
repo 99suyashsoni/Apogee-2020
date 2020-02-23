@@ -54,6 +54,7 @@ final cardThemeData = ThemeData(
       color: Colors.white,
       fontFamily: 'Google-Sans',
       fontStyle: FontStyle.normal
-    )
+    ),
+    
   )
 );

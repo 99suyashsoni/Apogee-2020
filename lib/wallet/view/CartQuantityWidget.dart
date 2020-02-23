@@ -1,4 +1,5 @@
 import 'package:apogee_main/shared/constants/appColors.dart';
+import 'package:apogee_main/shared/utils/HexColor.dart';
 import 'package:flutter/material.dart';
 
 abstract class CartQuantityListener {
@@ -18,15 +19,29 @@ class CartQuantityWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      height: 32,
+
       decoration: BoxDecoration(
-        color: cartQuantityButtonBackground,
-        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+       gradient:LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: quantity==0?[HexColor('#FCF379'),HexColor('#FA5C76')]:[Colors.transparent,Colors.transparent]),
+        borderRadius: BorderRadius.all(Radius.circular(16.0)),
       ),
       child: Row(
-        children: <Widget>[
-          GestureDetector(
+        children: getQuauntityLayout(quantity,context),
+        
+      ),
+    );
+  }
+
+  List<Widget> getQuauntityLayout(int quantity,BuildContext context){
+    List<Widget> returnList=[];
+    if(quantity!=0){
+      return returnList=[ GestureDetector(
             onTap: () {
               quantity -= 1;
               if(quantity >= 0) {
@@ -45,7 +60,7 @@ class CartQuantityWidget extends StatelessWidget {
                   bottomLeft: Radius.circular(5.0)
                 ),
               ),
-              child: Center(child: Icon(Icons.remove, color: cartQuantityButtonBackground, size: 20.0,)),
+              child: Center(child: Icon(Icons.remove, color: Colors.red, size: 20.0,)),
             ),
           ),
           Container(
@@ -68,11 +83,29 @@ class CartQuantityWidget extends StatelessWidget {
                   bottomRight: Radius.circular(5.0)
                 ),
               ),
-              child: Center(child: Icon(Icons.add, color: cartQuantityButtonBackground, size: 20.0,)),
+              child: Center(child: Icon(Icons.add, color: Colors.red, size: 20.0,)),
             ),
           ),
-        ],
-      ),
-    );
+        ];
+    }
+    else{
+      return returnList=[
+        GestureDetector(
+          onTap: () {
+              quantity += 1;
+              cartQuantityListener.onQuantityChanged(
+                id: itemId,
+                quantity: quantity
+              );      
+           },
+          child: Text(
+                  'Add +',
+                  style: Theme.of(context).textTheme.body2.copyWith(color: cartAddQuantity),
+           
+          ),
+        ),
+      ];
+    }
+
   }
 }
