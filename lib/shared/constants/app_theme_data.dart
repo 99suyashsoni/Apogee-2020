@@ -23,40 +23,7 @@ final appThemeData = ThemeData(
     )
 );
 
-final eventCardThemeData = ThemeData(
-   textTheme: TextTheme(
-     headline: TextStyle(
-      fontSize: 16,
-      color: Colors.white,
-      fontWeight: FontWeight.bold,
-      fontFamily:'Google-Sans',
-      fontStyle: FontStyle.normal
-     ),
-     body1: TextStyle(
-       fontSize: 12,
-       color: offwhite74,
-       fontWeight: FontWeight.normal,
-       fontFamily: 'Google-Sans',
-       fontStyle: FontStyle.normal
-     ),
-     body2: TextStyle(
-       fontSize: 12,
-       fontWeight: FontWeight.normal,
-       color: offwhite80,
-       fontFamily: 'Google-Sans',
-       fontStyle: FontStyle.normal
-     ),
-     subhead: TextStyle(
-       fontSize:14,
-       fontFamily: 'Google-Sans',
-       fontWeight: FontWeight.bold,
-       fontStyle: FontStyle.normal,
-       color: Colors.white
-     ),
-   )  
-);
-
-final orderCardThemeData = ThemeData(
+final cardThemeData = ThemeData(
   textTheme: TextTheme(
     headline: TextStyle(
       fontSize: 16,

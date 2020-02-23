@@ -39,7 +39,7 @@ class OrdersList extends StatelessWidget {
                       itemCount:orders.length,
                       itemBuilder: (context, index) {
                         return Theme(
-                          data: orderCardThemeData,
+                          data: cardThemeData,
                           child: OrderCard(
                             orders: orders[index],
                             orderItems: orderItems.where((item) => item.orderId == orders[index].orderId).toList(),

@@ -27,7 +27,7 @@ class EventsModel with ChangeNotifier {
       var body = jsonDecode(json);
       _eventsDao.insertAllEvents(body);
       isLoading = false;
-      getEventsByDate("2019-10-20");
+      getEventsByDate("2019-10-19");
       getAllDates();
       notifyListeners();
     });

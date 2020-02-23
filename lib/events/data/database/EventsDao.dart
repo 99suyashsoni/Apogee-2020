@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 
 import 'package:apogee_main/events/data/dataClasses/Events.dart';
 import 'package:apogee_main/shared/database_helper.dart';
@@ -45,13 +45,12 @@ Future<List<Events>> getAllEvents() async{
 
 Future<List<String>> getDates() async{
   var database = await databaseInstance();
-  List<Map<String,dynamic>> dates = await database.rawQuery("SELECT DISTINCT date from events_data WHERE date!='TBA' OR date!=' ' ORDER BY date");
+  List<Map<String,dynamic>> dates = await database.rawQuery("SELECT DISTINCT date from events_data WHERE date!='TBA' ORDER BY date");
   if(dates==null||dates.isEmpty)
    return [];
   List<String> dateList =[];  
   for(var date in dates){
-    if(date!=' ')
-    dateList.add(date["date"].toString().trim());
+    dateList.add(date["date"].toString());
   }
 
   return dateList;
