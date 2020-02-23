@@ -168,7 +168,7 @@ class ApogeeApp extends StatelessWidget {
           //ProfileScreenPreApogeeController controller =
           return ChangeNotifierProvider.value(
             value: MyProfileModel(
-                walletDao: walletDao, networkClient: customHttpNetworkClient),
+                walletDao: walletDao, networkClient: customHttpNetworkClient, secureStorage: secureStorage),
             child: ProfileScreen(),
           );
         },
