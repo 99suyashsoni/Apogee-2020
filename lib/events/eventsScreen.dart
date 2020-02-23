@@ -1,6 +1,7 @@
 
 import 'package:apogee_main/events/data/EventsModel.dart';
 import 'package:apogee_main/events/data/dataClasses/Events.dart';
+import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:flutter/material.dart';
 import 'package:apogee_main/shared/screen.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,9 @@ class EventsScreen extends StatelessWidget{
     return  Screen(
       title: "Events",
       child: EventList(),
+      endColor: topLevelScreensGradientEndColor,
+      screenBackground: orderScreenBackground,
+      startColor: topLevelScreensGradientStartColor,
       selectedTabIndex: 2,
     );
   

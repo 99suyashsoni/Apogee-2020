@@ -8,11 +8,12 @@ import 'package:apogee_main/events/eventsScreen.dart';
 import 'package:apogee_main/shared/constants/app_theme_data.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/wallet/controller/CartController.dart';
+import 'package:apogee_main/wallet/controller/OrderController.dart';
 import 'package:apogee_main/wallet/controller/ProfileController_PreApogee.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
-import 'package:apogee_main/wallet/view/CartScreen.dart';
 import 'package:apogee_main/wallet/view/OrderScreen.dart';
 import 'package:apogee_main/wallet/view/ProfileScreen.dart';
+import 'package:apogee_main/wallet/view/ProfileScreenPreApogee.dart';
 import 'package:apogee_main/wallet/view/StallScreen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -140,7 +141,7 @@ class ApogeeApp extends StatelessWidget {
             child: PhoneLoginScreen(),
           );
         },
-        '/events': (context) {
+        '/': (context) {
           return ChangeNotifierProvider.value(
             value: EventsModel(
                 eventsDao: eventsDao, networkClient: customHttpNetworkClient),
@@ -149,9 +150,8 @@ class ApogeeApp extends StatelessWidget {
         },
         '/orders': (context) {
           return ChangeNotifierProvider.value(
-            value: CartController(
-                walletDao: walletDao, networkClient: customHttpNetworkClient),
-            child: CartScreen(),
+            value: OrderController(walletDao, customHttpNetworkClient),
+            child: OrderScreen(walletDao, customHttpNetworkClient, secureStorage),
           );
         },
         '/stalls': (context) {
@@ -171,19 +171,20 @@ class ApogeeApp extends StatelessWidget {
         },
         '/more': (context) {
           return ChangeNotifierProvider.value(
-            value: CartController(
+            value: MyProfileModel(
                 walletDao: walletDao, networkClient: customHttpNetworkClient),
-            child: CartScreen(),
+            child: ProfileScreen(),
           );
         },
-        '/cart': (context) {
+        
+        '/pre-apogee': (context) {
           return ChangeNotifierProvider.value(
-            value: CartController(
-                walletDao: walletDao, networkClient: customHttpNetworkClient),
-            child: CartScreen(),
+            value:
+                ProfileScreenPreApogeeController(secureStorage: secureStorage),
+            child: ProfileScreenPreApogee(secureStorage),
           );
-        },
-       
+        
+      },
       },
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),

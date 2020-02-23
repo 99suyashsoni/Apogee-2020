@@ -23,9 +23,6 @@ final appThemeData = ThemeData(
 );
 
 final cardThemeData = ThemeData(
-  bottomSheetTheme: BottomSheetThemeData(
-    backgroundColor:screenBackground,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(16),topRight: Radius.circular(16)))),
   textTheme: TextTheme(
     headline: TextStyle(
       fontSize: 16,

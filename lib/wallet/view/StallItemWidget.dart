@@ -16,7 +16,7 @@ class StallItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
      
-      margin: EdgeInsets.symmetric(vertical: 8.0,horizontal: 8.0),
+      // margin: EdgeInsets.fromLTRB(8.0,0.0,8.0,8.0),
      
       decoration: BoxDecoration(
          borderRadius: new BorderRadius.all(Radius.circular(8)),

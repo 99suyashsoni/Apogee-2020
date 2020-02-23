@@ -1,19 +1,14 @@
-import 'dart:io';
 import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/screen.dart';
 import 'package:apogee_main/shared/utils/HexColor.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
-import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallModifiedMenuItem.dart';
 import 'package:apogee_main/wallet/view/CartQuantityWidget.dart';
-import 'package:apogee_main/wallet/view/CartScreen.dart';
 import 'package:apogee_main/wallet/view/CartScreen_BottomSheet.dart';
 import 'package:apogee_main/wallet/view/MenuCategoryWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'MenuItemWidget.dart';
 
 class MenuScreen extends StatefulWidget {
   @override
@@ -26,20 +21,22 @@ class MenuScreen extends StatefulWidget {
   MenuScreen(this.id,this.stallName,this.networkClient,this.walletDao);
 }
 
-class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver implements CartQuantityListener {
-
-
+class _MenuScreenState extends State<MenuScreen>
+    with WidgetsBindingObserver
+    implements CartQuantityListener {
   MyMenuModel _myMenuModel;
+
   @override
   Widget build(BuildContext context) {
-    
     return Screen(
+        startColor:HexColor('#FCF379') ,     
+        endColor:HexColor('#FA5C76'),
+        screenBackground: HexColor('#2D2D2E'), 
         selectedTabIndex: -1,
         title: widget.stallName,
-       child: ChangeNotifierProvider<MyMenuModel>(
+        child: ChangeNotifierProvider<MyMenuModel>(
           create: (BuildContext context) => MyMenuModel(widget.id,widget.walletDao),
           child: Container(
-            color:screenBackground ,
             child: Column(
               children: <Widget>[
                 Expanded(
@@ -60,7 +57,7 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
                                 itemCount: mymenumodel.getMenuCategories().length,
                                 itemBuilder: (context, index) {
                                   return MenuCategoryWidget(menuItems:mymenumodel.mapItems[mymenumodel.categories[index]],
-                                  cartQuantityListener: this );                  
+                                  cartQuantityListener: this,isCart: false, );                  
                                 },
                               ),
                             ),
@@ -72,7 +69,7 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
                                 itemCount: mymenumodel.getMenuCategories().length,
                                 itemBuilder: (context, index) {
                                   return MenuCategoryWidget(menuItems:mymenumodel.mapItems[mymenumodel.categories[index]],
-                                  cartQuantityListener: this );                      
+                                  cartQuantityListener: this,isCart: false, );                      
                                 },
                               ),
                             ),
@@ -82,30 +79,8 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
                                   end: Alignment.centerRight,
                                   colors:[HexColor('#FCF379'),HexColor('#FA5C76')]),
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                   Container(
-                                     margin: EdgeInsets.all(12.0),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: cartItemBorder,width: 2)
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(6.0),
-                                      child: Text(mymenumodel.cartItems.length.toString(),
-                                      style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500)
-                                      
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(16.0),
-                                    child: GestureDetector(
-                                      child: Text("View cart",
-                                        style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white)
-                                      ),
-                                      onTap: () async {
+                              child: GestureDetector(
+                                   onTap: () async {
                                         //await Navigator.of(context).pushNamed('/cart');
                                         await showModalBottomSheet(
                                           context: context, 
@@ -129,14 +104,36 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
                                         mymenumodel.getCartItems();
                                        /* controller.placeOrder();*/
                                       },
+                                  child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                     Container(
+                                       margin: EdgeInsets.all(12.0),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: cartItemBorder,width: 2)
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(6.0),
+                                        child: Text(mymenumodel.cartItems.length.toString(),
+                                        style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500)
+                                        
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(16.0),
-                                    child: Text("\u20B9 "+mymenumodel.getTotalPrice().toString(),
-                                      style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white)),
-                                  ),
-                                ],
+                                    Container(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: Text("View cart",
+                                        style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white)
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: Text("\u20B9 "+mymenumodel.getTotalPrice().toString(),
+                                        style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white)),
+                                    ),
+                                  ],
+                                ),
                               ),
                             )
                           ]
@@ -145,10 +142,10 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
                     },
                   ),
                 ),
-              ],
-            ),
+            ],
           ),
-       ),
+        ),
+      ),
     );
   }
 
@@ -156,35 +153,26 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
   void onQuantityChanged({int id, int quantity}) {
     _myMenuModel.cartItemQuantityChanged(id, quantity);
   }
-
-
 }
 
-class MyMenuModel with ChangeNotifier{
-
-  bool isLoading=false;
-  //List<StallDataItem> stallItems;
-
+class MyMenuModel with ChangeNotifier {
+  bool isLoading = false;
   WalletDao _walletDao;
   int stallId;
 
   List<StallModifiedMenuItem> menuItems= [];
   List<StallModifiedMenuItem> cartItems=[];
   List<String> categories=[];
-   Map<String,List<StallModifiedMenuItem>> mapItems=Map();
-   List<Widget> menuWidgets=[];
-     
-
-  
-
+  Map<String,List<StallModifiedMenuItem>> mapItems=Map();
+    
   MyMenuModel(int stallId, WalletDao walletDao) {
     this._walletDao = walletDao;
-     this.stallId=stallId;
+    this.stallId = stallId;
 
-     isLoading = true;
+    isLoading = true;
     displayStallMenuItems(stallId);
     getCartItems();
-     
+
     // loadCartItems();
   }
 
@@ -222,19 +210,18 @@ class MyMenuModel with ChangeNotifier{
     if(quantity >= 0) {
       if(quantity == 0) {
         //cartItems.removeWhere((item) => item.itemId == id);
-        menuItems.firstWhere((item) => item.itemId == id).quantity=quantity;
+        menuItems.firstWhere((item) => item.itemId == id).quantity = quantity;
         notifyListeners();
         var result = await _walletDao.deleteCartItem(id);
         print("Result for delting item from cart = $result");
-      }
-      else if(quantity == 1) {
+      } else if (quantity == 1) {
         //cartItems.removeWhere((item) => item.itemId == id);
-        menuItems.firstWhere((item) => item.itemId == id).quantity=quantity;
+        menuItems.firstWhere((item) => item.itemId == id).quantity = quantity;
         notifyListeners();
-        var result = await _walletDao.insertCartItemfromMenuScreen(id, quantity, stallId);
+        var result = await _walletDao.insertCartItemfromMenuScreen(
+            id, quantity, stallId);
         print("insert new intem to cart");
-      }
-      else {
+      } else {
         print("enter update with new quantity$quantity id$id");
         menuItems.firstWhere((item) => item.itemId == id).quantity = quantity;
         notifyListeners();
@@ -244,22 +231,19 @@ class MyMenuModel with ChangeNotifier{
     getCartItems();
   }
 
-   Future<Null> getCartItems() async {
+  Future<Null> getCartItems() async {
     print("try: dget cart items called in Menu Screen");
     cartItems = await _walletDao.getAllCartItems();
     // isLoading = false;
     notifyListeners();
     print("Updated CartItems = $cartItems");
   }
-   
-  int getTotalPrice(){
-         int price=0;
-         for(var item in cartItems){
-           price+=item.quantity*item.currentPrice;
-         }
-         return price;
-    
-     }
 
-
+  int getTotalPrice() {
+    int price = 0;
+    for (var item in cartItems) {
+      price += item.quantity * item.currentPrice;
+    }
+    return price;
+  }
 }

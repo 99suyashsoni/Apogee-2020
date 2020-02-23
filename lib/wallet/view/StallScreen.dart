@@ -27,8 +27,10 @@ class _StallScreenState extends State<StallScreen> {
     return Screen(
       selectedTabIndex: 0,
       title: "Stall",
+      endColor: topLevelScreensGradientEndColor,
+      screenBackground: orderScreenBackground,
+      startColor: topLevelScreensGradientStartColor,
       child: Container(
-        color: screenBackground,
         child: Column(
           children: <Widget>[
             Expanded(
@@ -45,9 +47,11 @@ class _StallScreenState extends State<StallScreen> {
                       : mystallmodel.stallItems.isEmpty
                           ? Center(child: Text("No Stalls are available"))
                           : Container(
-                            margin: EdgeInsets.all(16.0),
+                            margin: EdgeInsets.fromLTRB(16.0,0,16.0,0.0),
                               child: GridView.count(
                               crossAxisCount: 2,
+                              crossAxisSpacing: 16.0,
+                              mainAxisSpacing: 16.0,
                               childAspectRatio: 2.0/2.5,
                               children: List.generate(mystallmodel.stallItems.length, (index) {
                                 return GestureDetector(
