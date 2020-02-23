@@ -96,6 +96,7 @@ class _MenuScreenState extends State<MenuScreen>
                                              
                                             child: CartScreenBottomSheet(widget.networkClient,widget.walletDao)),
                                           isScrollControlled: true,
+                                          
                                           backgroundColor:Colors.transparent,
                                            
                                            //RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(16),topRight: Radius.circular(16)))

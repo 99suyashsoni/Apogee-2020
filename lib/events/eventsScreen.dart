@@ -226,7 +226,7 @@ EventCard({@required this.event});
           Container(
               child: RichText(
                               text: TextSpan(text: event.details.split(">")[1],style: cardThemeData.textTheme.subtitle,),
-                              maxLines: 2,
+                              maxLines: 1,
                               softWrap: true,
               ),
             ),
