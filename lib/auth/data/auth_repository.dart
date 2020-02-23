@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:apogee_main/Constants.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/network/errorState.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -116,5 +117,7 @@ class AuthRepository {
     await _storage.write(key: 'QR', value: user['qr_code']);
     await _storage.write(key: 'REFERRAL_CODE', value: user['referral_code']);
     await _storage.write(key: 'IS_BITSIAN', value: isBitsian.toString());
+
+    Constants.userId = user['user_id'].toString();
   }
 }

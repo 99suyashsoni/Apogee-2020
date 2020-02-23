@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:apogee_main/Constants.dart';
 import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/network/errorState.dart';
@@ -33,7 +34,7 @@ class _ProfileScreenState
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
-      stream: Firestore.instance.collection('users').document("5889").snapshots(),
+      stream: Firestore.instance.collection('users').document(Constants.userId).snapshots(),
       builder: (context, snapshot) {
         return Screen(
           selectedTabIndex: 3,

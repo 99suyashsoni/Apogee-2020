@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:apogee_main/Constants.dart';
 import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/screen.dart';
@@ -36,7 +37,7 @@ class _OrderScreenState extends State<OrderScreen> implements OtpSeenListener {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
           .collection('orders')
-          .where('userid', isEqualTo: 5889)
+          .where('userid', isEqualTo: Constants.userId)
           .snapshots(),
       builder: (context, snapshot) {
         print("Entered stream query builder");
