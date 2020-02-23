@@ -45,7 +45,7 @@ class _StallScreenState extends State<StallScreen> {
                   return mystallmodel.isLoading
                       ? Center(child: CircularProgressIndicator())
                       : mystallmodel.stallItems.isEmpty
-                          ? Center(child: Text("No Stalls are available"))
+                          ? Center(child: Text("Error:No stalls are available",style: Theme.of(context).textTheme.body1.copyWith(fontSize: 18,color: Colors.white),))
                           : Container(
                             margin: EdgeInsets.fromLTRB(16.0,0,16.0,0.0),
                               child: GridView.count(
@@ -58,7 +58,11 @@ class _StallScreenState extends State<StallScreen> {
                                   child: StallItemWidget(
                                     stallDataItem: mystallmodel.stallItems[index]),
                                   onTap: () {
-                                        Navigator.of(context).push(
+                                        if(mystallmodel.stallItems[index].closed){
+                                           Fluttertoast.showToast(msg:'This stall is currently closed');
+                                        }
+                                        else{
+                                           Navigator.of(context).push(
                                          MaterialPageRoute(
                                             builder: (context) =>
                                               MenuScreen(mystallmodel
@@ -68,13 +72,13 @@ class _StallScreenState extends State<StallScreen> {
                                                 .stallName,mystallmodel._networkClient,mystallmodel._walletDao),
                                               settings: RouteSettings(name:"/menuItems$index")
                                               ));
+                                        }
                                   },
                                 );
                               }),
                               ),
    
                            );
-                
                 },
               ),
             ),

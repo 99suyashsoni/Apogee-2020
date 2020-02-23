@@ -46,7 +46,7 @@ class _MenuScreenState extends State<MenuScreen>
                       _myMenuModel = mymenumodel;
                       mymenumodel.stallId=widget.id;
                       return mymenumodel.isLoading ? Center(child: CircularProgressIndicator(),) :
-                      mymenumodel.menuItems.isEmpty ? Center(child: Text("No menu available for this stall"),) :
+                      mymenumodel.menuItems.isEmpty ? Center(child: Text("No menu available for this stall",style: Theme.of(context).textTheme.body1.copyWith(fontSize: 18,color: Colors.white),),) :
                       Container(
                         child: Column(
                           children: mymenumodel.cartItems.isEmpty?

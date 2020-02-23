@@ -46,7 +46,7 @@ class _CartScreenBottomSheetState extends State<CartScreenBottomSheet> implement
                   controller.state=0;
                 }
                   return controller.isLoading ? Center(child: CircularProgressIndicator(),) :
-                    controller.cartItems.isEmpty ? Center(child: Text("There are no items in your cart"),) :
+                    controller.cartItems.isEmpty ? Center(child: Text("There are no items in your cart",style: Theme.of(context).textTheme.body1.copyWith(fontSize: 18,color: Colors.white),),) :
                       Container(
                         child: Column(
                           children: <Widget>[

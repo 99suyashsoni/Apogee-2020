@@ -85,7 +85,7 @@ class StallItemWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                                     child: new Text(
-                'Shakes, Sandwiches, Beverages & more',
+                stallDataItem.description,
                 maxLines: 2,
                 overflow:TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
