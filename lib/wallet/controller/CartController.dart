@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/network/errorState.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
-import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
+import 'package:apogee_main/wallet/data/database/dataClasses/StallModifiedMenuItem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:collection/collection.dart';
 
@@ -12,7 +11,7 @@ class CartController with ChangeNotifier {
   String message="";
   WalletDao _walletDao;
   CustomHttpNetworkClient _networkClient;
-  List<CartItem> cartItems = [
+  List<StallModifiedMenuItem> cartItems = [
    /* CartItem(
       basePrice: 200,
       currentPrice: 150,
@@ -93,12 +92,12 @@ class CartController with ChangeNotifier {
   Future<Null> placeOrder() async {
     isLoading = true;
     notifyListeners();
-    cartItems.sort((item1, item2) => item1.vendorId.compareTo(item2.vendorId));
-    Map<int, List<CartItem>> map = groupBy(cartItems, (CartItem item) => item.vendorId);
+    cartItems.sort((item1, item2) => item1.stallId.compareTo(item2.stallId));
+    Map<int, List<StallModifiedMenuItem>> map = groupBy(cartItems, (StallModifiedMenuItem item) => item.stallId);
     Map<String, dynamic> finalMap = Map();
-    map.forEach((int key, List<CartItem> value) {
+    map.forEach((int key, List<StallModifiedMenuItem> value) {
       Map<String, dynamic> vendorMap = Map();
-      value.forEach((CartItem item) {
+      value.forEach((StallModifiedMenuItem item) {
         vendorMap.addAll(item.toMapForOrder());
       });
       finalMap.addEntries([MapEntry(key.toString(), vendorMap)]);

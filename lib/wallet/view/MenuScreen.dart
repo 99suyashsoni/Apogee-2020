@@ -110,9 +110,20 @@ class _MenuScreenState extends State<MenuScreen>  with WidgetsBindingObserver im
                                         await showModalBottomSheet(
                                           context: context, 
                                           builder:(context) =>
-                                          Container(height:  MediaQuery.of(context).size.height * 0.75,
+                                          Container(
+                                            height:  MediaQuery.of(context).size.height * 0.75,
+                                           
+                                            decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(16.0),topRight: Radius.circular(16.0)),
+                                            color: screenBackground,
+                                            
+                                          ),
+                                             
                                             child: CartScreenBottomSheet(widget.networkClient,widget.walletDao)),
                                           isScrollControlled: true,
+                                          backgroundColor:Colors.transparent,
+                                           
+                                           //RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(16),topRight: Radius.circular(16)))
                                           );
                                         mymenumodel.displayStallMenuItems(widget.id);
                                         mymenumodel.getCartItems();
@@ -158,7 +169,7 @@ class MyMenuModel with ChangeNotifier{
   int stallId;
 
   List<StallModifiedMenuItem> menuItems= [];
-  List<CartItem> cartItems=[];
+  List<StallModifiedMenuItem> cartItems=[];
   List<String> categories=[];
    Map<String,List<StallModifiedMenuItem>> mapItems=Map();
    List<Widget> menuWidgets=[];

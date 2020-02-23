@@ -1,5 +1,4 @@
 import 'package:apogee_main/shared/database_helper.dart';
-import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/OrderItems.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallDataItem.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallModifiedMenuItem.dart';
@@ -73,14 +72,14 @@ class WalletDao {
     print("Result of deleting object from cart = $result");
   }
 
-  Future<List<CartItem>> getAllCartItems() async {
+  Future<List<StallModifiedMenuItem>> getAllCartItems() async {
     var database = await databaseInstance();
-    var result = await database.rawQuery("""SELECT cart_data.item_id AS itemId, stall_items.itemName as itemName, stall_items.isVeg as isVeg, cart_data.vendor_id AS vendorId, stalls.stallName AS vendorName, cart_data.quantity AS quantity, stall_items.current_price AS currentPrice, stall_items.discount AS discount, stall_items.base_price AS basePrice FROM cart_data LEFT JOIN stall_items ON cart_data.item_id = stall_items.itemId LEFT JOIN stalls ON cart_data.vendor_id = stalls.stallId ORDER BY vendorId""");
-    List<CartItem> cartItems = [];
+    var result = await database.rawQuery("""SELECT cart_data.item_id AS itemId, stall_items.itemName AS itemName, stall_items.stallId AS stallId, stall_items.stallName AS stallName, stall_items.category AS category, stall_items.isVeg as isVeg, cart_data.quantity AS quantity, stall_items.current_price AS currentPrice, stall_items.discount AS discount, stall_items.base_price AS basePrice, stall_items.isAvailable AS isAvailable FROM cart_data LEFT JOIN stall_items ON cart_data.item_id = stall_items.itemId LEFT JOIN stalls ON cart_data.vendor_id = stalls.stallId ORDER BY vendorId""");
+    List<StallModifiedMenuItem> cartItems = [];
     if(result == null || result.isEmpty) 
       return cartItems;
     for(var element in result) {
-      cartItems.add(CartItem.fromMap(element));
+      cartItems.add(StallModifiedMenuItem.fromMap(element));
     }
     return cartItems;
   }

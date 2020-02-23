@@ -39,7 +39,7 @@ class MenuItemWidget extends StatelessWidget {
                   style: Theme.of(context).textTheme.body2.copyWith(fontSize:16.0,color: menuScreenItemColor),
                     ),
                     Padding(padding: EdgeInsets.only(top:4),
-                    child: item.discount!=0?
+                    child: item.discount==0?
                       Text(
                         '\u20B9 ${item.basePrice}',
                         style:Theme.of(context).textTheme.body2.copyWith(fontSize:12.0,color: menuScreenItemPrice),

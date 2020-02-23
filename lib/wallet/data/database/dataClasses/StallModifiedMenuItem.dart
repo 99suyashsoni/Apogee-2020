@@ -1,16 +1,16 @@
 class StallModifiedMenuItem {
 
-  int itemId;
-  String itemName;
-  int stallId;
-  String stallName;
-  String category;
-  int  currentPrice;
+  int itemId;//
+  String itemName;//
+  int stallId;//
+  String stallName;//
+  String category;//
+  int  currentPrice;//
   bool isAvailable;
-  bool isVeg;
-  int discount;
+  bool isVeg;//
+  int discount;//
   int basePrice;
-  int quantity;
+  int quantity;//
 
   StallModifiedMenuItem({
     this.itemId,
@@ -40,5 +40,11 @@ class StallModifiedMenuItem {
     quantity: int.parse(response["quantity"].toString()),
 
   );
+
+  Map<String, int> toMapForOrder() => {
+    itemId.toString(): quantity
+  };
+
+
 
 }
