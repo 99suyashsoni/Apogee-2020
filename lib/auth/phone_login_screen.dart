@@ -1,3 +1,4 @@
+import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:apogee_main/shared/screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,9 @@ class PhoneLoginScreen extends StatelessWidget {
       title: 'Verify Number',
       child: _PhoneLogin(),
       selectedTabIndex: -1,
+      endColor: topLevelScreensGradientEndColor,
+      screenBackground: orderScreenBackground,
+      startColor: topLevelScreensGradientStartColor,
     );
   }
 }

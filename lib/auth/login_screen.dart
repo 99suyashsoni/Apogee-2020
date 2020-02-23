@@ -1,4 +1,5 @@
 import 'package:apogee_main/auth/data/auth_repository.dart';
+import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:apogee_main/shared/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,9 @@ class LoginScreen extends StatelessWidget {
       title: "Login",
       child: _Login(),
       selectedTabIndex: -1,
+      endColor: topLevelScreensGradientEndColor,
+      screenBackground: orderScreenBackground,
+      startColor: topLevelScreensGradientStartColor,
     );
   }
 }
