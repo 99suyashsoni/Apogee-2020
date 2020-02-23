@@ -1,18 +1,17 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'package:apogee_main/auth/data/auth_repository.dart';
 import 'package:apogee_main/auth/login_screen.dart';
 import 'package:apogee_main/auth/phone_login_screen.dart';
 import 'package:apogee_main/events/data/EventsModel.dart';
 import 'package:apogee_main/events/data/database/EventsDao.dart';
 import 'package:apogee_main/events/eventsScreen.dart';
+import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:apogee_main/shared/constants/app_theme_data.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/wallet/controller/CartController.dart';
 import 'package:apogee_main/wallet/controller/OrderController.dart';
 import 'package:apogee_main/wallet/controller/ProfileController_PreApogee.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
-import 'package:apogee_main/wallet/view/CartScreen.dart';
 import 'package:apogee_main/wallet/view/OrderScreen.dart';
 import 'package:apogee_main/wallet/view/ProfileScreen.dart';
 import 'package:apogee_main/wallet/view/ProfileScreenPreApogee.dart';
@@ -70,7 +69,7 @@ void main() async {
     );
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Color(0xFF5A534A),
+      statusBarColor: statusBarColor,
     ));
 
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -175,25 +174,20 @@ class ApogeeApp extends StatelessWidget {
         },
         '/more': (context) {
           return ChangeNotifierProvider.value(
-            value: CartController(
+            value: MyProfileModel(
                 walletDao: walletDao, networkClient: customHttpNetworkClient),
-            child: CartScreen(),
+            child: ProfileScreen(),
           );
         },
-        '/cart': (context) {
-          return ChangeNotifierProvider.value(
-            value: CartController(
-                walletDao: walletDao, networkClient: customHttpNetworkClient),
-            child: CartScreen(),
-          );
-        },
+        
         '/pre-apogee': (context) {
           return ChangeNotifierProvider.value(
             value:
                 ProfileScreenPreApogeeController(secureStorage: secureStorage),
             child: ProfileScreenPreApogee(secureStorage),
           );
-        },
+        
+      },
       },
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),

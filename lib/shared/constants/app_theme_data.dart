@@ -1,5 +1,8 @@
+
 import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:flutter/material.dart';
+
+import 'appColors.dart';
 
 final appThemeData = ThemeData(
     primarySwatch: Colors.blue,
@@ -54,6 +57,10 @@ final cardThemeData = ThemeData(
       color: Colors.white,
       fontFamily: 'Google-Sans',
       fontStyle: FontStyle.normal
-    )
+    ),
+    subhead: TextStyle(color: offwhite80,
+    fontFamily: 'Google-Sans',
+    fontStyle: FontStyle.normal,
+    fontSize: 12)
   )
 );

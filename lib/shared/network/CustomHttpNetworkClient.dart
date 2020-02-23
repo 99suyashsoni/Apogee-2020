@@ -30,10 +30,17 @@ class CustomHttpNetworkClient implements NetworkClient {
 
 
     try{
-    response = await _networkClient.get("$baseUrl$url", headers: {'Content-Type': 'application/json', HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? ""});
+    response = await _networkClient.get("$baseUrl$url", headers: {'Content-Type': 'application/json', HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? "", 'App-Version':'4.0'});
     print("try: get url $url Code = ${response.statusCode} Response = ${response.body}");
-    } catch(e)
+    }
+     on SocketException
+     {
+        return ErrorState(message:'Poor Internet Connection',state: 2);
+     }
+
+     catch(e)
     {
+      if(e)
       print("try: get url $url  ${e.toString()}");
       return ErrorState(message: "${e.toString()}",state: 2); 
     }
@@ -49,7 +56,7 @@ class CustomHttpNetworkClient implements NetworkClient {
     print("try: inside post networkcliner url $url ");
     final headers = {'Content-Type': 'application/json'};
     //if(wantAuth){
-      headers.addAll({HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? ""});
+      headers.addAll({HttpHeaders.authorizationHeader: await _secureStorage.read(key: 'JWT') ?? "", 'App-Version':'4.0'});
     //}
     Response response;
   try{

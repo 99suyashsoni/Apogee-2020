@@ -28,6 +28,7 @@ class OrderScreen extends StatefulWidget {
   _OrderScreenState createState() => _OrderScreenState();
 }
 
+//TODO: add Firestore remove hardcoded userid
 class _OrderScreenState extends State<OrderScreen> implements OtpSeenListener {
   @override
   Widget build(BuildContext context) {
