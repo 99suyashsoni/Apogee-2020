@@ -5,6 +5,7 @@ import 'package:apogee_main/auth/phone_login_screen.dart';
 import 'package:apogee_main/events/data/EventsModel.dart';
 import 'package:apogee_main/events/data/database/EventsDao.dart';
 import 'package:apogee_main/events/eventsScreen.dart';
+import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:apogee_main/shared/constants/app_theme_data.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/wallet/controller/CartController.dart';
@@ -68,7 +69,7 @@ void main() async {
     );
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Color(0xFF5A534A),
+      statusBarColor: statusBarColor,
     ));
 
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

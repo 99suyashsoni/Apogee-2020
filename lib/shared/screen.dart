@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
-
+import 'package:apogee_main/shared/constants/appColors.dart';
+import 'package:apogee_main/shared/utils/HexColor.dart';
 import 'package:flutter/material.dart';
 
 class Screen extends StatelessWidget {
@@ -105,7 +106,7 @@ class Screen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: _BottomNav(
-        currentIndex: selectedTabIndex,
+        currentIndex: selectedTabIndex,endcolor: endColor,
       ),
     );
   }
@@ -114,19 +115,22 @@ class Screen extends StatelessWidget {
 class _BottomNav extends StatelessWidget {
   const _BottomNav({
     this.currentIndex,
+    this.endcolor,
     Key key,
   }) : super(key: key);
 
   final int currentIndex;
+  final Color endcolor;
 
   @override
   Widget build(BuildContext context) {
     if (currentIndex != -1) {
       return BottomNavigationBar(
         currentIndex: currentIndex,
-        backgroundColor: Theme.of(context).primaryColor,
-        selectedItemColor: Theme.of(context).primaryColorDark,
-        unselectedItemColor: Theme.of(context).primaryColorLight,
+        backgroundColor: bottomNavBackground,
+        selectedItemColor: endcolor,
+        //Theme.of(context).primaryColorLight
+        unselectedItemColor: HexColor('#767676'),
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
         selectedFontSize: 9.0,
@@ -136,34 +140,34 @@ class _BottomNav extends StatelessWidget {
         items: [
           _bottomNavItem(
             title: 'Stalls',
-            selectedIconData: Icons.star,
-            unselectedIconData: Icons.shop,
+            selectedIconData:Icons.fastfood,
+            unselectedIconData:Icons.fastfood,
             isSelected: currentIndex == 0,
           ),
           _bottomNavItem(
             title: 'Orders',
-            selectedIconData: Icons.star,
+            selectedIconData: Icons.list,
             unselectedIconData: Icons.list,
             isSelected: currentIndex == 1,
           ),
           _bottomNavItem(
             title: 'Events',
-            selectedIconData: Icons.star,
+            selectedIconData: Icons.event,
             unselectedIconData: Icons.event,
             isSelected: currentIndex == 2,
           ),
           _bottomNavItem(
             title: 'Profile',
-            selectedIconData: Icons.star,
+            selectedIconData: Icons.person,
             unselectedIconData: Icons.person,
             isSelected: currentIndex == 3,
           ),
-          _bottomNavItem(
-            title: 'More',
-            selectedIconData: Icons.star,
-            unselectedIconData: Icons.more,
-            isSelected: currentIndex == 4,
-          ),
+          // _bottomNavItem(
+          //   title: 'More',
+          //   selectedIconData: Icons.star,
+          //   unselectedIconData: Icons.more,
+          //   isSelected: currentIndex == 4,
+          // ),
         ],
         onTap: (i) {
           if (i == currentIndex) {
@@ -181,10 +185,11 @@ class _BottomNav extends StatelessWidget {
           } else if (i == 3) {
             Navigator.of(context)
                 .pushNamedAndRemoveUntil('/profile', ModalRoute.withName('/'));
-          } else if (i == 4) {
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil('/more', ModalRoute.withName('/'));
           }
+          //  else if (i == 4) {
+          //   Navigator.of(context)
+          //       .pushNamedAndRemoveUntil('/more', ModalRoute.withName('/'));
+          // }
         },
       );
     } else {

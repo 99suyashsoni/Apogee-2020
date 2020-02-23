@@ -23,6 +23,8 @@ Color orderCardReadyShadow = HexColor("#DAF81929");
 Color orderCardFinishedShadow = HexColor("#19F8A629");
 Color orderCardAmount = HexColor("#00B2FF");
 
+Color bottomNavBackground = HexColor('#373856');
+Color statusBarColor = HexColor('#161C22');
 //Cart Screen Colors
 Color cartAddQuantity = HexColor('#4D4D63');
 Color cartItemBorder = HexColor('#FDFDFD');

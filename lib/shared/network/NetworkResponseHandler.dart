@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:apogee_main/shared/network/errorState.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +14,20 @@ class NetworkResponseHandler {
         await onSuccess(response.body);
         return ErrorState(
           state: 0,
-          message: "Inshaalah Developers Played Well"
+          message: "200: Success"
         );
-      } else {
+      } else if(response.statusCode==500) {
         return ErrorState(
             state: 2,
-            message: "${response.statusCode} Inshaalah Developers Played Well"
+            message: "${response.statusCode}: Error Ocurred!!! Contact DVM official"
         );
           // TODO discuss with backend and sort error handling
+      }
+      else{
+        return ErrorState(
+          state: 2,
+          message: "${response.statusCode}: "+ getDisplayMessage(response.body.toString()) ,
+          );
       }
     } else {
       return ErrorState(
@@ -34,4 +42,17 @@ class NetworkResponseHandler {
       );
     }
   }
+
+}
+String getDisplayMessage(String errorBody){
+ var jsonResponse =jsonDecode(errorBody);
+ if(jsonResponse.containsKey('display_message')){
+    return jsonResponse['display'];
+ }
+ else if(jsonResponse.containsKey('detail')){
+    return jsonResponse['detail'];
+ }
+ else
+    return 'Something went wrong!!!';
+
 }
