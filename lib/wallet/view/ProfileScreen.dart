@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:apogee_main/Constants.dart';
 import 'package:apogee_main/shared/constants/appColors.dart';
+import 'package:apogee_main/shared/constants/app_theme_data.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/network/errorState.dart';
 import 'package:apogee_main/shared/screen.dart';
@@ -216,7 +217,10 @@ class _ProfileScreenState
                                 )
                               ],
                             ),
-                          )
+                          ),
+                          Container(
+                             child: FlatButton(onPressed:()=>profileController.logout(), child: Text('Logout',style: cardThemeData.textTheme.headline,),color: Colors.blue),
+                          ),
                         ],
                       ),
                     ),
@@ -263,6 +267,17 @@ class MyProfileModel with ChangeNotifier {
       isLoading=false;
       notifyListeners();
     }
+
+     Future<void> logout() async {
+    await _secureStorage.delete(key: 'NAME');
+    await _secureStorage.delete(key: 'JWT');
+    await _secureStorage.delete(key: 'EMAIL');
+    await _secureStorage.delete(key: 'CONTACT');
+    await _secureStorage.delete(key: 'ID');
+    await _secureStorage.delete(key: 'QR');
+    await _secureStorage.delete(key: 'IS_BITSIAN');
+    await _secureStorage.delete(key: 'REFERRAL_CODE');
+  }
 
   Future<Null> addMoney(String money) async {
     isLoading = true;

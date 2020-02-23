@@ -68,6 +68,9 @@ class _LoginState extends State<_Login> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 32.0),
             child: TextField(
+              style: TextStyle(
+                color:Colors.white
+              ),
               decoration: InputDecoration(
                 hintText: "Username",
                 hintStyle: TextStyle(color: offWhite44, fontFamily: 'Google-Sans'),
@@ -84,6 +87,9 @@ class _LoginState extends State<_Login> {
             padding: EdgeInsets.symmetric(horizontal: 32.0),
             child: TextField(
               obscureText: true,
+              style: TextStyle(
+                color:Colors.white
+              ),
               decoration: InputDecoration(
                 hintText: "Password",
                 hintStyle: TextStyle(

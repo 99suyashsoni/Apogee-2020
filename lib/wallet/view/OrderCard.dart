@@ -102,6 +102,7 @@ class OrderCard extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
+                    
                     // TODO: Implement OTP seen
                   },
                   child: Container(
