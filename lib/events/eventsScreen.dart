@@ -56,6 +56,7 @@ class EventView extends StatefulWidget{
 class EventViewState extends State<EventView> with SingleTickerProviderStateMixin{
   PageController _pageController;
   TabController _tabController;
+  var isPageChanged=true;
 
   @override
   void initState(){
@@ -63,14 +64,28 @@ class EventViewState extends State<EventView> with SingleTickerProviderStateMixi
      final initialPage =
         widget.ncontroller.events.indexWhere((events) => events.date == "2019-10-19");
 
-    if (initialPage == -1) {
+    /*if (initialPage == -1) {
       _pageController = PageController();
     } else {
       _pageController = PageController(initialPage: initialPage);
-    }
+    }*/
    _tabController = TabController(length: widget.ncontroller.dates.length, vsync: this);
+   _tabController.addListener((){
+     if(_tabController.indexIsChanging){
+       onPageChange(_tabController.index,p: _pageController);
+     }
+   });
   }
-   
+    onPageChange(int index, {PageController p, TabController t}) async {
+         if (p != null) {
+      isPageChanged = false;
+             await _pageController.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.ease);//Wait for pageview to switch, then release pageivew listener
+      isPageChanged = true;
+    } else {
+             _tabController.animateTo(index);//Switch Tabbar
+    }
+  }
+
 void _nextPage(int delta) {
   print(':called');
     final int newIndex = _tabController.index + delta;
@@ -86,7 +101,9 @@ void _nextPage(int delta) {
 
     Container(
       child: new TabBar(
-          
+          onTap: (index){
+             widget.ncontroller.getEventsByDate(widget.ncontroller.dates[index]);
+          },
           controller: _tabController,
           labelColor: Colors.white,
           indicatorColor: Colors.white,
@@ -110,9 +127,11 @@ void _nextPage(int delta) {
       Expanded(
               child: PageView.builder(controller: _pageController,
               scrollDirection: Axis.horizontal,
-              
+        
               onPageChanged: (index){
-                     _nextPage(index);
+                if(isPageChanged){
+                  onPageChange(index);
+                }
              },
           itemCount: widget.ncontroller.dates.length,
           itemBuilder:(_,index){
