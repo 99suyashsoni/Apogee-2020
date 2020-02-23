@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:apogee_main/shared/screen.dart';
 import 'package:apogee_main/wallet/controller/CartController.dart';
 import 'package:apogee_main/wallet/view/CartItemWidget.dart';
@@ -21,6 +22,9 @@ class _CartScreenState extends State<CartScreen> implements CartQuantityListener
     return Screen(
       selectedTabIndex: -1,
       title: "Cart",
+      endColor: topLevelScreensGradientEndColor,
+      screenBackground: orderScreenBackground,
+      startColor: topLevelScreensGradientStartColor,
 //      child: ChangeNotifierProvider<CartController>(
 //        create: (BuildContext context) => CartController(),
         child: Container(
