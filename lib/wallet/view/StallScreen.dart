@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:apogee_main/shared/constants/appColors.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/screen.dart';
+import 'package:apogee_main/shared/utils/HexColor.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallDataItem.dart';
 import 'package:apogee_main/wallet/view/MenuScreen.dart';
@@ -27,9 +28,9 @@ class _StallScreenState extends State<StallScreen> {
     return Screen(
       selectedTabIndex: 0,
       title: "Stall",
-      endColor: topLevelScreensGradientEndColor,
+      endColor: HexColor('#FCF379') ,
       screenBackground: orderScreenBackground,
-      startColor: topLevelScreensGradientStartColor,
+      startColor:HexColor('#FA5C76'),
       child: Container(
         child: Column(
           children: <Widget>[

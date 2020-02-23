@@ -29,6 +29,8 @@ Color orderCardAmount = HexColor("#00B2FF");
 
 Color eventCardBackground =HexColor("#043A68");
 Color eventBookmark=HexColor("#5DB1FF");
+Color bottomNavBackground = HexColor('#373856');
+Color statusBarColor = HexColor('#161C22');
 //Cart Screen Colors
 Color cartAddQuantity = HexColor('#4D4D63');
 Color cartItemBorder = HexColor('#FDFDFD');
