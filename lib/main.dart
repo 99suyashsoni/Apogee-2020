@@ -8,6 +8,7 @@ import 'package:apogee_main/events/eventsScreen.dart';
 import 'package:apogee_main/shared/constants/app_theme_data.dart';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/wallet/controller/CartController.dart';
+import 'package:apogee_main/wallet/controller/OrderController.dart';
 import 'package:apogee_main/wallet/controller/ProfileController_PreApogee.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
 import 'package:apogee_main/wallet/view/CartScreen.dart';
@@ -85,7 +86,7 @@ void main() async {
       ));
     } else {
       runApp(ApogeeApp(
-        initialRoute: '/',
+        initialRoute: '/orders',
         analytics: analytics,
         authRepository: authRepository,
         eventsDao: eventsDao,
@@ -123,6 +124,7 @@ class ApogeeApp extends StatelessWidget {
   //Make controller instance while passing so that functions of constructor are called every time the screen opens
   @override
   Widget build(BuildContext context) {
+    OrderController model;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Apogee App',
@@ -150,9 +152,8 @@ class ApogeeApp extends StatelessWidget {
         },
         '/orders': (context) {
           return ChangeNotifierProvider.value(
-            value: CartController(
-                walletDao: walletDao, networkClient: customHttpNetworkClient),
-            child: CartScreen(),
+            value: model = OrderController(walletDao, customHttpNetworkClient),
+            child: OrderScreen(model,walletDao,customHttpNetworkClient,secureStorage),
           );
         },
         '/stalls': (context) {

@@ -25,7 +25,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   http: ^0.12.0+2
   firebase_auth: ^0.14.0+9
-  google_sign_in: ^4.1.1
+  google_sign_in: ^4.0.0
   cloud_firestore: ^0.12.11
   firebase_analytics: ^5.0.6
   firebase_messaging: ^5.1.6
@@ -64,7 +64,7 @@ flutter:
       - asset: fonts/Google-Sans-Fonts-master/GoogleSans-Regular.ttf
        
   assets:
-  - assets/
+  - assets/images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
