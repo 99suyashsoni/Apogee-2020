@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'package:apogee_main/auth/data/auth_repository.dart';
 import 'package:apogee_main/auth/login_screen.dart';
 import 'package:apogee_main/auth/phone_login_screen.dart';
@@ -87,7 +86,7 @@ void main() async {
       ));
     } else {
       runApp(ApogeeApp(
-        initialRoute: '/events',
+        initialRoute: '/',
         analytics: analytics,
         authRepository: authRepository,
         eventsDao: eventsDao,

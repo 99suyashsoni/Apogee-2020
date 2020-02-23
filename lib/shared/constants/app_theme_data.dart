@@ -55,6 +55,10 @@ final cardThemeData = ThemeData(
       color: Colors.white,
       fontFamily: 'Google-Sans',
       fontStyle: FontStyle.normal
-    )
+    ),
+    subhead: TextStyle(color: Colors.white,
+    fontFamily: 'Google-Sans',
+    fontStyle: FontStyle.normal,
+    fontSize: 12)
   )
 );

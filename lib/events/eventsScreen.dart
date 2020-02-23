@@ -7,21 +7,23 @@ import 'package:apogee_main/shared/screen.dart';
 import 'package:provider/provider.dart';
 import 'package:apogee_main/shared/constants/app_theme_data.dart';
 
+import '../shared/constants/appColors.dart';
+import '../shared/constants/appColors.dart';
+import '../shared/constants/appColors.dart';
+import '../shared/constants/app_theme_data.dart';
+import '../shared/constants/app_theme_data.dart';
+
 class EventsScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
     return  Screen(
       title: "Events",
-<<<<<<< HEAD
-=======
       child: EventList(),
-      endColor: topLevelScreensGradientEndColor,
+      endColor: eventsGradientEndColor,
       screenBackground: orderScreenBackground,
-      startColor: topLevelScreensGradientStartColor,
->>>>>>> fe075689815c0e0ae2c4d83756a3d58e7426fe3b
+      startColor: eventsGradientStartColor,
       selectedTabIndex: 2,
-      child: EventList(),
     );
   
   }
@@ -68,6 +70,14 @@ class EventViewState extends State<EventView> with SingleTickerProviderStateMixi
   @override
   void initState(){
     super.initState();
+     final initialPage =
+        widget.ncontroller.events.indexWhere((events) => events.date == "2019-10-19");
+
+    if (initialPage == -1) {
+      _pageController = PageController();
+    } else {
+      _pageController = PageController(initialPage: initialPage);
+    }
     _tabController = TabController(length: widget.ncontroller.dates.length, vsync: this);
   }
     void _nextPage(int delta) {
@@ -79,41 +89,47 @@ class EventViewState extends State<EventView> with SingleTickerProviderStateMixi
   @override
   Widget build(BuildContext context) {
     return Column(
-       
-      children: <Widget>[
-        SizedBox(height: 20.0,),
+     crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      SizedBox(height: 20.0,),
 
-        new TabBar(
-                    controller: _tabController,
-                    tabs: List<Widget>.generate(widget.ncontroller.dates.length,(int index){
-                          return new Tab(
-                             child: Padding(padding: EdgeInsets.all(8.0),
-                             child:Container(
-                               height: 190,
-                               width: 200,
-                             alignment: Alignment.center,
-                             margin: EdgeInsets.only(top:30.0),
-                             child: Dates(eventDate: widget.ncontroller.dates[index],)
-                             ) ,
-                   ),
-                );
-              }
-             ),
-           
-          ),
+      Expanded(
+              child: new TabBar(
+        
+        controller: _tabController,
+        labelColor: Colors.white,
+        tabs: List<Widget>.generate(widget.ncontroller.dates.length,(int index){
+              return new Tab(
+                 child: Padding(padding: EdgeInsets.all(8.0),
+                 child:Container(
+                   
+                 alignment: Alignment.center,
+                 margin: EdgeInsets.only(top:30.0),
+                 child: Dates(eventDate: widget.ncontroller.dates[index],)
+                 ) ,
+         ),
+    );
+        }
+         ),
+         
+        ),
+      ),
 
-        PageView.builder(controller: _pageController,
+      SizedBox(
+        height: MediaQuery.of(context).size.height,
+              child: PageView.builder(controller: _pageController,
         scrollDirection: Axis.horizontal,
         onPageChanged: (index){
-          _nextPage(index);
+    _nextPage(index);
         },
         itemCount: widget.ncontroller.dates.length,
         itemBuilder:(_,index){
         widget.ncontroller.getEventsByDate(widget.ncontroller.dates[index]);
         return EventPage(eventList: widget.ncontroller.events);
   }),
-      ],
-    );
+      ),
+    ],
+        );
   }
 
   @override
@@ -130,16 +146,18 @@ class EventPage extends StatelessWidget{
   EventPage({@required this.eventList});
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Expanded(
-                  flex: 6,
-                  child:ListView.builder(
-                  itemCount: eventList.length,
-                  itemBuilder: (context,index){
-                    return EventCard(event: eventList[index],);
-                  },
-                ),
-          ),
+    return Column(
+      children: <Widget>[
+        Expanded(
+                    flex: 6,
+                    child:ListView.builder(
+                    itemCount: eventList.length,
+                    itemBuilder: (context,index){
+                      return EventCard(event: eventList[index],);
+                    },
+                  ),
+            ),
+      ],
     );
   }
 
@@ -181,7 +199,7 @@ EventCard({@required this.event});
       margin: EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
-        color: eventCardBackground
+        color: orderCardBackground
       ),
       child: Column(
         children: <Widget>[
@@ -200,13 +218,24 @@ EventCard({@required this.event});
             height:20.0
           ),
           Container(
-            child: Text(event.about,
-            style: cardThemeData.textTheme.body1,),
+            child: Text(event.rules,
+            style: cardThemeData.textTheme.subtitle,),
           ),
           SizedBox(
             height: 20.0
           ) ,
-          Container(child: Text(event.date,style: cardThemeData.textTheme.body2,),alignment: Alignment.bottomRight,) 
+          Container(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Text(event.time,style: cardThemeData.textTheme.subhead,),
+                SizedBox(width:2,),
+                Text(',',style:cardThemeData.textTheme.subhead),
+                SizedBox(width:2),
+                Text(event.venue,style: cardThemeData.textTheme.subhead,)
+              ],
+            )
+            ,alignment: Alignment.bottomRight,) 
         ],
       ),
     );

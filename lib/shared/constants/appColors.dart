@@ -2,12 +2,16 @@ import 'package:apogee_main/shared/utils/HexColor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/HexColor.dart';
+import '../utils/HexColor.dart';
+
 Color borderColor = Colors.black;
 
 Color strikeThroughLine = Colors.lightGreen;
 
 Color cartQuantityButtonBackground = Colors.lightBlue;
-
+Color eventsGradientStartColor=HexColor("#FF4EC0");
+Color eventsGradientEndColor=HexColor("#FF8D91");
 Color topLevelScreensGradientStartColor = HexColor("#61D3D3");
 Color topLevelScreensGradientEndColor = HexColor("#6E92FA");
 
