@@ -13,6 +13,13 @@ class EventsScreen extends StatelessWidget{
 
     return  Screen(
       title: "Events",
+<<<<<<< HEAD
+=======
+      child: EventList(),
+      endColor: topLevelScreensGradientEndColor,
+      screenBackground: orderScreenBackground,
+      startColor: topLevelScreensGradientStartColor,
+>>>>>>> fe075689815c0e0ae2c4d83756a3d58e7426fe3b
       selectedTabIndex: 2,
       child: EventList(),
     );
