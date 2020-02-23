@@ -15,41 +15,50 @@ class MenuItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(8,0, 8, 8),
+      margin: EdgeInsets.fromLTRB(16,0, 16, 16),
       //TODO: Max lines, size to all text boxes
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-              child: Icon(Icons.center_focus_strong),
+              child: Image.asset(item.isVeg?'assets/veg.png':'assets/non_veg.png',height: 16,width: 16,),
+              margin: EdgeInsets.only(top:4.0,right: 4.0),
             ),
          Expanded(
             child: Container(
-              margin: EdgeInsets.only(left: 8.0,right: 8.0),
+              // margin: EdgeInsets.only(left: 8.0,right: 8.0),
               child: 
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(item.itemName+item.itemName,
+                  Text(item.itemName,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    color: Colors.white,
-                    
-                    fontSize: 16),
+                  style: Theme.of(context).textTheme.body2.copyWith(fontSize:16.0,color: menuScreenItemColor),
                     ),
-                    Padding(padding: EdgeInsets.only(top:8),
+                    Padding(padding: EdgeInsets.only(top:4),
                     child: item.discount!=0?
                       Text(
-                          'data',
-                        style: TextStyle(
-                          color: Colors.white,
-                          backgroundColor: Colors.red,
-                          fontSize: 12,
-                        ),
-                      ):  Text('data'),
+                        '\u20B9 ${item.basePrice}',
+                        style:Theme.of(context).textTheme.body2.copyWith(fontSize:12.0,color: menuScreenItemPrice),
+                      ):  Row(
+                        children:<Widget>[
+                          Text(
+                            '\u20B9 ${item.basePrice}',
+                            style:Theme.of(context).textTheme.body2.copyWith(fontSize:12.0,color: menuScreenItemPrice,decoration: TextDecoration.lineThrough),
+                         ),
+                          Text(
+                        '  \u20B9 ${item.currentPrice}',
+                        style:Theme.of(context).textTheme.body2.copyWith(fontSize:12.0,color: menuScreenItemPrice),
+                      ),
+                       Text(
+                        '  ~${item.discount}%',
+                        style:Theme.of(context).textTheme.body2.copyWith(fontSize: 12.0,color: menuScreenItemPrice),
+                      )
+                        ],
+                      )
                     )
                   ],
                 ),

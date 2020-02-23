@@ -26,8 +26,9 @@ Color orderCardAmount = HexColor("#00B2FF");
 //Cart Screen Colors
 Color cartAddQuantity = HexColor('#4D4D63');
 Color cartItemBorder = HexColor('#FDFDFD');
-
+//Menu Screen Colors
 Color menuScreenItemColor=HexColor('#FEFEFE');
+Color menuScreenItemPrice=Color.fromRGBO(254, 254, 254, 0.66);
 //Common Screen Colors
 Color screenBackground = HexColor("#30305B");
 //Common Card Colours 

@@ -42,11 +42,12 @@ class StallItemWidget extends StatelessWidget {
   ),
   placeholder: (context, url) => Padding(
     padding: const EdgeInsets.all(8.0),
-    child: Image.asset('assets/stall_placeholder.png',color:stallPlaceHolderBg,),
+    child: Image.asset('assets/stall_placeholder.png',fit: BoxFit.fill,),
+    
   ),
   errorWidget: (context, url, error) => Padding(
     padding: const EdgeInsets.all(8.0),
-    child: Image.asset('assets/stall_placeholder.png',color:stallPlaceHolderBg,),
+    child: Image.asset('assets/stall_placeholder.png',fit:BoxFit.fill,),
   ),
 ),
              ),

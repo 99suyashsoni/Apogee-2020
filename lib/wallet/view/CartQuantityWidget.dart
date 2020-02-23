@@ -20,28 +20,36 @@ class CartQuantityWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      height: 32,
-
-      decoration: BoxDecoration(
-       gradient:LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: quantity==0?[HexColor('#FCF379'),HexColor('#FA5C76')]:[Colors.transparent,Colors.transparent]),
-        borderRadius: BorderRadius.all(Radius.circular(16.0)),
-      ),
-      child: Row(
-        children: getQuauntityLayout(quantity,context),
-        
-      ),
-    );
-  }
-
-  List<Widget> getQuauntityLayout(int quantity,BuildContext context){
-    List<Widget> returnList=[];
-    if(quantity!=0){
-      return returnList=[ GestureDetector(
+    return quantity==0 ?
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        height: 32,
+        decoration: BoxDecoration(
+          gradient:LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors:[HexColor('#FCF379'),HexColor('#FA5C76')]),
+            borderRadius: BorderRadius.all(Radius.circular(16.0)),
+        ),
+        child: GestureDetector(
+          onTap: () {
+            quantity += 1;
+            cartQuantityListener.onQuantityChanged(id: itemId,quantity: quantity);      
+          },
+          child:
+            Center(
+              child: Text(
+                'Add +',
+                style: Theme.of(context).textTheme.body2.copyWith(color: cartAddQuantity),
+          ),
+            ),
+        ),
+    )
+    :
+    Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+         GestureDetector(
             onTap: () {
               quantity -= 1;
               if(quantity >= 0) {
@@ -53,19 +61,27 @@ class CartQuantityWidget extends StatelessWidget {
               cartQuantityListener.onQuantityChanged(id: itemId, quantity: quantity);
             },
             child: Container(
+              height: 24,
+              width: 24,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(5.0),
-                  bottomLeft: Radius.circular(5.0)
+                gradient:LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors:[HexColor('#FCF379'),HexColor('#FA5C76')]
                 ),
+                borderRadius: BorderRadius.all(Radius.circular(12.0)),
               ),
-              child: Center(child: Icon(Icons.remove, color: Colors.red, size: 20.0,)),
+              child: Center(child: Icon(Icons.remove, color: cartAddQuantity, size: 16,)),
             ),
           ),
           Container(
+            height: 24,
             margin: EdgeInsets.symmetric(horizontal: 4.0),
-            child: Text(quantity.toString(), style: Theme.of(context).textTheme.title.copyWith(color: Colors.white),),
+           
+            child: Center(
+              child: Text(quantity.toString(), style: Theme.of(context).textTheme.title.copyWith(fontSize:16,color: stallDescription),
+              ),
+            ),
           ),
           GestureDetector(
             onTap: () {
@@ -76,36 +92,24 @@ class CartQuantityWidget extends StatelessWidget {
               );
             },
             child: Container(
+              height: 24,
+              width: 24,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(5.0),
-                  bottomRight: Radius.circular(5.0)
+                gradient:LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors:[HexColor('#FCF379'),HexColor('#FA5C76')]
                 ),
+                borderRadius: BorderRadius.all(Radius.circular(12.0)),
               ),
-              child: Center(child: Icon(Icons.add, color: Colors.red, size: 20.0,)),
+              child: Center(child: Icon(Icons.add, color: cartAddQuantity, size: 16,)),
             ),
-          ),
-        ];
-    }
-    else{
-      return returnList=[
-        GestureDetector(
-          onTap: () {
-              quantity += 1;
-              cartQuantityListener.onQuantityChanged(
-                id: itemId,
-                quantity: quantity
-              );      
-           },
-          child: Text(
-                  'Add +',
-                  style: Theme.of(context).textTheme.body2.copyWith(color: cartAddQuantity),
-           
-          ),
-        ),
-      ];
-    }
+          )
+      ],
+    )
+          ;
 
   }
+
+  
 }
