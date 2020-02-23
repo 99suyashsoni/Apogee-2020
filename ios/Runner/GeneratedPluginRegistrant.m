@@ -64,6 +64,18 @@
 @import google_sign_in;
 #endif
 
+#if __has_include(<path_provider/PathProviderPlugin.h>)
+#import <path_provider/PathProviderPlugin.h>
+#else
+@import path_provider;
+#endif
+
+#if __has_include(<paytm_payments/PaytmPaymentsPlugin.h>)
+#import <paytm_payments/PaytmPaymentsPlugin.h>
+#else
+@import paytm_payments;
+#endif
+
 #if __has_include(<shared_preferences/FLTSharedPreferencesPlugin.h>)
 #import <shared_preferences/FLTSharedPreferencesPlugin.h>
 #else
@@ -95,6 +107,8 @@
   [FlutterSecureStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterSecureStoragePlugin"]];
   [FluttertoastPlugin registerWithRegistrar:[registry registrarForPlugin:@"FluttertoastPlugin"]];
   [FLTGoogleSignInPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleSignInPlugin"]];
+  [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];
+  [PaytmPaymentsPlugin registerWithRegistrar:[registry registrarForPlugin:@"PaytmPaymentsPlugin"]];
   [FLTSharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharedPreferencesPlugin"]];
   [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
   [FLTUrlLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTUrlLauncherPlugin"]];

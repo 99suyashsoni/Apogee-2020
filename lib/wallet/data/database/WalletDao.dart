@@ -1,5 +1,5 @@
 import 'package:apogee_main/shared/database_helper.dart';
-import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
+import 'package:apogee_main/shared/database_helper.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/OrderItems.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallDataItem.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/StallModifiedMenuItem.dart';
@@ -15,11 +15,12 @@ class WalletDao {
       await transaction.delete("stalls");
       await transaction.delete("stall_items");
       for(var stallJson in stallsJson) {
-        await transaction.rawInsert("""INSERT INTO stalls (stallId, stallName, closed, imageUrl) VALUES (?, ?, ?, ?)""", [
+        await transaction.rawInsert("""INSERT INTO stalls (stallId, stallName, closed, imageUrl, description) VALUES (?, ?, ?, ?, ?)""", [
           int.parse(stallJson["id"].toString()) ?? 0,
           stallJson["name"].toString() ?? "",
           stallJson["closed"] as bool ? 1:0 ?? 0,
-          stallJson["image_url"].toString() ?? ""
+          stallJson["image_url"].toString() ?? "",
+          stallJson["description"].toString() ??""
         ]);
         print(stallJson["menu"]);
 
@@ -72,28 +73,28 @@ class WalletDao {
     print("Result of deleting object from cart = $result");
   }
 
-  Future<List<CartItem>> getAllCartItems() async {
+  Future<List<StallModifiedMenuItem>> getAllCartItems() async {
     var database = await databaseInstance();
-    var result = await database.rawQuery("""SELECT cart_data.item_id AS itemId, stall_items.itemName as itemName, stall_items.isVeg as isVeg, cart_data.vendor_id AS vendorId, stalls.stallName AS vendorName, cart_data.quantity AS quantity, stall_items.current_price AS currentPrice, stall_items.discount AS discount, stall_items.base_price AS basePrice FROM cart_data LEFT JOIN stall_items ON cart_data.item_id = stall_items.itemId LEFT JOIN stalls ON cart_data.vendor_id = stalls.stallId ORDER BY vendorId""");
-    List<CartItem> cartItems = [];
+    var result = await database.rawQuery("""SELECT cart_data.item_id AS itemId, stall_items.itemName AS itemName, stall_items.stallId AS stallId, stall_items.stallName AS stallName, stall_items.category AS category, stall_items.isVeg as isVeg, cart_data.quantity AS quantity, stall_items.current_price AS current_price, stall_items.discount AS discount, stall_items.base_price AS base_price, stall_items.isAvailable AS isAvailable FROM cart_data LEFT JOIN stall_items ON cart_data.item_id = stall_items.itemId LEFT JOIN stalls ON cart_data.vendor_id = stalls.stallId ORDER BY stallId""");
+    List<StallModifiedMenuItem> cartItems = [];
     if(result == null || result.isEmpty) 
       return cartItems;
     for(var element in result) {
-      cartItems.add(CartItem.fromMap(element));
+      cartItems.add(StallModifiedMenuItem.fromMap(element));
     }
     return cartItems;
   }
 
-  Future<Null> insertCartItems(List<dynamic> cartJson) async {
+  Future<Null> insertCartItems(List<StallModifiedMenuItem> cartJson) async {
    print("insert cart items called");
     var database = await databaseInstance();
     await database.transaction((transaction) async {
       await transaction.delete("cart_data");
       for(var element in cartJson) {    
         await transaction.rawInsert("""INSERT INTO cart_data (item_id, quantity, vendor_id) VALUES (?, ?, ?)""", [
-          int.parse(element["item_data".toString()]) ?? 0,
-          int.parse(element["quantity"].toString()) ?? 1,
-          int.parse(element["vendor_id"].toString()) ?? 0
+          element.itemId ?? 0,
+          element.quantity ?? 1,
+          element.stallId ?? 0
         ]);
       }
     });

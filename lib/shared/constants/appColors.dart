@@ -29,6 +29,21 @@ Color orderCardAmount = HexColor("#00B2FF");
 
 Color eventCardBackground =HexColor("#043A68");
 Color eventBookmark=HexColor("#5DB1FF");
+//Cart Screen Colors
+Color cartAddQuantity = HexColor('#4D4D63');
+Color cartItemBorder = HexColor('#FDFDFD');
+//Menu Screen Colors
+Color menuScreenItemColor=HexColor('#FEFEFE');
+Color menuScreenItemPrice=Color.fromRGBO(254, 254, 254, 0.66);
+//Common Screen Colors
+Color screenBackground = HexColor("#30305B");
+//Common Card Colours 
+Color cardBackground=HexColor("#70474f7a");
+
+//Stall Screen Colors
+Color offStallNameDivider16 = Color.fromRGBO(255, 255, 255,0.16);
+Color stallDescription=HexColor('#6BC0FF');
+Color stallPlaceHolderBg = HexColor('#CECECE');
 
 // NOTE: If we need a color that has an opacity defferent from 100, we use the prefix
 // off before the color, followed by the name of color or its function, followed by it's

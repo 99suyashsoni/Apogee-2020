@@ -23,6 +23,7 @@ class Screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO: add statusbar color
     return Scaffold(
       body: Container(
         child: SafeArea(

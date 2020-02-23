@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:apogee_main/shared/network/CustomHttpNetworkClient.dart';
 import 'package:apogee_main/shared/network/errorState.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
-import 'package:apogee_main/wallet/data/database/dataClasses/CartItem.dart';
+import 'package:apogee_main/wallet/data/database/dataClasses/StallModifiedMenuItem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:collection/collection.dart';
 
@@ -12,43 +11,10 @@ class CartController with ChangeNotifier {
   String message="";
   WalletDao _walletDao;
   CustomHttpNetworkClient _networkClient;
-  List<CartItem> cartItems = [
-   /* CartItem(
-      basePrice: 200,
-      currentPrice: 150,
-      discount: 50,
-      isVeg: true,
-      itemId: 1,
-      itemName: "Item 1",
-      quantity: 2,
-      vendorId: 2,
-      vendorName: "Vendor 1"
-    ),
-    CartItem(
-      basePrice: 200,
-      currentPrice: 200,
-      discount: 0,
-      isVeg: false,
-      itemId: 2,
-      itemName: "Item 2",
-      quantity: 1,
-      vendorId: 2,
-      vendorName: "Vendor 1"
-    )*/
-  ];
+  List<StallModifiedMenuItem> cartItems = [];
+  List<int> stallIds=[];
+  Map<int,List<StallModifiedMenuItem>> mapItems=Map();
   bool isLoading = false;
-
-// aks
-  // CartController() {
-  //   this._walletDao = WalletDao();
-  //   this._networkClient = CustomHttpNetworkClient(
-  //     baseUrl: prefix0.baseUrl,
-  //     headers: headerMap
-  //   );
-  //    isLoading = true;
-  //    loadCartItems();
-  // }
-
 
   CartController({
     WalletDao walletDao,
@@ -59,6 +25,30 @@ class CartController with ChangeNotifier {
      loadCartItems();
   }
 
+List<int> getStallIds(){
+    if(stallIds.isNotEmpty){
+      stallIds.clear();
+      mapItems.clear();
+    }
+    print('try: insde get stall ds');
+    for(var item in cartItems){
+      if(mapItems.containsKey(item.stallId))
+          {mapItems[item.stallId].add(item);
+            print('inside');}//mapItems[item.category].add(item);
+      else
+         {
+           print('inside else');
+           List<StallModifiedMenuItem> tempList=[item];
+            mapItems[item.stallId]=tempList;
+         }    
+    }
+     if(mapItems.isNotEmpty)
+         mapItems.keys.forEach((k) => stallIds.add(k));
+      
+      
+     return stallIds;
+
+  } 
 
   Future<Null> loadCartItems() async {
     cartItems = await _walletDao.getAllCartItems();
@@ -93,12 +83,12 @@ class CartController with ChangeNotifier {
   Future<Null> placeOrder() async {
     isLoading = true;
     notifyListeners();
-    cartItems.sort((item1, item2) => item1.vendorId.compareTo(item2.vendorId));
-    Map<int, List<CartItem>> map = groupBy(cartItems, (CartItem item) => item.vendorId);
+    cartItems.sort((item1, item2) => item1.stallId.compareTo(item2.stallId));
+    Map<int, List<StallModifiedMenuItem>> map = groupBy(cartItems, (StallModifiedMenuItem item) => item.stallId);
     Map<String, dynamic> finalMap = Map();
-    map.forEach((int key, List<CartItem> value) {
+    map.forEach((int key, List<StallModifiedMenuItem> value) {
       Map<String, dynamic> vendorMap = Map();
-      value.forEach((CartItem item) {
+      value.forEach((StallModifiedMenuItem item) {
         vendorMap.addAll(item.toMapForOrder());
       });
       finalMap.addEntries([MapEntry(key.toString(), vendorMap)]);
@@ -122,6 +112,7 @@ class CartController with ChangeNotifier {
 
   }
 
+//TODO:  implement ondispose
   @override
   void dispose() {
     print("try: dispose called on close cart");

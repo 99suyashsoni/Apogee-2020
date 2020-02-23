@@ -64,11 +64,11 @@ class EventViewState extends State<EventView> with SingleTickerProviderStateMixi
      final initialPage =
         widget.ncontroller.events.indexWhere((events) => events.date == "2019-10-19");
 
-    /*if (initialPage == -1) {
+    if (initialPage == -1) {
       _pageController = PageController();
     } else {
       _pageController = PageController(initialPage: initialPage);
-    }*/
+    }
    _tabController = TabController(length: widget.ncontroller.dates.length, vsync: this);
    _tabController.addListener((){
      if(_tabController.indexIsChanging){
@@ -79,19 +79,13 @@ class EventViewState extends State<EventView> with SingleTickerProviderStateMixi
     onPageChange(int index, {PageController p, TabController t}) async {
          if (p != null) {
       isPageChanged = false;
-             await _pageController.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.ease);//Wait for pageview to switch, then release pageivew listener
+             await _pageController.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.ease);
       isPageChanged = true;
     } else {
-             _tabController.animateTo(index);//Switch Tabbar
+             _tabController.animateTo(index);
     }
   }
 
-void _nextPage(int delta) {
-  print(':called');
-    final int newIndex = _tabController.index + delta;
-    if (newIndex < 0 || newIndex >= _tabController.length) return;
-    _tabController.animateTo(newIndex);
-  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -103,6 +97,7 @@ void _nextPage(int delta) {
       child: new TabBar(
           onTap: (index){
              widget.ncontroller.getEventsByDate(widget.ncontroller.dates[index]);
+              EventPage(eventList: widget.ncontroller.events);
           },
           controller: _tabController,
           labelColor: Colors.white,
@@ -229,14 +224,18 @@ EventCard({@required this.event});
             height:20.0
           ),
           Container(
-              child: Text(event.details.split(">")[1],overflow: TextOverflow.ellipsis,
-              style: cardThemeData.textTheme.subtitle,),
+              child: RichText(
+                              text: TextSpan(text: event.details.split(">")[1],style: cardThemeData.textTheme.subtitle,),
+                              maxLines: 2,
+                              softWrap: true,
+              ),
             ),
           SizedBox(
             height: 20.0
           ) ,
           Container(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(event.time,style: cardThemeData.textTheme.subhead,),

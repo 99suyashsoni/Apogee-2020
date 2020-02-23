@@ -8,7 +8,8 @@ List<String> tables = ['''
     stallId INTEGER PRIMARY KEY,
     stallName TEXT NON NULL,
     closed INTEGER NON NULL,
-    imageUrl TEXT NON NULL
+    imageUrl TEXT NON NULL,
+    description TEXT NON NULL
   )
   ''', '''
   CREATE TABLE stall_items (

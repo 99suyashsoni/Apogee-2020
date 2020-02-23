@@ -11,7 +11,6 @@ import 'package:apogee_main/wallet/controller/CartController.dart';
 import 'package:apogee_main/wallet/controller/OrderController.dart';
 import 'package:apogee_main/wallet/controller/ProfileController_PreApogee.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
-import 'package:apogee_main/wallet/view/CartScreen.dart';
 import 'package:apogee_main/wallet/view/OrderScreen.dart';
 import 'package:apogee_main/wallet/view/ProfileScreen.dart';
 import 'package:apogee_main/wallet/view/ProfileScreenPreApogee.dart';
@@ -172,25 +171,20 @@ class ApogeeApp extends StatelessWidget {
         },
         '/more': (context) {
           return ChangeNotifierProvider.value(
-            value: CartController(
+            value: MyProfileModel(
                 walletDao: walletDao, networkClient: customHttpNetworkClient),
-            child: CartScreen(),
+            child: ProfileScreen(),
           );
         },
-        '/cart': (context) {
-          return ChangeNotifierProvider.value(
-            value: CartController(
-                walletDao: walletDao, networkClient: customHttpNetworkClient),
-            child: CartScreen(),
-          );
-        },
+        
         '/pre-apogee': (context) {
           return ChangeNotifierProvider.value(
             value:
                 ProfileScreenPreApogeeController(secureStorage: secureStorage),
             child: ProfileScreenPreApogee(secureStorage),
           );
-        },
+        
+      },
       },
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),

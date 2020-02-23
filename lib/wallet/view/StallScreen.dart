@@ -45,42 +45,40 @@ class _StallScreenState extends State<StallScreen> {
                   return mystallmodel.isLoading
                       ? Center(child: CircularProgressIndicator())
                       : mystallmodel.stallItems.isEmpty
-                          ? Center(child: Text("No Stalls are available"))
+                          ? Center(child: Text("Error:No stalls are available",style: Theme.of(context).textTheme.body1.copyWith(fontSize: 18,color: Colors.white),))
                           : Container(
-                              child: Column(
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 1,
-                                    child: ListView.builder(
-                                      itemCount: mystallmodel.stallItems.length,
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                          child: StallItemWidget(
-                                              stallDataItem: mystallmodel
-                                                  .stallItems[index]),
-                                          onTap: () {
-                                            Scaffold.of(context).showSnackBar(
-                                                SnackBar(
-                                                    content: Text(
-                                                        index.toString())));
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MenuScreen(mystallmodel
-                                                            .stallItems[index]
-                                                            .stallId,mystallmodel._walletDao),
-                                                    settings: RouteSettings(
-                                                        name:
-                                                            "/menuItems$index")));
-                                            //TODO: open menu Screen
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
+                            margin: EdgeInsets.fromLTRB(16.0,0,16.0,0.0),
+                              child: GridView.count(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 16.0,
+                              mainAxisSpacing: 16.0,
+                              childAspectRatio: 2.0/2.5,
+                              children: List.generate(mystallmodel.stallItems.length, (index) {
+                                return GestureDetector(
+                                  child: StallItemWidget(
+                                    stallDataItem: mystallmodel.stallItems[index]),
+                                  onTap: () {
+                                        if(mystallmodel.stallItems[index].closed){
+                                           Fluttertoast.showToast(msg:'This stall is currently closed');
+                                        }
+                                        else{
+                                           Navigator.of(context).push(
+                                         MaterialPageRoute(
+                                            builder: (context) =>
+                                              MenuScreen(mystallmodel
+                                                .stallItems[index]
+                                                .stallId,mystallmodel
+                                                .stallItems[index]
+                                                .stallName,mystallmodel._networkClient,mystallmodel._walletDao),
+                                              settings: RouteSettings(name:"/menuItems$index")
+                                              ));
+                                        }
+                                  },
+                                );
+                              }),
                               ),
-                            );
+   
+                           );
                 },
               ),
             ),
@@ -100,12 +98,7 @@ class MyStallModel with ChangeNotifier {
 
   WalletDao _walletDao;
   CustomHttpNetworkClient _networkClient;
-  List<StallDataItem> stallItems = [
-    StallDataItem(
-        stallId: 1, stallName: "Stall 1", closed: false, imageUrl: "ukbgukvsx"),
-    StallDataItem(
-        stallId: 2, stallName: "Stall 2", closed: false, imageUrl: "ukbgukvsx")
-  ];
+  List<StallDataItem> stallItems = [];
 
   MyStallModel({WalletDao walletDao, CustomHttpNetworkClient networkClient})
       : this._walletDao = walletDao,
