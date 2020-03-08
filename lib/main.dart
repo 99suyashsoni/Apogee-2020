@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:apogee_main/Constants.dart';
 import 'package:apogee_main/auth/data/auth_repository.dart';
 import 'package:apogee_main/auth/login_screen.dart';
 import 'package:apogee_main/auth/phone_login_screen.dart';
@@ -39,6 +40,8 @@ void main() async {
     final analytics = FirebaseAnalytics();
     final auth = FirebaseAuth.instance;
     final messaging = FirebaseMessaging();
+
+    Constants.userId = await secureStorage.read(key: "ID");
 
     await messaging.requestNotificationPermissions(IosNotificationSettings());
     //All repo and dao to be made singleton here

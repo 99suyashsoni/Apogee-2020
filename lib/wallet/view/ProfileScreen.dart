@@ -60,6 +60,7 @@ class _ProfileScreenState
                         children: <Widget>[
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            margin: EdgeInsets.only(bottom: 16.0),
                             child: Row(
                               children: <Widget>[
                                 Expanded(
@@ -68,10 +69,12 @@ class _ProfileScreenState
                                     child: Column(
                                       children: <Widget>[
                                         Text(
-                                          profileController.name
+                                          profileController.name,
+                                          style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white),
                                         ),
                                         Text(
-                                          "User Id: ${profileController.id}"
+                                          "User Id: ${profileController.id}",
+                                          style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white),
                                         )
                                       ],
                                     ),
@@ -84,6 +87,7 @@ class _ProfileScreenState
                                     minHeight: 80,
                                     minWidth: 80
                                   ),
+                                  color: Colors.white,
                                   child: profileController.qrCode.isEmpty ? Center( child: CircularProgressIndicator()) : 
                                     QrImage(
                                       data: profileController.qrCode,
@@ -105,16 +109,17 @@ class _ProfileScreenState
                               ],
                             ),
                           ),
-                          Divider(color: Colors.white,),
+                          Divider(color: offwhite74,),
                           Container(
-                            padding: EdgeInsets.only(top: 32.0),
+                            padding: EdgeInsets.only(top: 24.0),
                             child: Row(
                               children: <Widget>[
                                 Expanded(
                                   flex: 1,
                                   child: Center(
                                     child: Text(
-                                      "Balance"
+                                      "Balance",
+                                      style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white),
                                     ),
                                   ),
                                 ),
@@ -122,32 +127,38 @@ class _ProfileScreenState
                                   flex: 1,
                                   child: Center(
                                     child: Text(
-                                      "Tokens"
+                                      "Tokens",
+                                      style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white),
                                     ),
                                   )
                                 )
                               ],
                             ),
                           ),
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                flex: 1,
-                                child: Center(
-                                  child: Text(
-                                    "\u20B9${snapshot.data["total_balance"]}"
+                          Container(
+                            margin: EdgeInsets.only(bottom: 16.0),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                    child: Text(
+                                      "\u20B9${snapshot.data["total_balance"]}",
+                                        style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Center(
-                                  child: Text(
-                                    "\u20B9${snapshot.data["tokens"]}"
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                    child: Text(
+                                      "\u20B9${snapshot.data["tokens"]}",
+                                      style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white),
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
                           Container(
                             padding: EdgeInsets.only(top: 8.0),
@@ -164,14 +175,18 @@ class _ProfileScreenState
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(25.0),
                                           gradient: LinearGradient(
+                                            begin: Alignment.bottomRight,
+                                            end: Alignment.topLeft,
                                             colors: [
-                                              HexColor("#4920D6"),
-                                              HexColor("#61DCD0")
+                                              HexColor("#8467e8"),
+                                              HexColor("#8467e8").withOpacity(0.8),
+                                              HexColor("#61DCD0"),
                                             ]
                                           )
                                         ),
                                         child: Icon(
-                                          Icons.money_off
+                                          Icons.money_off,
+                                          color: Colors.white,
                                         ),
                                       ),
                                     ),
@@ -184,10 +199,20 @@ class _ProfileScreenState
                                       width: 50,
                                       height: 50,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(25.0)
-                                      ),
+                                          borderRadius: BorderRadius.circular(25.0),
+                                          gradient: LinearGradient(
+                                            begin: Alignment.bottomLeft,
+                                            end: Alignment.topRight,
+                                            colors: [
+                                              HexColor("#8467e8"),
+                                              HexColor("#8467e8").withOpacity(0.8),
+                                              HexColor("#61DCD0"),
+                                            ]
+                                          )
+                                        ),
                                       child: Icon(
-                                        Icons.money_off
+                                        Icons.money_off,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
@@ -203,7 +228,8 @@ class _ProfileScreenState
                                   flex: 1,
                                   child: Center(
                                     child: Text(
-                                      "Send Money"
+                                      "Send Money",
+                                      style: Theme.of(context).textTheme.body2.copyWith(color: offWhite44),
                                     ),
                                   ),
                                 ),
@@ -211,15 +237,13 @@ class _ProfileScreenState
                                   flex: 1,
                                   child: Center(
                                     child: Text(
-                                      "Add Money"
+                                      "Add Money",
+                                      style: Theme.of(context).textTheme.body2.copyWith(color: offWhite44),
                                     ),
                                   )
                                 )
                               ],
                             ),
-                          ),
-                          Container(
-                             child: FlatButton(onPressed:()=>profileController.logout(), child: Text('Logout',style: cardThemeData.textTheme.headline,),color: Colors.blue),
                           ),
                         ],
                       ),
