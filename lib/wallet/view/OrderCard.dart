@@ -3,6 +3,7 @@ import 'package:apogee_main/shared/constants/app_theme_data.dart';
 import 'package:apogee_main/shared/constants/strings.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/OrderItems.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/Orders.dart';
+import 'package:apogee_main/wallet/view/OrderCardDot.dart';
 import 'package:apogee_main/wallet/view/OrderDataWidget.dart';
 import 'package:flutter/material.dart';
 
@@ -162,16 +163,21 @@ class OrderCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Container(
-                        margin: EdgeInsets.only(right: 8.0),
-                        child: Image(
-                          image: AssetImage("assets/images/i1.png"),
-                          width: 32,
-                          fit: BoxFit.fitWidth,
-                        ),
+                        margin: EdgeInsets.only(right: 4.0),
+                        child: OrderCardDot(dotColor: getDotColor(0))
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(right: 4.0),
+                        child: OrderCardDot(dotColor: getDotColor(1))
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(right: 4.0),
+                        child: OrderCardDot(dotColor: getDotColor(2))
                       ),
                       Align(
                         alignment: Alignment.centerRight,
                         child: Container(
+                          margin: EdgeInsets.only(left: 8.0),
                           child: Text(
                             getOrderStateText(),
                             style: Theme.of(context).textTheme.body2,
@@ -206,6 +212,36 @@ class OrderCard extends StatelessWidget {
       case 1: return "Accepted";
       case 2: return "Ready";
       case 3: return "Delivered";
+    }
+  }
+
+  Color getDotColor(int index) {
+    switch(orders.status) {
+      case 0: {
+        switch(index) {
+          case 0: return orderCardPending;
+          default: return Colors.transparent;
+        }
+        break;
+      }
+      case 1: {
+        switch(index) {
+          case 0: return orderCardPending;
+          default: return Colors.transparent;
+        }
+        break;
+      }
+      case 2: {
+        switch(index) {
+          case 0: 
+          case 1: return orderCardReady;
+          default: return Colors.transparent;
+        }
+        break;
+      }
+      case 3: {
+        return orderCardFinished;
+      }
     }
   }
 
