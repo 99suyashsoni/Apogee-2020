@@ -10,8 +10,8 @@
 @import cloud_firestore;
 #endif
 
-#if __has_include(<firebase_analytics/FirebaseAnalyticsPlugin.h>)
-#import <firebase_analytics/FirebaseAnalyticsPlugin.h>
+#if __has_include(<firebase_analytics/FLTFirebaseAnalyticsPlugin.h>)
+#import <firebase_analytics/FLTFirebaseAnalyticsPlugin.h>
 #else
 @import firebase_analytics;
 #endif
@@ -22,8 +22,8 @@
 @import firebase_auth;
 #endif
 
-#if __has_include(<firebase_core/FirebaseCorePlugin.h>)
-#import <firebase_core/FirebaseCorePlugin.h>
+#if __has_include(<firebase_core/FLTFirebaseCorePlugin.h>)
+#import <firebase_core/FLTFirebaseCorePlugin.h>
 #else
 @import firebase_core;
 #endif
@@ -34,8 +34,8 @@
 @import firebase_crashlytics;
 #endif
 
-#if __has_include(<firebase_dynamic_links/FirebaseDynamicLinksPlugin.h>)
-#import <firebase_dynamic_links/FirebaseDynamicLinksPlugin.h>
+#if __has_include(<firebase_dynamic_links/FLTFirebaseDynamicLinksPlugin.h>)
+#import <firebase_dynamic_links/FLTFirebaseDynamicLinksPlugin.h>
 #else
 @import firebase_dynamic_links;
 #endif
@@ -58,14 +58,14 @@
 @import fluttertoast;
 #endif
 
-#if __has_include(<google_sign_in/GoogleSignInPlugin.h>)
-#import <google_sign_in/GoogleSignInPlugin.h>
+#if __has_include(<google_sign_in/FLTGoogleSignInPlugin.h>)
+#import <google_sign_in/FLTGoogleSignInPlugin.h>
 #else
 @import google_sign_in;
 #endif
 
-#if __has_include(<path_provider/PathProviderPlugin.h>)
-#import <path_provider/PathProviderPlugin.h>
+#if __has_include(<path_provider/FLTPathProviderPlugin.h>)
+#import <path_provider/FLTPathProviderPlugin.h>
 #else
 @import path_provider;
 #endif
@@ -76,8 +76,8 @@
 @import paytm_payments;
 #endif
 
-#if __has_include(<shared_preferences/SharedPreferencesPlugin.h>)
-#import <shared_preferences/SharedPreferencesPlugin.h>
+#if __has_include(<shared_preferences/FLTSharedPreferencesPlugin.h>)
+#import <shared_preferences/FLTSharedPreferencesPlugin.h>
 #else
 @import shared_preferences;
 #endif
@@ -88,8 +88,8 @@
 @import sqflite;
 #endif
 
-#if __has_include(<url_launcher/UrlLauncherPlugin.h>)
-#import <url_launcher/UrlLauncherPlugin.h>
+#if __has_include(<url_launcher/FLTURLLauncherPlugin.h>)
+#import <url_launcher/FLTURLLauncherPlugin.h>
 #else
 @import url_launcher;
 #endif
@@ -111,7 +111,7 @@
   [PaytmPaymentsPlugin registerWithRegistrar:[registry registrarForPlugin:@"PaytmPaymentsPlugin"]];
   [FLTSharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharedPreferencesPlugin"]];
   [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
-  [FLTUrlLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTUrlLauncherPlugin"]];
+  [FLTURLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTURLLauncherPlugin"]];
 }
 
 @end

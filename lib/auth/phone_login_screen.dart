@@ -46,15 +46,21 @@ class _PhoneLoginState extends State<_PhoneLogin> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Spacer(),
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Enter phone number',
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 32.0),
+            child: TextField(
+              style: TextStyle(color: Colors.white),
+              maxLength: 10,
+              decoration: InputDecoration(
+                hintText: 'Enter phone number',
+                hintStyle: TextStyle(color: offWhite44, fontFamily: 'Google-sans'),
+              ),
+              onChanged: (number) {
+                setState(() {
+                  phoneNumber = number;
+                });
+              },
             ),
-            onChanged: (number) {
-              setState(() {
-                phoneNumber = number;
-              });
-            },
           ),
           SizedBox(height: 20.0),
           RaisedButton(
@@ -62,7 +68,7 @@ class _PhoneLoginState extends State<_PhoneLogin> {
             onPressed: () async {
               _auth = Provider.of<FirebaseAuth>(context);
               _auth.verifyPhoneNumber(
-                phoneNumber: phoneNumber,
+                phoneNumber: '+91$phoneNumber',
                 timeout: const Duration(seconds: 30),
                 verificationCompleted: (AuthCredential phoneAuthCred) {
                   print(phoneAuthCred.toString());
