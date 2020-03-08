@@ -43,6 +43,8 @@ class OrdersList extends StatelessWidget {
                           child: OrderCard(
                             orders: orders[index],
                             orderItems: orderItems.where((item) => item.orderId == orders[index].orderId).toList(),
+                            otpSeenListener: otpSeenListener,
+                            orderId: index,
                           ),
                         );
                       },

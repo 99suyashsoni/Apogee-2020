@@ -3,15 +3,20 @@ import 'package:apogee_main/shared/constants/app_theme_data.dart';
 import 'package:apogee_main/shared/constants/strings.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/OrderItems.dart';
 import 'package:apogee_main/wallet/data/database/dataClasses/Orders.dart';
+import 'package:apogee_main/wallet/view/OrderDataWidget.dart';
 import 'package:flutter/material.dart';
 
 class OrderCard extends StatelessWidget {
   Orders orders;
   List<OrderItems> orderItems;
+  int orderId;
+  OtpSeenListener otpSeenListener;
 
   OrderCard({
     @required this.orders,
-    @required this.orderItems
+    @required this.orderItems,
+    @required this.otpSeenListener,
+    @required this.orderId
   });
 
   @override
@@ -102,8 +107,7 @@ class OrderCard extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    
-                    // TODO: Implement OTP seen
+                    otpSeenListener.onOtpSeenClicked(orderId: orderId);
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
@@ -169,7 +173,7 @@ class OrderCard extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         child: Container(
                           child: Text(
-                            "Delivered",
+                            getOrderStateText(),
                             style: Theme.of(context).textTheme.body2,
                           ),
                         ),
@@ -185,12 +189,23 @@ class OrderCard extends StatelessWidget {
     );
   }
 
+  // TODO: Handle case for ddeclined orders
   Color getOTPButtonColor() {
     switch(orders.status) {
       case 0: return orderCardPending;
       case 1: return orderCardPending;
       case 2: return orderCardReady;
       case 3: return orderCardFinished;
+    }
+  }
+
+  // TODO: Handle case for ddeclined orders
+  String getOrderStateText() {
+    switch(orders.status) {
+      case 0: return "Pending";
+      case 1: return "Accepted";
+      case 2: return "Ready";
+      case 3: return "Delivered";
     }
   }
 
