@@ -8,6 +8,7 @@ import 'package:apogee_main/shared/screen.dart';
 import 'package:apogee_main/shared/utils/HexColor.dart';
 import 'package:apogee_main/wallet/controller/ProfileController_PreApogee.dart';
 import 'package:apogee_main/wallet/data/database/WalletDao.dart';
+import 'package:apogee_main/wallet/data/database/dataClasses/UserShow.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -46,9 +47,16 @@ class _ProfileScreenState
           startColor: topLevelScreensGradientStartColor,
           child: Consumer<MyProfileModel> (
             builder: (context, profileController, child) {
+              /* StreamBuilder<DocumentSnapshot>(
+                stream: Firestore.instance.collection('tickets').document(Constants.userId).snapshots(),
+                builder: (context, snapshot) {
+                  profileController.fetchTicketsDataFromBackend();
+                  return Container();
+                },
+              ); */
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 32.0),
-                child: profileController.isLoading ? Center(child: CircularProgressIndicator()) : Column (
+                child: profileController.isLoading ? Center(child: CircularProgressIndicator()) : ListView (
                   children: <Widget>[
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 32.0),
@@ -248,6 +256,116 @@ class _ProfileScreenState
                         ],
                       ),
                     ),
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
+                      margin: EdgeInsets.symmetric(vertical: 32.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25.0),
+                        color: orderCardBackground,
+                      ),
+                      constraints: BoxConstraints(
+                        maxHeight: (150.0 + (30 * (profileController.userShows.length + 1))),
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              "TICKETS",
+                              style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 16.0),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    "Event",
+                                    style: Theme.of(context).textTheme.body2.copyWith(color: offwhite74),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    "Used",
+                                    style: Theme.of(context).textTheme.body2.copyWith(color: offwhite74),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    "Unused",
+                                    style: Theme.of(context).textTheme.body2.copyWith(color: offwhite74),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Column(
+                              children: profileController.userShows.map((ticket) => Container(
+                                margin: EdgeInsets.only(bottom: 8.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        ticket.name,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context).textTheme.body2.copyWith(color: offwhite74),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        ticket.used.toString(),
+                                        style: Theme.of(context).textTheme.body2.copyWith(color: offwhite74),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        ticket.unused.toString(),
+                                        style: Theme.of(context).textTheme.body2.copyWith(color: offwhite74),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )).toList(),
+                            ),
+                          ),
+                          Center(
+                            child: GestureDetector(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                                margin: EdgeInsets.only(top: 8.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  gradient: LinearGradient(
+                                    begin: Alignment.bottomLeft,
+                                    end: Alignment.topRight,
+                                    colors: [
+                                      HexColor("#8467e8"),
+                                      HexColor("#8467e8").withOpacity(0.8),
+                                      // HexColor("#61DCD0"),
+                                    ]
+                                  )
+                                ),
+                                child: Text(
+                                  "Buy Tickets",
+                                  style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
                   ],
                 ),
               );
@@ -266,6 +384,9 @@ class MyProfileModel with ChangeNotifier {
   String name = "";
   String id = "";
   FlutterSecureStorage _secureStorage;
+  List<UserShow> userShows = [
+    UserShow(id: 0, name: "Show 1")
+  ];
 
   //List<StallDataItem> stallItems;
   int state = 0;
@@ -284,15 +405,16 @@ class MyProfileModel with ChangeNotifier {
           initializeProfileController();
     }
 
-    Future<Null> initializeProfileController() async {
+  Future<Null> initializeProfileController() async {
       qrCode = await _secureStorage.read(key: 'QR');
       name = await _secureStorage.read(key: 'NAME');
       id = await _secureStorage.read(key: 'ID');
       isLoading=false;
       notifyListeners();
+      fetchTicketsDataFromBackend();
     }
 
-     Future<void> logout() async {
+  Future<void> logout() async {
     await _secureStorage.delete(key: 'NAME');
     await _secureStorage.delete(key: 'JWT');
     await _secureStorage.delete(key: 'EMAIL');
@@ -301,6 +423,20 @@ class MyProfileModel with ChangeNotifier {
     await _secureStorage.delete(key: 'QR');
     await _secureStorage.delete(key: 'IS_BITSIAN');
     await _secureStorage.delete(key: 'REFERRAL_CODE');
+  }
+
+  // TODO: Handle Error state
+  Future<Null> fetchTicketsDataFromBackend() async {
+    ErrorState errorState = await _networkClient.get(
+      "tickets-manager/tickets",
+      (response) async {
+        var jsonResponse = json.decode(response);
+        for(var show in jsonResponse["shows"]) {
+          userShows.add(UserShow.fromResponse(show));
+        }
+        notifyListeners();
+      }
+    );
   }
 
   Future<Null> addMoney(String money) async {

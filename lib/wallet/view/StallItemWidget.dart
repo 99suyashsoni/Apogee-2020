@@ -61,7 +61,7 @@ class StallItemWidget extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                   child: new Text(
                 stallDataItem.stallName,
-                maxLines: 2,
+                maxLines: 1,
                 overflow:TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: Theme.of(context).textTheme.body2.copyWith(fontWeight: FontWeight.w500,color: Colors.white)
