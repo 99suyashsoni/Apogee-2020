@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:apogee_main/auth/data/auth_repository.dart';
 import 'package:apogee_main/auth/login_screen.dart';
+import 'package:apogee_main/auth/onboarding_screen.dart';
 import 'package:apogee_main/auth/phone_login_screen.dart';
 import 'package:apogee_main/events/data/EventsModel.dart';
 import 'package:apogee_main/events/data/database/EventsDao.dart';
@@ -75,7 +76,7 @@ void main() async {
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     if ((await secureStorage.read(key: 'JWT')) == null) {
       runApp(ApogeeApp(
-        initialRoute: '/phone-ver',
+        initialRoute: '/login',
         analytics: analytics,
         authRepository: authRepository,
         eventsDao: eventsDao,
@@ -86,7 +87,7 @@ void main() async {
       ));
     } else {
       runApp(ApogeeApp(
-        initialRoute: '/events',
+        initialRoute: '/onBoarding',
         analytics: analytics,
         authRepository: authRepository,
         eventsDao: eventsDao,
@@ -144,13 +145,16 @@ class ApogeeApp extends StatelessWidget {
             child: PhoneLoginScreen(),
           );
         },
-        '/': (context) {
-          return ChangeNotifierProvider.value(
-            value: EventsModel(
-                eventsDao: eventsDao, networkClient: customHttpNetworkClient),
-            child: EventsScreen(),
-          );
+        '/onBoarding': (context) {
+          return OnBoardingScreens();
         },
+//        '/': (context) {
+//          return ChangeNotifierProvider.value(
+//            value: EventsModel(
+//                eventsDao: eventsDao, networkClient: customHttpNetworkClient),
+//            child: EventsScreen(),
+//          );
+//        },
         '/orders': (context) {
           return ChangeNotifierProvider.value(
             value: OrderController(walletDao, customHttpNetworkClient),

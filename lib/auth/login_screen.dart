@@ -128,7 +128,7 @@ class _LoginState extends State<_Login> {
                   if (loginCheck) {
                     Scaffold.of(context)
                         .showSnackBar(SnackBar(content: Text('Login Success')));
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacementNamed('/onBoarding');
                   } else {
                     //to be decided
                   }
