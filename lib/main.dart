@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:apogee_main/Constants.dart';
 import 'package:apogee_main/auth/data/auth_repository.dart';
 import 'package:apogee_main/auth/login_screen.dart';
 import 'package:apogee_main/auth/onboarding_screen.dart';
@@ -40,6 +41,8 @@ void main() async {
     final analytics = FirebaseAnalytics();
     final auth = FirebaseAuth.instance;
     final messaging = FirebaseMessaging();
+
+    Constants.userId = await secureStorage.read(key: "ID");
 
     await messaging.requestNotificationPermissions(IosNotificationSettings());
     //All repo and dao to be made singleton here
@@ -87,7 +90,7 @@ void main() async {
       ));
     } else {
       runApp(ApogeeApp(
-        initialRoute: '/onBoarding',
+        initialRoute: '/',
         analytics: analytics,
         authRepository: authRepository,
         eventsDao: eventsDao,
@@ -148,13 +151,13 @@ class ApogeeApp extends StatelessWidget {
         '/onBoarding': (context) {
           return OnBoardingScreens();
         },
-//        '/': (context) {
-//          return ChangeNotifierProvider.value(
-//            value: EventsModel(
-//                eventsDao: eventsDao, networkClient: customHttpNetworkClient),
-//            child: EventsScreen(),
-//          );
-//        },
+        '/': (context) {
+          return ChangeNotifierProvider.value(
+            value: EventsModel(
+                eventsDao: eventsDao, networkClient: customHttpNetworkClient),
+            child: EventsScreen(),
+          );
+        },
         '/orders': (context) {
           return ChangeNotifierProvider.value(
             value: OrderController(walletDao, customHttpNetworkClient),
@@ -179,7 +182,7 @@ class ApogeeApp extends StatelessWidget {
         '/more': (context) {
           return ChangeNotifierProvider.value(
             value: MyProfileModel(
-                walletDao: walletDao, networkClient: customHttpNetworkClient),
+                walletDao: walletDao, networkClient: customHttpNetworkClient, secureStorage: secureStorage),
             child: ProfileScreen(),
           );
         },

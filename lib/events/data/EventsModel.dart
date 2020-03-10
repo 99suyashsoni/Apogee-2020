@@ -41,7 +41,7 @@ class EventsModel with ChangeNotifier {
 
   Future<Null> getEventsByDate(String date) async{
     events = await _eventsDao.getEventsByDate(date);
-    print('events:$events');
+    // print('events:$events');
     isLoading = false;
     notifyListeners();
   }
